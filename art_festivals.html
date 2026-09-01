@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YatraSaathi - Arts & Festivals</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom Scrollbar for sleek UI */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border, rgba(0, 0, 0, 0.15));
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted-foreground, rgba(0, 0, 0, 0.3));
+    }
+    .lang-dropdown-menu {
+      animation: dropdownFade 0.18s ease-out forwards;
+    }
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .card-zoom:hover img {
+      transform: scale(1.06);
+    }
+  </style>
+</head>
+<body class="bg-[var(--background,#f8fafc)] text-[var(--foreground,#0f172a)] antialiased min-h-screen flex flex-col md:flex-row p-4 md:p-6 gap-6 font-sans">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="w-full md:w-64 bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] rounded-3xl p-6 flex flex-col justify-between shrink-0 shadow-sm">
+    <div>
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 flex-shrink-0 bg-gradient-to-tr from-orange-500 via-white to-green-600 rounded-full flex items-center justify-center shadow-md border border-[var(--border,#e2e8f0)] overflow-hidden">
+          <!-- Ashoka Chakra SVG -->
+          <svg class="w-6 h-6 text-blue-800 animate-[spin_20s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="1 1" />
+            <path stroke="currentColor" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4L18.4 5.6M12 12m-2 0a2 2 0 104 0 2 2 0 00-4 0" />
+          </svg>
+        </div>
+        <div>
+          <div data-i18n="brandTitle1" class="text-xs font-extrabold tracking-wider text-orange-500 leading-none">YATRA</div>
+          <div data-i18n="brandTitle2" class="text-xs font-extrabold tracking-wider text-[var(--foreground,#0f172a)] leading-none">SAATHI -</div>
+          <div data-i18n="brandTitle3" class="text-[10px] font-medium text-green-600 leading-none tracking-tight">ART & FESTIVALS</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="space-y-2">
+        <a href="dashboard_preview_v2.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground,#64748b)] hover:bg-[var(--accent,#f1f5f9)] hover:text-[var(--foreground,#0f172a)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+          </svg>
+          <span data-i18n="navDashboard">Dashboard</span>
+        </a>
+        <a href="cultural_dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground,#64748b)] hover:bg-[var(--accent,#f1f5f9)] hover:text-[var(--foreground,#0f172a)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span data-i18n="navExplore">Explore</span>
+        </a>
+        <a href="dashboard_preview_v2.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground,#64748b)] hover:bg-[var(--accent,#f1f5f9)] hover:text-[var(--foreground,#0f172a)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span data-i18n="navBookings">My Bookings</span>
+        </a>
+        <a href="cultural_reels.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground,#64748b)] hover:bg-[var(--accent,#f1f5f9)] hover:text-[var(--foreground,#0f172a)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span data-i18n="navLore">Cultural Reels</span>
+        </a>
+        <!-- Active Nav: Art & Festivals -->
+        <a href="art_festivals.html" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 font-semibold text-sm border-l-4 border-orange-500 shadow-sm transition-all">
+          <span class="flex items-center gap-4">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span data-i18n="navFestivals">Art & Festivals</span>
+          </span>
+          <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- User Profile & Settings in Sidebar Footer -->
+    <div class="mt-8 border-t border-[var(--border,#e2e8f0)] pt-6 space-y-2">
+      <a href="#" onclick="showLocalizedToast('toastAccount')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground,#64748b)] hover:bg-[var(--accent,#f1f5f9)] hover:text-[var(--foreground,#0f172a)] transition-all font-medium text-sm group">
+        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span data-i18n="navAccount">Account</span>
+      </a>
+      <a href="#" onclick="showLocalizedToast('toastSettings')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground,#64748b)] hover:bg-[var(--accent,#f1f5f9)] hover:text-[var(--foreground,#0f172a)] transition-all font-medium text-sm group">
+        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span data-i18n="navSettings">Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN WORKSPACE ================= -->
+  <main class="flex-1 flex flex-col gap-6 min-w-0">
+    
+    <!-- TOP BAR -->
+    <header class="w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] rounded-3xl p-4 shadow-sm relative overflow-visible z-30">
+      <!-- Decorative Backdrop Tricolor Blur -->
+      <div class="absolute inset-0 pointer-events-none opacity-5 dark:opacity-10 flex rounded-3xl overflow-hidden">
+        <div class="w-1/3 h-full bg-orange-500 blur-2xl"></div>
+        <div class="w-1/3 h-full bg-white blur-2xl"></div>
+        <div class="w-1/3 h-full bg-green-600 blur-2xl"></div>
+      </div>
+      
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md">
+        <input type="text" id="searchInput" oninput="handleSearch(this.value)" data-i18n-placeholder="searchArtPlaceholder" placeholder="Search arts, crafts, festivals, artists, traditions..." class="w-full pl-11 pr-4 py-2.5 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-[var(--foreground,#0f172a)] placeholder-[var(--placeholder,#94a3b8)] transition-all">
+        <svg class="w-4 h-4 text-[var(--muted-foreground,#64748b)] absolute left-4 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- User Panel Controls -->
+      <div class="flex items-center justify-between sm:justify-end gap-4 relative z-30">
+        
+        <!-- Language Dropdown Toggle Bar -->
+        <div class="relative" id="langDropdownContainer">
+          <button id="langBtn" onclick="toggleLangDropdown(event)" type="button" class="flex items-center gap-2 px-4 py-2 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] hover:border-blue-500 rounded-full text-xs font-bold hover:bg-[var(--accent,#f1f5f9)] transition-all shadow-sm cursor-pointer select-none">
+            <span class="text-base leading-none">🌐</span>
+            <span id="currentLang">English</span>
+            <svg id="langChevron" class="w-3.5 h-3.5 text-[var(--muted-foreground,#64748b)] transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          <!-- Lang Dropdown Menu (English & Hindi only) -->
+          <div id="langMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-2xl shadow-2xl py-1.5 z-50 text-xs lang-dropdown-menu overflow-hidden">
+            <button onclick="selectLang('en')" id="langOpt-en" type="button" class="w-full text-left px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold flex items-center justify-between transition-colors cursor-pointer">
+              <span>English</span>
+              <span id="check-en" class="text-blue-600 font-bold">✓</span>
+            </button>
+            <button onclick="selectLang('hi')" id="langOpt-hi" type="button" class="w-full text-left px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold flex items-center justify-between transition-colors cursor-pointer">
+              <span>हिन्दी (Hindi)</span>
+              <span id="check-hi" class="text-blue-600 font-bold hidden">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="flex items-center gap-3 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-full pl-1.5 pr-4 py-1">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Aditi Sharma" class="w-7 h-7 rounded-full object-cover border border-[var(--border,#e2e8f0)]">
+          <span data-i18n="userName" class="text-xs font-semibold text-[var(--foreground,#0f172a)] hidden xs:block">Aditi Sharma</span>
+          <svg class="w-3.5 h-3.5 text-[var(--muted-foreground,#64748b)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <!-- Notifications Bell -->
+        <button onclick="showLocalizedToast('toastNotifications')" class="w-9 h-9 flex items-center justify-center bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-full hover:bg-[var(--accent,#f1f5f9)] transition-all relative cursor-pointer">
+          <svg class="w-4 h-4 text-[var(--foreground,#0f172a)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="absolute top-1 right-1 w-2 h-2 bg-orange-500 border border-[var(--card,#ffffff)] rounded-full"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT WORKSPACE -->
+    <div class="flex-1 flex flex-col gap-6">
+      
+      <!-- Page Title & Header Bar -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] p-6 rounded-[32px] shadow-sm">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 text-[10px] font-extrabold rounded-full uppercase tracking-wider border border-orange-200 dark:border-orange-900/30" data-i18n="badgeHeritageLive">Heritage & Folk Repository</span>
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+          </div>
+          <h1 data-i18n="pageMainTitle" class="text-2xl font-black text-[var(--foreground,#0f172a)] tracking-tight mt-1">Arts & Cultural Festivals</h1>
+          <p id="pageSubtitle" class="text-xs text-[var(--muted-foreground,#64748b)] mt-0.5">Explore authentic handicraft traditions, master artisans, and vibrant festivals across Rajasthan</p>
+        </div>
+
+        <!-- Filter View Pills -->
+        <div class="flex items-center gap-2 bg-[var(--background,#f8fafc)] p-1.5 rounded-2xl border border-[var(--border,#e2e8f0)] shrink-0 flex-wrap">
+          <button onclick="setViewFilter('all')" id="btn-view-all" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-[var(--card,#ffffff)] text-blue-600 shadow-sm border border-[var(--border,#e2e8f0)] cursor-pointer">
+            <span data-i18n="filterAll">All Showcase</span>
+          </button>
+          <button onclick="setViewFilter('arts')" id="btn-view-arts" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer">
+            <span data-i18n="filterArts">🎭 Traditional Arts</span>
+          </button>
+          <button onclick="setViewFilter('festivals')" id="btn-view-festivals" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer">
+            <span data-i18n="filterFestivals">🎉 Cultural Festivals</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- City Selector Tabs Row -->
+      <div class="flex gap-2 overflow-x-auto pb-1 p-1 bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] rounded-3xl shrink-0 no-scrollbar">
+        <button onclick="switchCity('udaipur')" id="tab-udaipur" class="flex-1 min-w-[140px] text-center py-2.5 px-4 rounded-2xl text-xs font-bold transition-all bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border border-[var(--border,#e2e8f0)] shadow-sm cursor-pointer flex items-center justify-center gap-2">
+          <span>🏰</span> <span data-i18n="cityUdaipur">Udaipur</span>
+        </button>
+        <button onclick="switchCity('jaipur')" id="tab-jaipur" class="flex-1 min-w-[140px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer flex items-center justify-center gap-2">
+          <span>🌸</span> <span data-i18n="cityJaipur">Jaipur</span>
+        </button>
+        <button onclick="switchCity('bikaner')" id="tab-bikaner" class="flex-1 min-w-[140px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer flex items-center justify-center gap-2">
+          <span>🐪</span> <span data-i18n="cityBikaner">Bikaner</span>
+        </button>
+        <button onclick="switchCity('jaisalmer')" id="tab-jaisalmer" class="flex-1 min-w-[140px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer flex items-center justify-center gap-2">
+          <span>🏜️</span> <span data-i18n="cityJaisalmer">Jaisalmer</span>
+        </button>
+      </div>
+
+      <!-- ================= SECTION 1: TRADITIONAL ARTS & HANDICRAFTS ================= -->
+      <section id="section-arts" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+          <div>
+            <h2 data-i18n="headingArts" class="text-base font-extrabold text-[var(--foreground,#0f172a)] flex items-center gap-2">
+              <span>🎭</span>
+              <span>Traditional Arts & Handicrafts</span>
+            </h2>
+            <p id="subheadingArts" class="text-xs text-[var(--muted-foreground,#64748b)]">Master artisans, time-honored techniques, and GI certified heritage</p>
+          </div>
+          <span class="text-[10px] font-bold px-3 py-1 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400 rounded-full border border-green-200 dark:border-green-900/30 self-start sm:self-auto" id="artsCountBadge">
+            4 Verified Arts
+          </span>
+        </div>
+
+        <!-- Arts Grid (3-4 items) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="artsGrid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- ================= SECTION 2: CULTURAL FESTIVALS & MELAS ================= -->
+      <section id="section-festivals" class="space-y-4 pt-4 border-t border-[var(--border,#e2e8f0)]">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+          <div>
+            <h2 data-i18n="headingFestivals" class="text-base font-extrabold text-[var(--foreground,#0f172a)] flex items-center gap-2">
+              <span>🎉</span>
+              <span>Celebrated Cultural Festivals & Melas</span>
+            </h2>
+            <p id="subheadingFestivals" class="text-xs text-[var(--muted-foreground,#64748b)]">Annual heritage gatherings, folk dances, musical symphonies, and celebrations</p>
+          </div>
+          <span class="text-[10px] font-bold px-3 py-1 bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-400 rounded-full border border-orange-200 dark:border-orange-900/30 self-start sm:self-auto" id="festivalsCountBadge">
+            4 Annual Festivals
+          </span>
+        </div>
+
+        <!-- Festivals Grid (3-4 items) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="festivalsGrid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- ================= SECTION 3: INTERACTIVE FOLK AUDIO LORE & WORKSHOP STRIP ================= -->
+      <section class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div class="space-y-2 z-10 max-w-xl">
+          <span class="px-2.5 py-1 bg-orange-500/20 text-orange-400 text-[10px] font-extrabold rounded-lg uppercase tracking-wider border border-orange-500/30" data-i18n="tagMasterclass">Master Artisan Direct Experience</span>
+          <h3 id="masterclassTitle" class="text-lg font-black tracking-tight text-white mt-1">Book Hands-on Artisan Workshops & Live Demos</h3>
+          <p id="masterclassDesc" class="text-xs text-slate-300 leading-relaxed">Meet state award-winning artisans, try your hands on traditional woodblock printing, Usta gold foil embossing, and pottery wheels in heritage corridors.</p>
+        </div>
+
+        <div class="flex items-center gap-4 z-10 shrink-0">
+          <button onclick="openWorkshopModal()" class="px-5 py-3 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-bold rounded-2xl text-xs uppercase tracking-wider shadow-lg shadow-orange-500/30 transition-all cursor-pointer flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span data-i18n="btnBookWorkshop">Schedule Workshop</span>
+          </button>
+          <button onclick="playFolkRhythm()" class="px-4 py-3 bg-white/10 hover:bg-white/20 active:scale-95 text-white font-bold rounded-2xl text-xs uppercase tracking-wider transition-all border border-white/20 cursor-pointer flex items-center gap-2">
+            <svg id="folkAudioIcon" class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span data-i18n="btnFolkMelody">Play Folk Melody</span>
+          </button>
+        </div>
+
+        <!-- Decorative tricolor background sheen -->
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= INTERACTIVE DETAIL / BOOKING MODAL ================= -->
+  <div id="detailModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-5 transform scale-95 transition-all duration-300 relative">
+      
+      <!-- Close Button -->
+      <button onclick="closeModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] flex items-center justify-center cursor-pointer transition-colors">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+
+      <!-- Modal Content Area -->
+      <div id="modalContent">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Banner (Solid White Opaque Background) -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 bg-white text-slate-900 border border-slate-200 py-3.5 px-5 rounded-2xl shadow-2xl flex items-center gap-3.5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="p-1.5 bg-green-100 text-green-700 rounded-xl shrink-0">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <span id="toastMsg" class="text-xs font-bold text-slate-800">Action completed successfully!</span>
+  </div>
+
+  <!-- ================= STATE & JAVASCRIPT LOGIC ================= -->
+  <script>
+    // Internationalization (i18n) Dictionary for English and Hindi
+    const i18n = {
+      en: {
+        brandTitle1: "YATRA",
+        brandTitle2: "SAATHI -",
+        brandTitle3: "ART & FESTIVALS",
+        navDashboard: "Dashboard",
+        navExplore: "Explore",
+        navBookings: "My Bookings",
+        navLore: "Cultural Reels",
+        navFestivals: "Art & Festivals",
+        navAccount: "Account",
+        navSettings: "Settings",
+        searchArtPlaceholder: "Search arts, crafts, festivals, artists, traditions...",
+        userName: "Aditi Sharma",
+        badgeHeritageLive: "Heritage & Folk Repository",
+        pageMainTitle: "Arts & Cultural Festivals",
+        pageSubtitle: "Explore authentic handicraft traditions, master artisans, and vibrant festivals across Rajasthan",
+        filterAll: "All Showcase",
+        filterArts: "🎭 Traditional Arts",
+        filterFestivals: "🎉 Cultural Festivals",
+        cityUdaipur: "Udaipur",
+        cityJaipur: "Jaipur",
+        cityBikaner: "Bikaner",
+        cityJaisalmer: "Jaisalmer",
+        headingArts: "Traditional Arts & Handicrafts",
+        subheadingArts: "Master artisans, time-honored techniques, and GI certified heritage",
+        headingFestivals: "Celebrated Cultural Festivals & Melas",
+        subheadingFestivals: "Annual heritage gatherings, folk dances, musical symphonies, and celebrations",
+        tagMasterclass: "Master Artisan Direct Experience",
+        btnBookWorkshop: "Schedule Workshop",
+        btnFolkMelody: "Play Folk Melody",
+        btnExploreDetails: "Explore Details",
+        btnBookSession: "Book Workshop",
+        btnRegisterEvent: "Register / RSVP",
+        btnSetReminder: "Set Reminder",
+        tagGiCertified: "GI Certified Art",
+        tagMasterArtisan: "Master Artisan",
+        tagAnnualMela: "Annual Celebration",
+        lblOrigin: "Origin",
+        lblArtisan: "Artisan Guild",
+        lblDate: "Date & Season",
+        lblVenue: "Venue / Spot",
+        lblHighlights: "Highlights",
+        lblCraftTechnique: "Craft Technique",
+        modalBookTitle: "Register for Live Artisan Masterclass",
+        modalPassTitle: "Book Official Cultural Festival Pass",
+        btnConfirmBooking: "Confirm Registration (Free / Included)",
+        toastLangChanged: "Language changed to English",
+        toastWorkshopBooked: "Artisan workshop reservation confirmed!",
+        toastFestivalRegistered: "Festival VIP pass registered successfully!",
+        toastReminderSet: "Added to your travel calendar reminder!",
+        toastLikedAdded: "Added to your saved Arts & Festivals collection!",
+        toastLikedRemoved: "Removed from saved collection",
+        toastShared: "Art & Festival details copied to clipboard!",
+        toastMelodyPlaying: "Playing authentic desert folk melodies (Kamaicha & Ravanahatha)...",
+        toastAccount: "Loading account settings...",
+        toastSettings: "Opening settings panel...",
+        toastNotifications: "No unread notifications",
+        verifiedArts: "Verified Arts",
+        annualFestivals: "Annual Festivals",
+        modalWorkshopSuccess: "Workshop booked! Details sent to your registered travel ID.",
+        modalPassSuccess: "Festival Pass Confirmed! E-Pass generated."
+      },
+      hi: {
+        brandTitle1: "यात्रा",
+        brandTitle2: "साथी -",
+        brandTitle3: "कला एवं उत्सव",
+        navDashboard: "डैशबोर्ड",
+        navExplore: "अन्वेषण",
+        navBookings: "मेरी बुकिंग",
+        navLore: "सांस्कृतिक रील्स",
+        navFestivals: "कला एवं उत्सव",
+        navAccount: "खाता",
+        navSettings: "सेटिंग्स",
+        searchArtPlaceholder: "कलाएं, शिल्प, उत्सव, कलाकार, परंपराएं खोजें...",
+        userName: "अदिति शर्मा",
+        badgeHeritageLive: "धरोहर एवं लोक कला भंडार",
+        pageMainTitle: "पारंपरिक कलाएं एवं सांस्कृतिक उत्सव",
+        pageSubtitle: "राजस्थान के प्रामाणिक हस्तशिल्प, सिद्ध शिल्पकारों और रंगारंग मरुस्थलीय उत्सवों का अन्वेषण करें",
+        filterAll: "सभी देखें",
+        filterArts: "🎭 पारंपरिक कलाएं",
+        filterFestivals: "🎉 सांस्कृतिक उत्सव",
+        cityUdaipur: "उदयपुर",
+        cityJaipur: "जयपुर",
+        cityBikaner: "बीकानेर",
+        cityJaisalmer: "जैसलमेर",
+        headingArts: "पारंपरिक लोक कलाएं एवं हस्तशिल्प",
+        subheadingArts: "सिद्ध शिल्पकार, प्राचीन तकनीक और भौगोलिक संकेत (GI) प्रमाणित धरोहर",
+        headingFestivals: "प्रसिद्ध सांस्कृतिक उत्सव एवं मेले",
+        subheadingFestivals: "वार्षिक सांस्कृतिक मेले, लोक नृत्य, संगीत संगम और पारंपरिक उल्लास",
+        tagMasterclass: "शिल्पकार प्रत्यक्ष कार्यशाला अनुभव",
+        btnBookWorkshop: "कार्यशाला बुक करें",
+        btnFolkMelody: "लोक धुन सुनें",
+        btnExploreDetails: "विस्तृत विवरण",
+        btnBookSession: "कार्यशाला बुक करें",
+        btnRegisterEvent: "उत्सव पास बुक करें",
+        btnSetReminder: "रिमाइंडर सेट करें",
+        tagGiCertified: "जीआई प्रमाणित कला",
+        tagMasterArtisan: "सिद्ध शिल्पकार",
+        tagAnnualMela: "वार्षिक उत्सव",
+        lblOrigin: "उत्पत्ति / काल",
+        lblArtisan: "शिल्पकार घराना",
+        lblDate: "तिथि व समय",
+        lblVenue: "स्थान / घाट",
+        lblHighlights: "प्रमुख आकर्षण",
+        lblCraftTechnique: "निर्माण तकनीक",
+        modalBookTitle: "शिल्पकार प्रत्यक्ष मास्टरक्लास पंजीकरण",
+        modalPassTitle: "सांस्कृतिक उत्सव ई-पास आरक्षण",
+        btnConfirmBooking: "पंजीकरण की पुष्टि करें (निःशुल्क / शामिल)",
+        toastLangChanged: "भाषा बदलकर हिन्दी कर दी गई है",
+        toastWorkshopBooked: "शिल्पकार कार्यशाला सीट सफलतापूर्वक बुक हुई!",
+        toastFestivalRegistered: "उत्सव वीआईपी पास सफलतापूर्वक पंजीकृत हुआ!",
+        toastReminderSet: "यात्रा कैलेंडर में रिमाइंडर जोड़ दिया गया है!",
+        toastLikedAdded: "पसंदीदा कला एवं उत्सव संग्रह में सहेजा गया!",
+        toastLikedRemoved: "पसंदीदा संग्रह से हटाया गया",
+        toastShared: "कला एवं उत्सव विवरण क्लिपबोर्ड पर कॉपी किया गया!",
+        toastMelodyPlaying: "पारंपरिक राजस्थानी लोक धुन (कमायचा व रावणहत्था) बज रही है...",
+        toastAccount: "खाता सेटिंग्स लोड हो रही हैं...",
+        toastSettings: "सेटिंग्स पैनल लोड हो रहा है...",
+        toastNotifications: "कोई नई सूचना नहीं है",
+        verifiedArts: "प्रमाणित कलाएं",
+        annualFestivals: "वार्षिक उत्सव",
+        modalWorkshopSuccess: "कार्यशाला बुक हुई! विवरण आपके पंजीकृत यात्रा आईडी पर भेजा गया।",
+        modalPassSuccess: "उत्सव पास कन्फर्म! ई-पास तैयार हो गया है।"
+      }
+    };
+
+    // Full Bilingual Database for 4 Mock Cities: 3-4 Arts & 3-4 Festivals each
+    const artsAndFestivalsData = {
+      udaipur: {
+        arts: [
+          {
+            id: "u-art-1",
+            name: { en: "Phad Scroll Painting", hi: "फड़ लोक चित्रकला" },
+            category: "Painting",
+            artisan: { en: "Joshi Family Guild (Kalyan Joshi)", hi: "जोशी परिवार घराना (कल्याण जोशी)" },
+            origin: { en: "10th Century Mewar", hi: "10वीं शताब्दी मेवाड़" },
+            shortDesc: { 
+              en: "Religious scroll painting on handwoven khadi depicting epics of Pabuji and Devnarayan.", 
+              hi: "खादी कपड़े पर प्राकृतिक खनिज रंगों से बनाई जाने वाली लोकदेवता पाबूजी व देवनारायण की गाथा।" 
+            },
+            fullDesc: {
+              en: "Phad is a 700-year-old traditional scroll painting style native to Mewar. Painted on treated khadi using natural stone pigments and pure gum, the scrolls act as mobile temples for folk balladeers (Bhopas) who sing and perform the narrative through night-long musical recitals.",
+              hi: "फड़ मेवाड़ की 700 वर्ष पुरानी पारंपरिक वस्त्र-चित्रकला है। प्राकृतिक पत्थर के रंगों और गोंद से खादी पर निर्मित यह विशाल चित्रपट रात भर चलने वाले भोपा-भोपी के गायन और वादन के साथ लोक देवताओं की अमर गाथाएं प्रस्तुत करता है।"
+            },
+            rating: "4.9",
+            badge: { en: "GI Certified", hi: "जीआई प्रमाणित" },
+            image: "https://cdn.exoticindia.com/images/products/original/paintings-2019/mix198.jpg"
+          },
+          {
+            id: "u-art-2",
+            name: { en: "Mewar Royal Miniature Painting", hi: "मेवाड़ दरबारी लघु चित्रकला" },
+            category: "Painting",
+            artisan: { en: "Master Chandra Prakash Atelier", hi: "उस्ताद चंद्र प्रकाश कार्यशाला" },
+            origin: { en: "16th Century Mewar Court", hi: "16वीं शताब्दी मेवाड़ दरबार" },
+            shortDesc: { 
+              en: "Fine miniature court art using single-hair squirrel brushes and pure 24k gold leaf (Vark).", 
+              hi: "गिलहरी के बाल के बारीक ब्रश और शुद्ध 24 कैरेट सोने के वर्क से तैयार दरबारी कला।" 
+            },
+            fullDesc: {
+              en: "Characterized by expressive eyes, glowing jewel tones, and gold embellishments, Mewar miniature paintings capture romantic court scenes, Krishna Leela, and royal battles of Maharana Pratap with microscopic precision.",
+              hi: "भावपूर्ण नयन, चमकीले प्राकृतिक रत्न रंग और स्वर्णिम नक्काशी मेवाड़ लघु चित्रकला की पहचान है। इसमें महाराणा प्रताप के शौर्य और कृष्ण लीला का सूक्ष्म चित्रण किया जाता है।"
+            },
+            rating: "5.0",
+            badge: { en: "Royal Heritage", hi: "शाही धरोहर" },
+            image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "u-art-3",
+            name: { en: "Molela Terracotta Clay Murals", hi: "मोलेला टेराकोटा भित्ति कला" },
+            category: "Pottery & Clay",
+            artisan: { en: "Mohanlal Kumhar Heritage Guild", hi: "मोहनलाल कुम्हार शिल्प संघ" },
+            origin: { en: "Banas River Basin", hi: "बनास नदी तट" },
+            shortDesc: { 
+              en: "Sacred unglazed hollow relief plaques of village deities sculpted from river clay.", 
+              hi: "नदी की मिट्टी से हाथ से गढ़ी गई लोक देवताओं की उभरी हुई पवित्र टेराकोटा पट्टिकाएं।" 
+            },
+            fullDesc: {
+              en: "Hailing from Molela village near Udaipur, master potters hand-model clay relief plaques of Lord Devnarayan, Lord Ganesha, and snake gods. Fired in indigenous kilns, these unglazed murals are installed across tribal Rajasthan and Gujarat.",
+              hi: "उदयपुर के पास मोलेला गांव के कुम्हार बिना किसी सांचे के अपने हाथों से मिट्टी की उभरी हुई देव पट्टिकाएं बनाते हैं। यह पवित्र कला पूरे देश के मंदिरों व घरों में प्रतिष्ठित है।"
+            },
+            rating: "4.8",
+            badge: { en: "GI Certified", hi: "जीआई प्रमाणित" },
+            image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "u-art-4",
+            name: { en: "Mewari Wooden Crafts & Jharokhas", hi: "मेवाड़ी काष्ठ कला एवं झरोखे" },
+            category: "Woodcraft",
+            artisan: { en: "Bassi Woodcraft Collective", hi: "बस्सी काष्ठ शिल्पकार संघ" },
+            origin: { en: "Bassi, Chittorgarh-Udaipur", hi: "बस्सी-मेवाड़ क्षेत्र" },
+            shortDesc: { 
+              en: "Lacquered wooden traveling shrines (Kavad), jharokhas, and royal palanquins.", 
+              hi: "शीशम की लकड़ी पर नक्काशीदार कावड़ (चल मंदिर), जालीदार झरोखे और शाही पालकी।" 
+            },
+            fullDesc: {
+              en: "Bassi woodcrafts are famous for 'Kavad'—a portable painted wooden box shrine with multiple folding doors that tell mythological tales as they open, alongside intricate carved jharokhas for traditional havelis.",
+              hi: "कावड़ एक अद्भुत काष्ठ मंदिर है जिसके कई पट होते हैं। कथावाचक जैसे-जैसे एक-एक दरवाजा खोलते हैं, पौराणिक कहानियां सजीव हो उठती हैं। इसके साथ ही सुंदर झरोखे भी तैयार किए जाते हैं।"
+            },
+            rating: "4.7",
+            badge: { en: "Handmade", hi: "हस्तनिर्मित" },
+            image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80"
+          }
+        ],
+        festivals: [
+          {
+            id: "u-fest-1",
+            name: { en: "Mewar Festival & Gangaur Pageant", hi: "मेवाड़ महोत्सव एवं गणगौर सवारी" },
+            date: { en: "Apr 4-6 (Annual Spring)", hi: "4-6 अप्रैल (वार्षिक वसंत)" },
+            venue: { en: "Gangaur Ghat, Lake Pichola", hi: "गणगौर घाट, पिछोला झील" },
+            shortDesc: { 
+              en: "Royal procession of Goddess Gauri to Lake Pichola with decorated boat flotillas and Ghoomar.", 
+              hi: "पिछोला झील में माँ गौरी की शोभायात्रा, सजी हुई शाही नावें और महिलाओं का भव्य घूमर नृत्य।" 
+            },
+            fullDesc: {
+              en: "The Mewar Festival coincides with Gangaur and heralds the arrival of spring. Women carry brass idols of Isar and Gangaur through the old city to Lake Pichola for holy immersion amidst royal boat processions, Rajasthani folk songs, and dazzling firework shows.",
+              hi: "वसंत ऋतु के आगमन पर मनाया जाने वाला मेवाड़ महोत्सव गणगौर के पावन अवसर पर होता है। घाटों पर सजी नावों में माँ गौरी की सवारी और शाम को आतिशबाजी का भव्य दृश्य देखने देश-विदेश से पर्यटक आते हैं।"
+            },
+            crowd: { en: "High Energy / 50k+ Visitors", hi: "अत्यधिक उल्लास / 50,000+ दर्शक" },
+            image: "https://www.india-tours.com/blog/wp-content/uploads/2021/05/mewar-festival.jpg"
+          },
+          {
+            id: "u-fest-2",
+            name: { en: "Shilpgram National Folk Crafts Fair", hi: "शिल्पग्राम राष्ट्रीय लोक कला उत्सव" },
+            date: { en: "Dec 21-30 (10 Days)", hi: "21-30 दिसंबर (10 दिवसीय)" },
+            venue: { en: "Shilpgram Rural Arts Village", hi: "शिल्पग्राम कला परिसर, उदयपुर" },
+            shortDesc: { 
+              en: "10-day cultural mela hosting 1,000+ folk dancers, tribal musicians, and master weavers.", 
+              hi: "21 राज्यों के 1,000 से अधिक लोक कलाकारों, बुनकरों और आदिवासी संगीतकारों का राष्ट्रीय समागम।" 
+            },
+            fullDesc: {
+              en: "Spanning across rural mud huts and open-air amphitheatres, Shilpgram Crafts Mela showcases live pottery, Kalbelia snake dances, Chari fire dances, and traditional food stalls celebrating rural India's indigenous crafts.",
+              hi: "अरावली की वादियों में स्थित शिल्पग्राम में 10 दिनों तक पूरे भारत के लोक नर्तक, कठपुतली कलाकार और बुनकर अपनी कला का प्रदर्शन करते हैं। यहाँ पारंपरिक व्यंजनों का लुत्फ भी लिया जा सकता है।"
+            },
+            crowd: { en: "Festive Carnival / 100k+ Visitors", hi: "भव्य कार्निवल / 1,00,000+ पर्यटक" },
+            image: "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "u-fest-3",
+            name: { en: "Udaipur World Music Festival", hi: "उदयपुर वर्ल्ड म्यूजिक फेस्टिवल" },
+            date: { en: "Feb 7-9 (Annual)", hi: "7-9 फरवरी (वार्षिक)" },
+            venue: { en: "Fateh Sagar & Gandhi Ground", hi: "फतह सागर झील व गांधी ग्राउंड" },
+            shortDesc: { 
+              en: "Confluence of 150+ global musicians performing Sufi, Spanish flamenco, and desert melodies.", 
+              hi: "150+ अंतरराष्ट्रीय कलाकारों का सूफी, स्पेनिश फ्लेमेंको और मरुस्थलीय लोक संगीत संगम।" 
+            },
+            fullDesc: {
+              en: "Set against the serene waters of Fateh Sagar Lake, this international festival features morning meditative ragas, afternoon world fusion tunes, and energetic evening concerts blending Indian folk with global genres.",
+              hi: "झील के किनारे सुबह के शांत शास्त्रीय रागों से लेकर शाम के सूफी और फ्लेमेंको रॉक कॉन्सर्ट तक, यह महोत्सव संगीत प्रेमियों के लिए एक जादुई अनुभव है।"
+            },
+            crowd: { en: "Global Audience / Lakefront Vibe", hi: "वैश्विक दर्शक / सुरम्य झील किनारा" },
+            image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "u-fest-4",
+            name: { en: "Hariyali Amavasya Monsoon Mela", hi: "हरियाली अमावस्या सावन मेला" },
+            date: { en: "Aug 12-13 (Shravan Monsoon)", hi: "12-13 अगस्त (सावन मानसून)" },
+            venue: { en: "Saheliyon Ki Bari & Fateh Sagar", hi: "सहेलियों की बाड़ी व फतह सागर" },
+            shortDesc: { 
+              en: "Historic lakeside monsoon carnival with giant ferris wheels, malpuas, and folk singing.", 
+              hi: "झील किनारे विशाल झूले, प्रसिद्ध मालपुए, सावन के लोकगीत और पारंपरिक सांस्कृतिक उल्लास।" 
+            },
+            fullDesc: {
+              en: "Initiated by Maharana Fateh Singh over 130 years ago, this two-day fair celebrates the arrival of the monsoon. The second day is reserved exclusively for women, adorned in colorful lehengas singing traditional rain songs.",
+              hi: "130 वर्ष पूर्व महाराणा फतेह सिंह द्वारा शुरू किया गया यह मेला सावन की हरियाली का उत्सव है। मेले का दूसरा दिन विशेष रूप से महिलाओं के लिए आरक्षित होता है जहाँ वे पारंपरिक परिधानों में लोकगीत गाती हैं।"
+            },
+            crowd: { en: "Local Community / High Energy", hi: "स्थानीय लोक रंग / उल्लासमय" },
+            image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=600&q=80"
+          }
+        ]
+      },
+
+      jaipur: {
+        arts: [
+          {
+            id: "j-art-1",
+            name: { en: "Jaipur Blue Pottery", hi: "जयपुर ब्लू पॉटरी" },
+            category: "Ceramics & Pottery",
+            artisan: { en: "Kripal Kumbh Studio (Kripal Singh Lineage)", hi: "कृपाल कुंभ स्टूडियो (कृपाल सिंह घराना)" },
+            origin: { en: "Turko-Persian & Jaipur Royalty", hi: "तुर्को-फारसी व जयपुर राजघराना" },
+            shortDesc: { 
+              en: "Clay-free glazed quartz ceramics painted in brilliant cobalt blues and floral motifs.", 
+              hi: "बिना मिट्टी के क्वार्ट्ज पत्थर व कांच से निर्मित चमकीले नीले बर्तनों पर हस्त चित्रकारी।" 
+            },
+            fullDesc: {
+              en: "Unique in the world because it is made without clay, Jaipur Blue Pottery is crafted from a dough of ground quartz, glass, Fuller's earth, and natural gum. It is glazed with copper oxide and fired at low temperatures for a translucent glass finish.",
+              hi: "विश्व की एकमात्र ऐसी पॉटरी जो बिना मिट्टी के क्वार्ट्ज पत्थर, कांच, मुल्तानी मिट्टी और गोंद से बनती है। इस पर तांबे और कोबाल्ट के नीले रंगों से सुंदर फूल-पत्तियां बनाई जाती हैं।"
+            },
+            rating: "4.9",
+            badge: { en: "GI Certified", hi: "जीआई प्रमाणित" },
+            image: "https://static.wixstatic.com/media/a039ca_25bd1285de9e4b4787e91bd7ad58c99f~mv2.jpg/v1/fill/w_980,h_632,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a039ca_25bd1285de9e4b4787e91bd7ad58c99f~mv2.jpg"
+          },
+          {
+            id: "j-art-2",
+            name: { en: "Sanganeri & Bagru Block Printing", hi: "सांगानेरी व बगरू ब्लॉक प्रिंटिंग" },
+            category: "Textiles",
+            artisan: { en: "Chhipa Hand-block Printers Guild", hi: "छीपा हस्तशिल्प ब्लॉक प्रिंटर्स गिल्ड" },
+            origin: { en: "17th Century Sanganer", hi: "17वीं शताब्दी सांगानेर" },
+            shortDesc: { 
+              en: "Hand-stamped organic botanical printing on cotton using carved teakwood blocks.", 
+              hi: "सागवान के ठप्पों और प्राकृतिक वनस्पति रंगों (नील, हरड़) से सूती कपड़ों पर हाथ की छपाई।" 
+            },
+            fullDesc: {
+              en: "Sanganeri printing features delicate floral jaals on pure white backgrounds, while Bagru specializes in Dhabu mud-resist and earthy indigo shades stamped with hand-carved sheesham wooden blocks.",
+              hi: "सांगानेरी प्रिंट में सफेद पृष्ठभूमि पर नाजुक बेल-बूटे होते हैं, जबकि बगरू प्रिंट में दाबू मिट्टी और प्राकृतिक नील के गहरे रंगों से छपाई की जाती है। यह पर्यावरण अनुकूल विश्वप्रसिद्ध वस्त्र कला है।"
+            },
+            rating: "5.0",
+            badge: { en: "GI Certified", hi: "जीआई प्रमाणित" },
+            image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "j-art-3",
+            name: { en: "Meenakari & Kundan Jadau Jewelry", hi: "मीनाकारी एवं कुंदन आभूषण कला" },
+            category: "Jewelry & Metal",
+            artisan: { en: "Johari Bazaar Royal Enamel Masters", hi: "जौहरी बाजार राजघराना मीनाकार" },
+            origin: { en: "Raja Man Singh I Era", hi: "राजा मानसिंह प्रथम काल" },
+            shortDesc: { 
+              en: "Intricate vitreous mineral enameling on gold with uncut diamond foil settings.", 
+              hi: "सोने पर रंगीन मीने की नक्काशी और बिना तराशे हीरों को 24 कैरेट कुंदन में जड़ने की कला।" 
+            },
+            fullDesc: {
+              en: "Introduced to Jaipur by Raja Man Singh who invited Lahore enamelers, Meenakari involves engraving grooves on gold and firing powdered glass in ruby red, sapphire blue, and emerald green, framed by pure 24k Kundan jadau gemstones.",
+              hi: "जयपुर का कुंदन-मीनाकारी कार्य विश्व में बेजोड़ है। सोने की सतह पर बारीक नक्काशी करके रंगीन कांच पिघलाकर भरा जाता है और कीमती रत्नों को शुद्ध सोने की पन्नी (कुंदन) में जड़ा जाता है।"
+            },
+            rating: "4.9",
+            badge: { en: "Royal Luxury", hi: "शाही कला" },
+            image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "j-art-4",
+            name: { en: "Kathputli String Puppetry", hi: "जयपुर कठपुतली कला" },
+            category: "Folk Performance Art",
+            artisan: { en: "Bhatt Puppet Masters Colony", hi: "भाट कठपुतली कलाकार समाज" },
+            origin: { en: "Medieval Rajputana Courts", hi: "मध्यकालीन राजपूताना दरबार" },
+            shortDesc: { 
+              en: "Handmade mango-wood marionettes in gota-patti enacting ballads of bravery.", 
+              hi: "आम की लकड़ी और गोटा-पत्ती से सजी धागे की कठपुतलियां जो शौर्य गाथाएं सुनाती हैं।" 
+            },
+            fullDesc: {
+              en: "Carved from light mango wood and adorned in colorful bandhani and gota textiles, Kathputli puppets are operated with delicate strings, accompanied by high-pitched reed whistles (boli) and dholak beats telling historical legends.",
+              hi: "कठपुतली राजस्थान की सबसे प्राचीन लोक कलाओं में से एक है। कलाकार बिना किसी आधुनिक उपकरण के धागों और सीटी (बोली) के जरिए कठपुतलियों में जीवन फूंक देते हैं।"
+            },
+            rating: "4.8",
+            badge: { en: "Living Folklore", hi: "जीवंत लोककला" },
+            image: "https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?auto=format&fit=crop&w=600&q=80"
+          }
+        ],
+        festivals: [
+          {
+            id: "j-fest-1",
+            name: { en: "Teej Festival Royal Procession", hi: "तीज महोत्सव एवं शाही सवारी" },
+            date: { en: "Aug 18-19 (Shravan Monsoon)", hi: "18-19 अगस्त (श्रावण मास)" },
+            venue: { en: "City Palace to Chaugan Stadium", hi: "सिटी पैलेस से चौगान स्टेडियम" },
+            shortDesc: { 
+              en: "Gilded palanquin of Goddess Teej carried through Tripoliya Gate with royal elephants.", 
+              hi: "त्रिपोलिया गेट से निकलने वाली तीज माता की स्वर्ण पालकी, सजे-धजे हाथी और लोक नृत्य।" 
+            },
+            fullDesc: {
+              en: "The historic Teej procession is dedicated to Goddess Parvati. Accompanied by royal retinue, caparisoned camels, brass bands, and dancers balancing brass pots, the city turns emerald green celebrating marital bliss and sweet ghewar feasts.",
+              hi: "माता पार्वती को समर्पित तीज का पर्व जयपुर में अत्यंत भव्यता से मनाया जाता है। पारंपरिक घेवर की महक, मेहंदी से रचे हाथ और शाही लवाजमे के साथ निकलने वाली सवारी शहर का मुख्य आकर्षण होती है।"
+            },
+            crowd: { en: "Historic Pageant / 80k+ Attendees", hi: "ऐतिहासिक शोभायात्रा / 80,000+ श्रद्धालु" },
+            image: "https://www.india-tours.com/images/festivals/teej-festival/teej-festival-1.jpg"
+          },
+          {
+            id: "j-fest-2",
+            name: { en: "Jaipur Literature Festival (JLF)", hi: "जयपुर साहित्य उत्सव (JLF)" },
+            date: { en: "Jan 23-27 (5 Days)", hi: "23-27 जनवरी (5 दिवसीय)" },
+            venue: { en: "Hotel Clarks Amer / Diggi Palace", hi: "होटल क्लार्क्स आमेर / डिग्गी पैलेस" },
+            shortDesc: { 
+              en: "World's largest free literary festival hosting Nobel laureates, poets, and thinkers.", 
+              hi: "विश्व का सबसे बड़ा निःशुल्क साहित्य समागम जिसमें नोबेल विजेता और प्रख्यात लेखक भाग लेते हैं।" 
+            },
+            fullDesc: {
+              en: "Known as the 'Kumbh of Literature', JLF brings together hundreds of global authors, philosophers, and musicians under colorful canopies for book launches, debates, poetry slams, and morning music recitals.",
+              hi: "साहित्य का महाकुंभ कहे जाने वाले इस उत्सव में देश-विदेश के हजारों पाठक, विचारक और कलाकार जुटते हैं। यहाँ ज्ञानवर्धक परिचर्चाओं और संगीत का अद्भुत संगम होता है।"
+            },
+            crowd: { en: "International Crowd / Intellectual Vibe", hi: "अंतरराष्ट्रीय उपस्थिति / बौद्धिक समागम" },
+            image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "j-fest-3",
+            name: { en: "Gangaur Royal Festival", hi: "गणगौर शाही उत्सव" },
+            date: { en: "Mar 22-23 (Chaitra Spring)", hi: "22-23 मार्च (चैत्र मास)" },
+            venue: { en: "Tripolia Bazaar & Talkatora", hi: "त्रिपोलिया बाजार व तालकटोरा" },
+            shortDesc: { 
+              en: "Splendid royal pageant celebrating Lord Shiva and Goddess Parvati's divine union.", 
+              hi: "भगवान शिव (ईसर) और माता पार्वती (गौरी) के पावन मिलन की पारंपरिक शाही शोभायात्रा।" 
+            },
+            fullDesc: {
+              en: "The Gangaur idol is carried out of the City Palace through the grand Tripoliya gate amidst folk troupes, armed camel guards, and devotional songs, ending with holy water rituals at Talkatora lake.",
+              hi: "सिटी पैलेस से निकलने वाली गणगौर माता की सवारी में पारंपरिक राजस्थानी बाजे, घुड़सवार और कलश लिए महिलाएं शामिल होती हैं। यह पर्व सुहाग और समृद्धि का प्रतीक है।"
+            },
+            crowd: { en: "Grand Heritage Pageant", hi: "भव्य राजसी लवाजमा" },
+            image: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "j-fest-4",
+            name: { en: "Jaipur International Kite Festival", hi: "जयपुर मकर संक्रांति पतंग उत्सव" },
+            date: { en: "Jan 14-15 (Makar Sankranti)", hi: "14-15 जनवरी (मकर संक्रांति)" },
+            venue: { en: "Jal Mahal & Walled City Rooftops", hi: "जल महल व चारदीवारी की छतें" },
+            shortDesc: { 
+              en: "Sky filled with millions of kites, illuminated night lanterns (Tukkals), and feeni sweets.", 
+              hi: "आसमान में रंग-बिरंगी पतंगों की उड़न, रात में रोशन कंदील (तुक्कल) और फीणी-तिलपट्टी का स्वाद।" 
+            },
+            fullDesc: {
+              en: "On Makar Sankranti, every rooftop across Jaipur resonates with shouts of 'Woh Kata Re!'. As twilight falls, thousands of illuminated paper lanterns (Tukkals) and firecrackers light up the Pink City sky.",
+              hi: "संक्रांति पर पूरा जयपुर अपनी छतों पर पतंगबाजी के उल्लास में डूब जाता है। 'वो काटा' की गूंज और शाम को आसमान में उड़ते जगमगाते तुक्कल अद्भुत छटा बिखेरते हैं।"
+            },
+            crowd: { en: "City-wide Rooftop Festivity", hi: "पूरे नगर में छतों पर उत्सव" },
+            image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80"
+          }
+        ]
+      },
+
+      bikaner: {
+        arts: [
+          {
+            id: "b-art-1",
+            name: { en: "Usta Gold Relief Art (Naqqashi)", hi: "उस्ता कला (स्वर्ण मीनाकारी व नक्काशी)" },
+            category: "Gold Foil & Leather",
+            artisan: { en: "Padmashree Hanif Usta Heritage Guild", hi: "पद्मश्री हनीफ उस्ता शिल्प घराना" },
+            origin: { en: "Mughal-Bikaner Royal Court", hi: "मुगल-बीकानेर शाही दरबार" },
+            shortDesc: { 
+              en: "24-karat gold foil embossing and lacquer work on cured camel hide (Kupi) and marble.", 
+              hi: "ऊंट की खाल के कुप्पों व संगमरमर पर 24 कैरेट सोने के वर्क से उभरी हुई स्वर्णिम नक्काशी।" 
+            },
+            fullDesc: {
+              en: "Usta Art is a world-renowned gold embossing technique. Master craftsmen apply clay paste relief onto treated camel hide bottles, wood, or Junagarh Palace ceilings, gilding it with genuine 24k gold leaf and mineral pigments.",
+              hi: "उस्ता कला बीकानेर की अनुपम धरोहर है। ऊंट की खाल से बने कुप्पों, कांच और दीवारों पर मिट्टी की उभरी हुई नक्काशी करके शुद्ध 24 कैरेट सोने का वर्क लगाया जाता है जो सदियों तक चमकता रहता है।"
+            },
+            rating: "5.0",
+            badge: { en: "GI Certified", hi: "जीआई प्रमाणित" },
+            image: "https://mumbaimirror.indiatimes.com/photo/15838018.cms"
+          },
+          {
+            id: "b-art-2",
+            name: { en: "Bikaneri Haveli Fresco Murals", hi: "बीकानेर हवेली भित्ति चित्रकला" },
+            category: "Painting & Architecture",
+            artisan: { en: "Rampuria Haveli Artists Circle", hi: "रामपुरिया हवेली चित्रकार मंडल" },
+            origin: { en: "16th-19th Century Havelis", hi: "16वीं-19वीं शताब्दी हवेलियां" },
+            shortDesc: { 
+              en: "Red sandstone jharokhas and fresco paintings depicting Rajput royalty and folklore.", 
+              hi: "लाल बलुआ पत्थर के नक्काशीदार झरोखे और हवेलियों की दीवारों पर बने पारंपरिक भित्ति चित्र।" 
+            },
+            fullDesc: {
+              en: "The grand havelis of Bikaner, particularly the Rampuria group, boast delicate Dulmera red sandstone latticework combined with vibrant interior fresco murals depicting Radha-Krishna and royal court pageants.",
+              hi: "दुलमेरा के लाल पत्थर पर की गई बारीक नक्काशी और हवेलियों के अंदर प्राकृतिक रंगों से सजे भित्ति चित्र बीकानेर की वास्तुकला को अद्वितीय बनाते हैं।"
+            },
+            rating: "4.8",
+            badge: { en: "Architectural Art", hi: "वास्तु कला" },
+            image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "b-art-3",
+            name: { en: "Camel Wool Dhurries & Pattu Weaving", hi: "ऊंट ऊन बुनाई एवं पट्टू कला" },
+            category: "Textiles",
+            artisan: { en: "Nokha Desert Weavers Collective", hi: "नोखा मरुस्थलीय बुनकर संघ" },
+            origin: { en: "Thar Pastoral Communities", hi: "थार पशुपालक समाज" },
+            shortDesc: { 
+              en: "Thick thermal blankets (Pattu) and dhurries hand-spun from desert camel wool.", 
+              hi: "रेगिस्तानी ऊंट के ऊन से हाथ-करघे पर बुनी गई पारंपरिक पट्टू (शॉल) और मजबूत दरियाँ।" 
+            },
+            fullDesc: {
+              en: "Woven by Meghwal artisans in rural Bikaner on traditional pit looms, Pattu textiles feature geometric lozenge patterns made from coarse, natural camel hair and sheep wool to withstand extreme desert winters.",
+              hi: "कड़ाके की ठंड से बचने के लिए ऊंट के प्राकृतिक ऊन से हाथ-करघे पर बुनी जाने वाली पट्टू पर आकर्षक ज्यामितीय डिजाइन बनाए जाते हैं। यह अत्यंत टिकाऊ और गर्म होती है।"
+            },
+            rating: "4.7",
+            badge: { en: "Handloom Heritage", hi: "हथकरघा धरोहर" },
+            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "b-art-4",
+            name: { en: "Bikaneri Bhujia & Papad Culinary Craft", hi: "बीकानेरी भुजिया एवं पापड़ पाक-कला" },
+            category: "GI Culinary Craft",
+            artisan: { en: "Traditional Halwai Cottage Guild", hi: "पारंपरिक हलवाई एवं गृह उद्योग संघ" },
+            origin: { en: "1877 Maharaja Shri Dungar Singh", hi: "1877 महाराजा श्री डूंगर सिंह काल" },
+            shortDesc: { 
+              en: "GI-tagged crisp moth bean savoury prepared with desert spices and saline water.", 
+              hi: "मोठ के आटे, हींग और काली मिर्च से निर्मित विश्वप्रसिद्ध कुरकुरी बीकानेरी भुजिया।" 
+            },
+            fullDesc: {
+              en: "First crafted during the reign of Maharaja Dungar Singh, Bikaneri Bhujia is made from locally harvested moth bean flour, black pepper, and hing, pressed through brass sieves and deep-fried to golden crunchiness.",
+              hi: "बीकानेर की जलवायु और पानी के विशेष गुणों के कारण यहाँ की भुजिया का स्वाद दुनिया में कहीं और नहीं मिल सकता। इसे भारत सरकार द्वारा जीआई टैग प्रदान किया गया है।"
+            },
+            rating: "5.0",
+            badge: { en: "GI Certified Taste", hi: "जीआई प्रमाणित स्वाद" },
+            image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80"
+          }
+        ],
+        festivals: [
+          {
+            id: "b-fest-1",
+            name: { en: "International Bikaner Camel Festival", hi: "अंतरराष्ट्रीय बीकानेर ऊंट उत्सव" },
+            date: { en: "Jan 11-12 (Annual Winter)", hi: "11-12 जनवरी (वार्षिक शीतकालीन)" },
+            venue: { en: "Karni Singh Stadium & Ladera Dunes", hi: "करणी सिंह स्टेडियम व लाडेरा धोरे" },
+            shortDesc: { 
+              en: "Camel fur-cutting pageants, camel dance rhythms, and thrilling Jasnath fire dancers.", 
+              hi: "ऊंटों के फर पर कलात्मक नक्काशी, ऊंट नृत्य प्रतियोगिता और जसनाथी सिद्धों का अग्नि नृत्य।" 
+            },
+            fullDesc: {
+              en: "A vibrant desert spectacle honoring the 'Ship of the Desert'. Features camels adorned with heavy silver jewellery, camel acrobatics, tug-of-war contests, turban tying, and awe-inspiring night performances by fire dancers dancing barefoot on live embers.",
+              hi: "रेगिस्तान के जहाज ऊंट के सम्मान में आयोजित यह उत्सव देश-विदेश में प्रसिद्ध है। सजे हुए ऊंटों का नृत्य और धधकते अंगारों पर नंगे पैर किया जाने वाला सिद्ध अग्नि नृत्य रोंगटे खड़े कर देता है।"
+            },
+            crowd: { en: "Global Desert Carnival / 60k+ Spectators", hi: "वैश्विक मरु उत्सव / 60,000+ दर्शक" },
+            image: "https://mediaindia.eu/wp-content/uploads/2022/01/IMG_2767-scaled.jpg"
+          },
+          {
+            id: "b-fest-2",
+            name: { en: "Karni Mata Fair (Deshnoke)", hi: "करणी माता मेला (देशनोक)" },
+            date: { en: "Oct 15-23 (Navratri Mahotsav)", hi: "15-23 अक्टूबर (नवरात्र महोत्सव)" },
+            venue: { en: "Deshnoke Temple Complex", hi: "देशनोक मंदिर परिसर, बीकानेर" },
+            shortDesc: { 
+              en: "Sacred bi-annual pilgrimage honoring Goddess Karni amidst 25,000 revered sacred rats.", 
+              hi: "25,000 पवित्र चूहों (काबा) के चमत्कारी मंदिर में लगने वाला विशाल धार्मिक नवरात्र मेला।" 
+            },
+            fullDesc: {
+              en: "Held during Navratri, millions of devotees visit the 600-year-old marble temple of Karni Mata. Sighting a rare white rat among the thousands of resident black rats (Kabbas) is believed to bring profound blessings.",
+              hi: "देशनोक मंदिर में नवरात्र के दौरान लगने वाले इस मेले में भक्तजन माता के दर्शन और पवित्र काबों को भोग लगाने आते हैं। यहाँ सफेद चूहे का दिखना अत्यंत शुभ माना जाता है।"
+            },
+            crowd: { en: "Spiritual Gathering / Devotional Bliss", hi: "विशाल धार्मिक समागम / असीम आस्था" },
+            image: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "b-fest-3",
+            name: { en: "Kolayat Sacred Lake & Kapil Muni Fair", hi: "कोलायत कपिल मुनि मेला एवं दीपदान" },
+            date: { en: "Nov 14-16 (Kartik Purnima)", hi: "14-16 नवंबर (कार्तिक पूर्णिमा)" },
+            venue: { en: "Kolayat Holy Lake (52 Ghats)", hi: "पवित्र कोलायत सरोवर (52 घाट)" },
+            shortDesc: { 
+              en: "Twilight spectacle with 52 ghats illuminated by thousands of floating earthen oil lamps.", 
+              hi: "कार्तिक पूर्णिमा पर 52 घाटों से सरोवर में तैरते हजारों दीपकों का महा-दीपदान व स्नान।" 
+            },
+            fullDesc: {
+              en: "Dedicated to sage Kapil Muni, this sacred fair features pilgrims taking holy dips in the 52 ghats. At dusk, thousands of earthen lamps set on leaf-boats are floated onto the tranquil waters creating an unforgettable sea of golden light.",
+              hi: "महर्षि कपिल की तपोभूमि कोलायत में कार्तिक पूर्णिमा पर होने वाला दीपदान अत्यंत नयनाभिराम होता है। सरोवर के जल पर तैरते दीपक पूरे वातावरण को अलौकिक बना देते हैं।"
+            },
+            crowd: { en: "Serene Spiritual Twilight Celebration", hi: "अलौकिक आध्यात्मिक दीपदान उत्सव" },
+            image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "b-fest-4",
+            name: { en: "Akshaya Tritiya Kite & Foundation Carnival", hi: "अक्षय तृतीया बीकानेर स्थापना दिवस" },
+            date: { en: "May 2-3 (Akha Teej)", hi: "2-3 मई (आखा तीज)" },
+            venue: { en: "Junagarh Fort Terraces & Old City", hi: "जूनागढ़ किला व पुराना बीकानेर" },
+            shortDesc: { 
+              en: "City-wide kite flying, saffron Imlana drink, and wheat Khichda feasts celebrating 1488 founding.", 
+              hi: "राव बीकाजी द्वारा नगर स्थापना का महापर्व, दिन-रात पतंगबाजी (चंदा) व इमलाना शर्बत का आनंद।" 
+            },
+            fullDesc: {
+              en: "Commemorating the founding of Bikaner by Rao Bika in 1488, people of all ages fly large paper kites (Chanda) day and night, drinking tangy Imlana and dining on traditional bajra khichda.",
+              hi: "बीकानेर स्थापना दिवस पर हर घर में पतंगें उड़ाई जाती हैं। इमली से बना खास 'इमलाना' पेय और गेहूं-बाजरे का खीचड़ा इस दिन का विशेष पारंपरिक व्यंजन है।"
+            },
+            crowd: { en: "Historic City Celebration", hi: "नगरव्यापी पारंपरिक उल्लास" },
+            image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80"
+          }
+        ]
+      },
+
+      jaisalmer: {
+        arts: [
+          {
+            id: "js-art-1",
+            name: { en: "Yellow Sandstone Jali Lattice Carving", hi: "पीत बलुआ पत्थर जाली नक्काशी" },
+            category: "Stonemasonry",
+            artisan: { en: "Silawat Master Stonecutters (Patwon Haveli Guild)", hi: "सिलावट पत्थर नक्काशी घराना (पटवों की हवेली)" },
+            origin: { en: "12th Century Golden Fort", hi: "12वीं शताब्दी सोनार दुर्ग" },
+            shortDesc: { 
+              en: "Delicate filigree and pierced geometric stone latticework carved without mortar.", 
+              hi: "जैसलमेर के सुनहरे बलुआ पत्थर पर बिना चूने-सीमेंट के तराशी गई बारीक जालीदार नक्काशी।" 
+            },
+            fullDesc: {
+              en: "Known as 'poetry in stone', Silawat craftsmen carve golden sandstone with chisels to create microscopic jali windows, balconies, and jharokhas that allow cool desert air to circulate while maintaining privacy.",
+              hi: "जैसलमेर की हवेलियों में पत्थर को लकड़ी की तरह तराशा गया है। धूप पड़ते ही यह जालीदार नक्काशी सोने जैसी दमकने लगती है। यह मरुस्थलीय वास्तुकला का अनुपम उदाहरण है।"
+            },
+            rating: "5.0",
+            badge: { en: "GI Certified", hi: "जीआई प्रमाणित" },
+            image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "js-art-2",
+            name: { en: "Camel Leather Embroidery & Mojaris", hi: "चमड़ा कशीदाकारी एवं मोजड़ी कला" },
+            category: "Leather & Footwear",
+            artisan: { en: "Swaroop Ram Master Atelier", hi: "स्वरूप राम मोजड़ी एवं चमड़ा शिल्प" },
+            origin: { en: "Thar Trade Route", hi: "थार व्यापार मार्ग" },
+            shortDesc: { 
+              en: "Tanned desert camel leather shoes (mojaris) and bags embroidered with silk and mirrors.", 
+              hi: "ऊंट के चमड़े से निर्मित पारंपरिक जूतियां (मोजड़ी), जिन पर रेशमी धागों व शीशों से कशीदाकारी होती है।" 
+            },
+            fullDesc: {
+              en: "Made from vegetable-tanned camel leather, Jaisalmeri mojaris feature upturned toes, soft padding, and intricate silk thread needlework that resists the hot sands of the Thar Desert.",
+              hi: "ऊंट के चमड़े से बनी ये मोजड़ियां बेहद आरामदायक और टिकाऊ होती हैं। इन पर हाथ से रंग-बिरंगे रेशमी धागों और चमकीले शीशों की बारीक कढ़ाई की जाती है।"
+            },
+            rating: "4.8",
+            badge: { en: "Authentic Craft", hi: "प्रामाणिक शिल्प" },
+            image: "https://s7ap1.scene7.com/is/image/incredibleindia/leather-bags-in-jaisalmer-blog-sho-hero?qlt=82&ts=1726660016292"
+          },
+          {
+            id: "js-art-3",
+            name: { en: "Manganiyar Kamaicha & Folk Instruments", hi: "मांगणियार कमायचा एवं मरु संगीत वाद्य" },
+            category: "Musical Craft",
+            artisan: { en: "Desert Folk Music Collective (Anwar Khan)", hi: "मरु लोक संगीत घराना (अनवर खान)" },
+            origin: { en: "Ancient Thar Desert Lore", hi: "प्राचीन थार लोक परंपरा" },
+            shortDesc: { 
+              en: "17-string bowed instrument carved from single mango wood blocks, accompanied by Khartal.", 
+              hi: "आम की लकड़ी व बकरे की खाल से बना 17 तारों वाला दुर्लभ कमायचा और शीशम की खड़ताल।" 
+            },
+            fullDesc: {
+              en: "The Kamaicha is one of the oldest bowed folk instruments in the world, producing a haunting, resonant sound. Master Manganiyar artisans craft the resonator from seasoned mango wood and goat skin.",
+              hi: "कमायचा थार रेगिस्तान की आत्मा है। 17 तारों वाले इस वाद्य की गूंज मरुस्थल के विरह और शौर्य के गीतों में जान फूंक देती है। इसके साथ खड़ताल की जुगलबंदी अद्भुत होती है।"
+            },
+            rating: "4.9",
+            badge: { en: "UNESCO Recognized", hi: "यूनेस्को मान्यता" },
+            image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "js-art-4",
+            name: { en: "Ralli Patchwork & Desert Mirror Quilts", hi: "रल्ली रजाई एवं मरुस्थलीय शीशा कढ़ाई" },
+            category: "Textiles",
+            artisan: { en: "Thar Women's Artisan Guild", hi: "थार महिला दस्तकार समिति" },
+            origin: { en: "Indo-Pak Thar Borderlands", hi: "थार सीमांत क्षेत्र" },
+            shortDesc: { 
+              en: "Vibrant geometric patchwork quilts stitched from cotton remnants and cowrie shells.", 
+              hi: "कपड़े के रंग-बिरंगे टुकड़ों, कौड़ियों और छोटे शीशों को जोड़कर बनाई जाने वाली पारंपरिक रल्ली।" 
+            },
+            fullDesc: {
+              en: "Ralli is an indigenous textile tradition practiced by nomad women in the Thar. Layers of hand-dyed cotton fabrics are cut into intricate geometric mosaic patterns, sewn with tiny mirrors that glitter in the sun.",
+              hi: "रल्ली थार की महिलाओं द्वारा बनाई जाने वाली एक बेहद खूबसूरत रजाई है। रंगीन कपड़ों के टुकड़ों को ज्यामितीय आकारों में जोड़कर और शीशे लगाकर इसे कलात्मक रूप दिया जाता है।"
+            },
+            rating: "4.8",
+            badge: { en: "Tribal Artisan", hi: "जनजातीय शिल्प" },
+            image: "https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=600&q=80"
+          }
+        ],
+        festivals: [
+          {
+            id: "js-fest-1",
+            name: { en: "Jaisalmer Desert Festival (Maru Mahotsav)", hi: "जैसलमेर मरु महोत्सव" },
+            date: { en: "Feb 14-16 (3 Days in Thar)", hi: "14-16 फरवरी (3 दिवसीय मरु उत्सव)" },
+            venue: { en: "Sam Sand Dunes & Fort Arena", hi: "सैम सैंड ड्यून्स व सोनार किला" },
+            shortDesc: { 
+              en: "3-day Thar carnival with turban tying, Mr. Desert pageant, camel polo, and moonlit concerts.", 
+              hi: "रेत के धोरों पर 3 दिवसीय उत्सव - मरु श्री प्रतियोगिता, ऊंट दौड़, पगड़ी बांधना और लोक संगीत।" 
+            },
+            fullDesc: {
+              en: "Set against rolling golden sand dunes, the Desert Festival celebrates the colors and chivalry of Rajasthan. Highlights include camel polo, longest moustache contests, traditional Kalbelia dances, and fireworks over Sam dunes.",
+              hi: "सैम के सुनहरे रेत के टीलों पर आयोजित मरु महोत्सव राजस्थान का सबसे चर्चित उत्सव है। चाँदनी रात में गूंजता लोक संगीत और सजे-धजे ऊंटों की दौड़ इसे अविस्मरणीय बनाती है।"
+            },
+            crowd: { en: "Iconic Desert Extravaganza / 100k+ Tourists", hi: "भव्य मरु उत्सव / 1,00,000+ पर्यटक" },
+            image: "https://www.rajasthantourplanner.com/blog/wp-content/uploads/2017/07/desert-festival-@-jaisalmer-1024x683.jpg"
+          },
+          {
+            id: "js-fest-2",
+            name: { en: "Ramdevra Maha Kumbh Folk Fair", hi: "रामदेवरा महाकुंभ लोक मेला" },
+            date: { en: "Sep 8-18 (Bhadrapada)", hi: "8-18 सितंबर (भाद्रपद मास)" },
+            venue: { en: "Ramdevra Holy Shrine", hi: "रामदेवरा समाधि धाम, जैसलमेर" },
+            shortDesc: { 
+              en: "Massive pilgrimage celebrating folk saint Baba Ramdevji with ecstatic Tera Tali dance.", 
+              hi: "सांप्रदायिक सद्भाव के प्रतीक लोक देवता बाबा रामदेव जी का मेला व प्रसिद्ध तेरहताली नृत्य।" 
+            },
+            fullDesc: {
+              en: "Millions of devotees walk hundreds of miles on foot carrying saffron flags (Dhwaja) to pay homage to Baba Ramdevji, the 14th-century folk deity of communal harmony, famous for the hypnotic 13-cymbal Tera Tali dance.",
+              hi: "लाखों श्रद्धालु पैदल यात्रा करके बाबा रामदेव जी के दर्शन करने पहुँचते हैं। कामड़ जाति की महिलाओं द्वारा शरीर पर 13 मंजीरे बांधकर किया जाने वाला 'तेरहताली नृत्य' इस मेले का प्रमुख आकर्षण है।"
+            },
+            crowd: { en: "Massive Devotional Pilgrimage / 500k+", hi: "विशाल लोक महाकुंभ / 5,00,000+ श्रद्धालु" },
+            image: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "js-fest-3",
+            name: { en: "Thar Night Dunes & Lantern Festival", hi: "थार सैंड ड्यून्स रात्रि लालटेन महोत्सव" },
+            date: { en: "Nov 20-22 (Full Moon Nights)", hi: "20-22 नवंबर (शरद पूर्णिमा)" },
+            venue: { en: "Khuri Sand Dunes", hi: "खुरी के सुनहरे धोरे, जैसलमेर" },
+            shortDesc: { 
+              en: "Moonlit desert gatherings with glowing lanterns over dunes, campfires, and Algoza tunes.", 
+              hi: "तारों भरी रात में रेत के टीलों पर कंदील उत्सव, अलाव की महफ़िल और अलगोजा-ढोलक की जुगलबंदी।" 
+            },
+            fullDesc: {
+              en: "Celebrated in the peaceful dunes of Khuri, travellers release glowing paper sky lanterns into the desert night sky while dining on hot Ker Sangri and listening to soulful ballads under the Milky Way.",
+              hi: "खुरी के शांत धोरों पर पूर्णिमा की रात को आकाश में उड़ते रोशन कंदील और मरुस्थलीय अलाव के चारों ओर बैठ कर लोक संगीत का आनंद लेना एक स्वप्निल अनुभव है।"
+            },
+            crowd: { en: "Magical Moonlit Campfire Vibe", hi: "जादुई मरुस्थलीय रात्रि समागम" },
+            image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=600&q=80"
+          },
+          {
+            id: "js-fest-4",
+            name: { en: "Sonar Qila Living Heritage Mahotsav", hi: "सोनार किला जीवंत विरासत महोत्सव" },
+            date: { en: "Dec 10-12 (Winter Heritage)", hi: "10-12 दिसंबर (शीतकालीन धरोहर)" },
+            venue: { en: "Jaisalmer Living Fort Corridors", hi: "जैसलमेर सोनार दुर्ग प्रांगण" },
+            shortDesc: { 
+              en: "Living fortress festivities with royal trumpets, puppet theater, and rooftop folk concerts.", 
+              hi: "860 वर्ष पुराने जीवंत किले में राजस्थानी नगाड़े, कठपुतली शो और हवेली छतों पर लोक संगीत।" 
+            },
+            fullDesc: {
+              en: "Inside one of the world's few fully functioning living forts, local residents and artists host heritage walks, royal Rajput trumpet fanfares, puppet theater, and courtyard folk dance showcases.",
+              hi: "विश्व के एकमात्र जीवंत किले के अंदर आयोजित यह उत्सव किले के 860 वर्ष पुराने इतिहास और संस्कृति को जीवंत करता है। यहाँ हवेलियों की छतों पर लोक संगीत की महफ़िलें सजती हैं।"
+            },
+            crowd: { en: "Medieval Living Fort Heritage", hi: "मध्यकालीन जीवंत दुर्ग उत्सव" },
+            image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
+          }
+        ]
+      }
+    };
+
+    // State Variables
+    let currentLangKey = localStorage.getItem('appLang') || 'en';
+    let currentCityKey = 'udaipur';
+    let activeViewFilter = 'all'; // 'all', 'arts', 'festivals'
+    let likedItems = JSON.parse(localStorage.getItem('likedArtsFestivals') || '[]');
+    let currentSearchTerm = '';
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(currentLangKey, false);
+      renderCityShowcase();
+
+      // Click outside to close language menu
+      document.addEventListener('click', (e) => {
+        const container = document.getElementById('langDropdownContainer');
+        if (container && !container.contains(e.target)) {
+          closeLangMenu();
+        }
+      });
+    });
+
+    // Language Dropdown Handlers
+    function toggleLangDropdown(event) {
+      if (event) event.stopPropagation();
+      const menu = document.getElementById('langMenu');
+      const chevron = document.getElementById('langChevron');
+      const isHidden = menu.classList.contains('hidden');
+
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        closeLangMenu();
+      }
+    }
+
+    function closeLangMenu() {
+      const menu = document.getElementById('langMenu');
+      const chevron = document.getElementById('langChevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
+
+    function selectLang(lang) {
+      if (lang !== 'en' && lang !== 'hi') lang = 'en';
+      currentLangKey = lang;
+      localStorage.setItem('appLang', lang);
+      closeLangMenu();
+      applyLanguage(lang, true);
+    }
+
+    function applyLanguage(lang, showNotification = true) {
+      const dict = i18n[lang] || i18n.en;
+
+      // Update button text and active checkmark
+      document.getElementById('currentLang').innerText = lang === 'hi' ? 'हिन्दी (Hindi)' : 'English';
+      
+      const checkEn = document.getElementById('check-en');
+      const checkHi = document.getElementById('check-hi');
+      if (checkEn && checkHi) {
+        if (lang === 'hi') {
+          checkEn.classList.add('hidden');
+          checkHi.classList.remove('hidden');
+        } else {
+          checkEn.classList.remove('hidden');
+          checkHi.classList.add('hidden');
+        }
+      }
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.innerText = dict[key];
+        }
+      });
+
+      // Update all placeholder elements with data-i18n-placeholder
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+
+      // Update Subtitle
+      document.getElementById('pageSubtitle').innerText = dict.pageSubtitle;
+      document.getElementById('subheadingArts').innerText = dict.subheadingArts;
+      document.getElementById('subheadingFestivals').innerText = dict.subheadingFestivals;
+
+      // Re-render data
+      renderCityShowcase();
+
+      if (showNotification) {
+        showToast(dict.toastLangChanged);
+      }
+    }
+
+    // Switch City Tab
+    function switchCity(cityKey) {
+      if (!artsAndFestivalsData[cityKey]) return;
+      currentCityKey = cityKey;
+
+      const cities = ['udaipur', 'jaipur', 'bikaner', 'jaisalmer'];
+      cities.forEach(c => {
+        const btn = document.getElementById(`tab-${c}`);
+        if (c === cityKey) {
+          btn.className = "flex-1 min-w-[140px] text-center py-2.5 px-4 rounded-2xl text-xs font-bold transition-all bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border border-[var(--border,#e2e8f0)] shadow-sm cursor-pointer flex items-center justify-center gap-2";
+        } else {
+          btn.className = "flex-1 min-w-[140px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer flex items-center justify-center gap-2";
+        }
+      });
+
+      renderCityShowcase();
+    }
+
+    // Switch View Filter (All, Arts, Festivals)
+    function setViewFilter(filter) {
+      activeViewFilter = filter;
+      const filters = ['all', 'arts', 'festivals'];
+      filters.forEach(f => {
+        const btn = document.getElementById(`btn-view-${f}`);
+        if (f === filter) {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all bg-[var(--card,#ffffff)] text-blue-600 shadow-sm border border-[var(--border,#e2e8f0)] cursor-pointer";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-medium text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-all cursor-pointer";
+        }
+      });
+
+      const sectionArts = document.getElementById('section-arts');
+      const sectionFestivals = document.getElementById('section-festivals');
+
+      if (filter === 'all') {
+        sectionArts.classList.remove('hidden');
+        sectionFestivals.classList.remove('hidden');
+      } else if (filter === 'arts') {
+        sectionArts.classList.remove('hidden');
+        sectionFestivals.classList.add('hidden');
+      } else if (filter === 'festivals') {
+        sectionArts.classList.add('hidden');
+        sectionFestivals.classList.remove('hidden');
+      }
+    }
+
+    // Search Filter Handler
+    function handleSearch(term) {
+      currentSearchTerm = (term || '').trim().toLowerCase();
+      renderCityShowcase();
+    }
+
+    // Render Arts and Festivals for current city
+    function renderCityShowcase() {
+      const cityData = artsAndFestivalsData[currentCityKey];
+      if (!cityData) return;
+
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+
+      // Filter Arts by search
+      let artsList = cityData.arts;
+      let festList = cityData.festivals;
+
+      if (currentSearchTerm) {
+        artsList = artsList.filter(a => {
+          const name = (a.name[lang] || a.name.en).toLowerCase();
+          const desc = (a.shortDesc[lang] || a.shortDesc.en).toLowerCase();
+          const artisan = (a.artisan[lang] || a.artisan.en).toLowerCase();
+          const cat = a.category.toLowerCase();
+          return name.includes(currentSearchTerm) || desc.includes(currentSearchTerm) || artisan.includes(currentSearchTerm) || cat.includes(currentSearchTerm);
+        });
+
+        festList = festList.filter(f => {
+          const name = (f.name[lang] || f.name.en).toLowerCase();
+          const desc = (f.shortDesc[lang] || f.shortDesc.en).toLowerCase();
+          const venue = (f.venue[lang] || f.venue.en).toLowerCase();
+          return name.includes(currentSearchTerm) || desc.includes(currentSearchTerm) || venue.includes(currentSearchTerm);
+        });
+      }
+
+      // Update count badges
+      document.getElementById('artsCountBadge').innerText = `${artsList.length} ${dict.verifiedArts}`;
+      document.getElementById('festivalsCountBadge').innerText = `${festList.length} ${dict.annualFestivals}`;
+
+      // Render Arts Grid
+      const artsGrid = document.getElementById('artsGrid');
+      artsGrid.innerHTML = '';
+
+      if (artsList.length === 0) {
+        artsGrid.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-[var(--muted-foreground,#64748b)]">${lang === 'hi' ? 'कोई परिणाम नहीं मिला।' : 'No traditional arts match your search criteria.'}</div>`;
+      } else {
+        artsList.forEach(art => {
+          const artName = art.name[lang] || art.name.en;
+          const artDesc = art.shortDesc[lang] || art.shortDesc.en;
+          const artisanName = art.artisan[lang] || art.artisan.en;
+          const artBadge = art.badge[lang] || art.badge.en;
+          const isLiked = likedItems.includes(art.id);
+
+          artsGrid.innerHTML += `
+            <div class="bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between group card-zoom">
+              <!-- Top Image with Badges -->
+              <div class="relative h-44 overflow-hidden bg-slate-100">
+                <img src="${art.image}" alt="${artName}" class="w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+                
+                <!-- Category Tag -->
+                <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-lg text-[9px] font-extrabold text-[var(--foreground,#0f172a)] uppercase tracking-wider shadow-sm">
+                  ${art.category}
+                </span>
+
+                <!-- Favorite Button -->
+                <button onclick="toggleLikeItem('${art.id}', '${artName}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur text-white flex items-center justify-center transition-all cursor-pointer">
+                  <svg class="w-4 h-4" fill="${isLiked ? '#f97316' : 'none'}" stroke="${isLiked ? '#f97316' : 'currentColor'}" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+
+                <!-- Bottom Badge in Image -->
+                <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
+                  <span class="text-[10px] font-bold text-orange-300 flex items-center gap-1">
+                    ★ ${art.rating} &bull; ${artBadge}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Body Details -->
+              <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div>
+                  <h3 class="font-extrabold text-sm text-[var(--foreground,#0f172a)] leading-snug line-clamp-1 group-hover:text-blue-600 transition-colors">${artName}</h3>
+                  <p class="text-[10px] text-green-700 dark:text-green-400 font-bold mt-0.5 truncate flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    ${artisanName}
+                  </p>
+                  <p class="text-[11px] text-[var(--muted-foreground,#64748b)] leading-relaxed mt-2 line-clamp-2">${artDesc}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-2 border-t border-[var(--border,#e2e8f0)] flex items-center gap-2">
+                  <button onclick="openArtModal('${art.id}')" class="flex-1 py-2 bg-[var(--background,#f8fafc)] hover:bg-[var(--accent,#f1f5f9)] text-[var(--foreground,#0f172a)] border border-[var(--border,#e2e8f0)] font-bold text-[10px] uppercase rounded-xl transition-all text-center cursor-pointer">
+                    ${dict.btnExploreDetails}
+                  </button>
+                  <button onclick="bookArtisanSession('${artName}')" class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-[10px] uppercase rounded-xl shadow-md shadow-blue-500/25 transition-all text-center cursor-pointer">
+                    ${dict.btnBookSession}
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // Render Festivals Grid
+      const festivalsGrid = document.getElementById('festivalsGrid');
+      festivalsGrid.innerHTML = '';
+
+      if (festList.length === 0) {
+        festivalsGrid.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-[var(--muted-foreground,#64748b)]">${lang === 'hi' ? 'कोई परिणाम नहीं मिला।' : 'No cultural festivals match your search criteria.'}</div>`;
+      } else {
+        festList.forEach(fest => {
+          const festName = fest.name[lang] || fest.name.en;
+          const festDesc = fest.shortDesc[lang] || fest.shortDesc.en;
+          const festDate = fest.date[lang] || fest.date.en;
+          const festVenue = fest.venue[lang] || fest.venue.en;
+          const isLiked = likedItems.includes(fest.id);
+
+          festivalsGrid.innerHTML += `
+            <div class="bg-[var(--card,#ffffff)] border border-[var(--border,#e2e8f0)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between group card-zoom">
+              <!-- Top Image with Badges -->
+              <div class="relative h-44 overflow-hidden bg-slate-100">
+                <img src="${fest.image}" alt="${festName}" class="w-full h-full object-cover transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+                
+                <!-- Date Pill -->
+                <span class="absolute top-3 left-3 px-2.5 py-1 bg-orange-500 text-white rounded-lg text-[9px] font-extrabold uppercase tracking-wider shadow-sm flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  ${festDate}
+                </span>
+
+                <!-- Favorite Button -->
+                <button onclick="toggleLikeItem('${fest.id}', '${festName}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur text-white flex items-center justify-center transition-all cursor-pointer">
+                  <svg class="w-4 h-4" fill="${isLiked ? '#f97316' : 'none'}" stroke="${isLiked ? '#f97316' : 'currentColor'}" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+
+                <!-- Venue Info in Image -->
+                <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
+                  <span class="text-[10px] font-bold text-slate-200 truncate flex items-center gap-1">
+                    <svg class="w-3 h-3 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                    ${festVenue}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Body Details -->
+              <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div>
+                  <h3 class="font-extrabold text-sm text-[var(--foreground,#0f172a)] leading-snug line-clamp-1 group-hover:text-orange-500 transition-colors">${festName}</h3>
+                  <p class="text-[10px] text-orange-600 dark:text-orange-400 font-bold mt-0.5 truncate">${fest.crowd[lang] || fest.crowd.en}</p>
+                  <p class="text-[11px] text-[var(--muted-foreground,#64748b)] leading-relaxed mt-2 line-clamp-2">${festDesc}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-2 border-t border-[var(--border,#e2e8f0)] flex items-center gap-2">
+                  <button onclick="openFestivalModal('${fest.id}')" class="flex-1 py-2 bg-[var(--background,#f8fafc)] hover:bg-[var(--accent,#f1f5f9)] text-[var(--foreground,#0f172a)] border border-[var(--border,#e2e8f0)] font-bold text-[10px] uppercase rounded-xl transition-all text-center cursor-pointer">
+                    ${dict.btnExploreDetails}
+                  </button>
+                  <button onclick="registerFestivalPass('${festName}')" class="flex-1 py-2 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-bold text-[10px] uppercase rounded-xl shadow-md shadow-orange-500/25 transition-all text-center cursor-pointer">
+                    ${dict.btnRegisterEvent}
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Open Art Detail Modal
+    function openArtModal(artId) {
+      const cityData = artsAndFestivalsData[currentCityKey];
+      const art = cityData.arts.find(a => a.id === artId);
+      if (!art) return;
+
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      const artName = art.name[lang] || art.name.en;
+      const artFullDesc = art.fullDesc[lang] || art.fullDesc.en;
+      const artisanName = art.artisan[lang] || art.artisan.en;
+      const artOrigin = art.origin[lang] || art.origin.en;
+      const artBadge = art.badge[lang] || art.badge.en;
+
+      const modalContent = document.getElementById('modalContent');
+      modalContent.innerHTML = `
+        <div class="space-y-4">
+          <div class="relative h-56 rounded-2xl overflow-hidden">
+            <img src="${art.image}" alt="${artName}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-white">
+              <span class="px-2.5 py-1 bg-orange-500 text-white rounded-lg text-[9px] font-extrabold uppercase tracking-wider">${artBadge}</span>
+              <h2 class="text-xl font-black mt-1">${artName}</h2>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs bg-[var(--background,#f8fafc)] p-3 rounded-2xl border border-[var(--border,#e2e8f0)]">
+            <div>
+              <span class="text-[10px] font-bold text-[var(--muted-foreground,#64748b)] uppercase block">${dict.lblArtisan}</span>
+              <span class="font-extrabold text-[var(--foreground,#0f172a)]">${artisanName}</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-[var(--muted-foreground,#64748b)] uppercase block">${dict.lblOrigin}</span>
+              <span class="font-extrabold text-[var(--foreground,#0f172a)]">${artOrigin}</span>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-bold text-[var(--muted-foreground,#64748b)] uppercase tracking-wider mb-1">${dict.lblCraftTechnique}</h4>
+            <p class="text-xs text-[var(--foreground,#0f172a)] leading-relaxed">${artFullDesc}</p>
+          </div>
+
+          <div class="pt-4 border-t border-[var(--border,#e2e8f0)] flex items-center gap-3">
+            <button onclick="shareItem('${artName}')" class="p-2.5 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-xl text-xs font-bold hover:bg-[var(--accent,#f1f5f9)] transition-colors cursor-pointer">
+              🔗
+            </button>
+            <button onclick="confirmBookingAction('${artName}', 'art')" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/25 transition-all cursor-pointer text-center">
+              ${dict.modalBookTitle}
+            </button>
+          </div>
+        </div>
+      `;
+
+      showModal();
+    }
+
+    // Open Festival Detail Modal
+    function openFestivalModal(festId) {
+      const cityData = artsAndFestivalsData[currentCityKey];
+      const fest = cityData.festivals.find(f => f.id === festId);
+      if (!fest) return;
+
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      const festName = fest.name[lang] || fest.name.en;
+      const festFullDesc = fest.fullDesc[lang] || fest.fullDesc.en;
+      const festDate = fest.date[lang] || fest.date.en;
+      const festVenue = fest.venue[lang] || fest.venue.en;
+      const festCrowd = fest.crowd[lang] || fest.crowd.en;
+
+      const modalContent = document.getElementById('modalContent');
+      modalContent.innerHTML = `
+        <div class="space-y-4">
+          <div class="relative h-56 rounded-2xl overflow-hidden">
+            <img src="${fest.image}" alt="${festName}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-white">
+              <span class="px-2.5 py-1 bg-orange-500 text-white rounded-lg text-[9px] font-extrabold uppercase tracking-wider">${festDate}</span>
+              <h2 class="text-xl font-black mt-1">${festName}</h2>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs bg-[var(--background,#f8fafc)] p-3 rounded-2xl border border-[var(--border,#e2e8f0)]">
+            <div>
+              <span class="text-[10px] font-bold text-[var(--muted-foreground,#64748b)] uppercase block">${dict.lblVenue}</span>
+              <span class="font-extrabold text-[var(--foreground,#0f172a)]">${festVenue}</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-[var(--muted-foreground,#64748b)] uppercase block">${dict.lblHighlights}</span>
+              <span class="font-extrabold text-orange-600">${festCrowd}</span>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-bold text-[var(--muted-foreground,#64748b)] uppercase tracking-wider mb-1">${dict.pageMainTitle}</h4>
+            <p class="text-xs text-[var(--foreground,#0f172a)] leading-relaxed">${festFullDesc}</p>
+          </div>
+
+          <div class="pt-4 border-t border-[var(--border,#e2e8f0)] flex items-center gap-3">
+            <button onclick="setEventReminder('${festName}')" class="px-4 py-3 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-2xl text-xs font-bold hover:bg-[var(--accent,#f1f5f9)] transition-colors cursor-pointer flex items-center gap-1.5">
+              🔔 <span>${dict.btnSetReminder}</span>
+            </button>
+            <button onclick="confirmBookingAction('${festName}', 'festival')" class="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl text-xs uppercase tracking-wider shadow-md shadow-orange-500/25 transition-all cursor-pointer text-center">
+              ${dict.modalPassTitle}
+            </button>
+          </div>
+        </div>
+      `;
+
+      showModal();
+    }
+
+    function openWorkshopModal() {
+      const city = currentCityKey;
+      const dict = i18n[currentLangKey] || i18n.en;
+      const cityName = dict['city' + city.charAt(0).toUpperCase() + city.slice(1)];
+      
+      const modalContent = document.getElementById('modalContent');
+      modalContent.innerHTML = `
+        <div class="space-y-4">
+          <div class="border-b border-[var(--border,#e2e8f0)] pb-3">
+            <span class="px-2.5 py-0.5 bg-green-100 text-green-700 text-[10px] font-extrabold rounded-full uppercase">${cityName} Artisans</span>
+            <h3 class="text-lg font-black text-[var(--foreground,#0f172a)] mt-1">${dict.modalBookTitle}</h3>
+            <p class="text-xs text-[var(--muted-foreground,#64748b)]">Join a 2-hour interactive masterclass led by national awardee artisans.</p>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="font-bold text-[10px] uppercase text-[var(--muted-foreground,#64748b)] block mb-1">Select Workshop Craft</label>
+              <select id="wsCraftSelect" class="w-full p-2.5 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-xl font-bold">
+                <option>Blue Pottery Tile Painting (2 hrs)</option>
+                <option>Phad Scroll Folk Pigment Workshop (3 hrs)</option>
+                <option>Usta 24k Gold Foil Relief Embossing (2 hrs)</option>
+                <option>Sanganeri Hand Block Printing on Silk (2 hrs)</option>
+              </select>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="font-bold text-[10px] uppercase text-[var(--muted-foreground,#64748b)] block mb-1">Preferred Date</label>
+                <input type="date" value="2026-09-08" class="w-full p-2 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-xl">
+              </div>
+              <div>
+                <label class="font-bold text-[10px] uppercase text-[var(--muted-foreground,#64748b)] block mb-1">Time Slot</label>
+                <select class="w-full p-2 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-xl">
+                  <option>10:00 AM - 12:00 PM</option>
+                  <option>03:00 PM - 05:00 PM</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="font-bold text-[10px] uppercase text-[var(--muted-foreground,#64748b)] block mb-1">Attendee Name & Contact</label>
+              <input type="text" value="Aditi Sharma (+91 98765 43210)" class="w-full p-2.5 bg-[var(--background,#f8fafc)] border border-[var(--border,#e2e8f0)] rounded-xl">
+            </div>
+          </div>
+
+          <button onclick="confirmBookingAction('${cityName} Masterclass', 'art')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/25 transition-all cursor-pointer">
+            ${dict.btnConfirmBooking}
+          </button>
+        </div>
+      `;
+
+      showModal();
+    }
+
+    function showModal() {
+      const modal = document.getElementById('detailModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.firstElementChild.classList.remove('scale-95');
+      modal.firstElementChild.classList.add('scale-100');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('detailModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.firstElementChild.classList.remove('scale-100');
+      modal.firstElementChild.classList.add('scale-95');
+    }
+
+    function confirmBookingAction(itemName, type) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      closeModal();
+      if (type === 'art') {
+        showToast(`${dict.modalWorkshopSuccess} (${itemName})`);
+      } else {
+        showToast(`${dict.modalPassSuccess} (${itemName})`);
+      }
+    }
+
+    // Direct Action Triggers
+    function bookArtisanSession(artName) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(`${dict.toastWorkshopBooked} - ${artName}`);
+    }
+
+    function registerFestivalPass(festName) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(`${dict.toastFestivalRegistered} - ${festName}`);
+    }
+
+    function setEventReminder(festName) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(`${dict.toastReminderSet} (${festName})`);
+    }
+
+    function toggleLikeItem(id, name) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      const idx = likedItems.indexOf(id);
+      if (idx > -1) {
+        likedItems.splice(idx, 1);
+        showToast(`${dict.toastLikedRemoved} (${name})`);
+      } else {
+        likedItems.push(id);
+        showToast(`${dict.toastLikedAdded} (${name})`);
+      }
+      localStorage.setItem('likedArtsFestivals', JSON.stringify(likedItems));
+      renderCityShowcase();
+    }
+
+    function shareItem(name) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      const text = `${name} - YatraSaathi Incredible India Arts & Festivals`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(dict.toastShared);
+      }).catch(() => {
+        showToast(dict.toastShared);
+      });
+    }
+
+    function playFolkRhythm() {
+      const dict = i18n[currentLangKey] || i18n.en;
+      const icon = document.getElementById('folkAudioIcon');
+      showToast(dict.toastMelodyPlaying);
+    }
+
+    function showLocalizedToast(key) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(dict[key] || "Action completed");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const toastText = document.getElementById('toastMsg');
+      
+      toastText.innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

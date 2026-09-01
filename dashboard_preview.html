@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YatraSaathi - Explore</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <!-- Leaflet CSS & JS for Real Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    /* Custom Scrollbar for better UI */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border, rgba(0, 0, 0, 0.1));
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted-foreground, rgba(0, 0, 0, 0.2));
+    }
+    .lang-dropdown-menu {
+      animation: dropdownFade 0.18s ease-out forwards;
+    }
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    /* Custom Leaflet Map Styling */
+    .leaflet-container {
+      font-family: inherit;
+      background: #f8fafc;
+    }
+    /* Blue Pointer Pin for Top 3 Destinations */
+    .custom-blue-pin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .custom-blue-pin .pin-body {
+      background: #2563eb;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.45);
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .custom-blue-pin:hover .pin-body {
+      transform: rotate(-45deg) scale(1.12);
+      background: #1d4ed8;
+    }
+    .custom-blue-pin .pin-content {
+      transform: rotate(45deg);
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      text-align: center;
+    }
+    .custom-blue-pin .pin-pulse {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: rgba(37, 99, 235, 0.4);
+      border-radius: 50%;
+      bottom: -6px;
+      left: 9px;
+      animation: pinPulse 2s infinite ease-out;
+      pointer-events: none;
+    }
+    @keyframes pinPulse {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* Green Pointer Pin for Public Facilities (Police, Hospital, Toilet) */
+    .custom-green-pin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .custom-green-pin .pin-body {
+      background: #16a34a;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.45);
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .custom-green-pin:hover .pin-body {
+      transform: rotate(-45deg) scale(1.15);
+      background: #15803d;
+    }
+    .custom-green-pin .pin-content {
+      transform: rotate(45deg);
+      font-size: 11px;
+      line-height: 1;
+      text-align: center;
+    }
+    .custom-green-pin .pin-pulse {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: rgba(22, 163, 74, 0.45);
+      border-radius: 50%;
+      bottom: -5px;
+      left: 8px;
+      animation: greenPinPulse 2s infinite ease-out;
+      pointer-events: none;
+    }
+    @keyframes greenPinPulse {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(2.3); opacity: 0; }
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 1.25rem;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.18), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+    }
+    .leaflet-popup-content {
+      margin: 0 !important;
+      line-height: 1.4;
+    }
+    .leaflet-container a.leaflet-popup-close-button {
+      top: 10px;
+      right: 10px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 9999px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: none;
+      backdrop-filter: blur(4px);
+    }
+    .leaflet-container a.leaflet-popup-close-button:hover {
+      background: rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen flex flex-col md:flex-row p-4 md:p-6 gap-6 font-sans">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="w-full md:w-64 bg-[var(--card)] border border-[var(--border)] rounded-3xl p-6 flex flex-col justify-between shrink-0 shadow-sm">
+    <div>
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 flex-shrink-0 bg-gradient-to-tr from-orange-500 via-white to-green-600 rounded-full flex items-center justify-center shadow-md border border-[var(--border)] overflow-hidden">
+          <!-- Ashoka Chakra SVG -->
+          <svg class="w-6 h-6 text-blue-800 animate-[spin_20s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="1 1" />
+            <path stroke="currentColor" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4L18.4 5.6M12 12m-2 0a2 2 0 104 0 2 2 0 00-4 0" />
+          </svg>
+        </div>
+        <div>
+          <div data-i18n="brandTitle1" class="text-xs font-extrabold tracking-wider text-orange-500 leading-none">YATRA</div>
+          <div data-i18n="brandTitle2" class="text-xs font-extrabold tracking-wider text-[var(--foreground)] leading-none">SAATHI -</div>
+          <div data-i18n="brandTitle3" class="text-[10px] font-medium text-green-600 leading-none tracking-tight">EXPLORE</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="space-y-2">
+        <a href="dashboard_preview_v2.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+          </svg>
+          <span data-i18n="navDashboard">Dashboard</span>
+        </a>
+        <a href="cultural_dashboard.html" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 font-semibold text-sm border-l-4 border-orange-500 shadow-sm transition-all">
+          <span class="flex items-center gap-4">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span data-i18n="navExplore">Explore</span>
+          </span>
+          <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+        </a>
+        <a href="dashboard_preview_v2.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span data-i18n="navBookings">My Bookings</span>
+        </a>
+        <a href="cultural_reels.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span data-i18n="navLore">Cultural Reels</span>
+        </a>
+        <a href="art_festivals.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span data-i18n="navFestivals">Art & Festivals</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- User Profile & Settings in Sidebar Footer -->
+    <div class="mt-8 border-t border-[var(--border)] pt-6 space-y-2">
+      <a href="#" onclick="showLocalizedToast('toastAccount')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span data-i18n="navAccount">Account</span>
+      </a>
+      <a href="#" onclick="showLocalizedToast('toastSettings')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span data-i18n="navSettings">Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN WORKSPACE ================= -->
+  <main class="flex-1 flex flex-col gap-6 min-w-0">
+    
+    <!-- TOP BAR -->
+    <header class="w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-[var(--card)] border border-[var(--border)] rounded-3xl p-4 shadow-sm relative overflow-visible z-30">
+      <!-- Decorative Backdrop Tricolor Blur -->
+      <div class="absolute inset-0 pointer-events-none opacity-5 dark:opacity-10 flex rounded-3xl overflow-hidden">
+        <div class="w-1/3 h-full bg-orange-500 blur-2xl"></div>
+        <div class="w-1/3 h-full bg-white blur-2xl"></div>
+        <div class="w-1/3 h-full bg-green-600 blur-2xl"></div>
+      </div>
+      
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md">
+        <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Search cultural paths, events, stays..." class="w-full pl-11 pr-4 py-2.5 bg-[var(--background)] border border-[var(--border)] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-[var(--foreground)] placeholder-[var(--placeholder)] transition-all">
+        <svg class="w-4 h-4 text-[var(--muted-foreground)] absolute left-4 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- User Panel Controls -->
+      <div class="flex items-center justify-between sm:justify-end gap-4 relative z-30">
+        
+        <!-- Language Dropdown Toggle Bar -->
+        <div class="relative" id="langDropdownContainer">
+          <button id="langBtn" onclick="toggleLangDropdown(event)" type="button" class="flex items-center gap-2 px-4 py-2 bg-[var(--background)] border border-[var(--border)] hover:border-blue-500 rounded-full text-xs font-bold hover:bg-[var(--accent)] transition-all shadow-sm cursor-pointer select-none">
+            <span class="text-base leading-none">🌐</span>
+            <span id="currentLang">English</span>
+            <svg id="langChevron" class="w-3.5 h-3.5 text-[var(--muted-foreground)] transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          <!-- Lang Dropdown Menu (English & Hindi only) -->
+          <div id="langMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-2xl shadow-2xl py-1.5 z-50 text-xs lang-dropdown-menu overflow-hidden">
+            <button onclick="selectLang('en')" id="langOpt-en" type="button" class="w-full text-left px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold flex items-center justify-between transition-colors cursor-pointer">
+              <span>English</span>
+              <span id="check-en" class="text-blue-600 font-bold">✓</span>
+            </button>
+            <button onclick="selectLang('hi')" id="langOpt-hi" type="button" class="w-full text-left px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold flex items-center justify-between transition-colors cursor-pointer">
+              <span>हिन्दी (Hindi)</span>
+              <span id="check-hi" class="text-blue-600 font-bold hidden">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="flex items-center gap-3 bg-[var(--background)] border border-[var(--border)] rounded-full pl-1.5 pr-4 py-1">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Aditi Sharma" class="w-7 h-7 rounded-full object-cover border border-[var(--border)]">
+          <span data-i18n="userName" class="text-xs font-semibold text-[var(--foreground)] hidden xs:block">Aditi Sharma</span>
+          <svg class="w-3.5 h-3.5 text-[var(--muted-foreground)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <!-- Notifications Bell -->
+        <button onclick="showLocalizedToast('toastNotifications')" class="w-9 h-9 flex items-center justify-center bg-[var(--background)] border border-[var(--border)] rounded-full hover:bg-[var(--accent)] transition-all relative">
+          <svg class="w-4 h-4 text-[var(--foreground)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="absolute top-1 right-1 w-2 h-2 bg-orange-500 border border-[var(--card)] rounded-full"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN WORKSPACE CONTENT -->
+    <div class="flex flex-col gap-6">
+      
+      <!-- ================= ROW 1: LIVE WEATHER + SOS EMERGENCY PANELS ================= -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5" id="futureWorkspaceSection">
+        
+        <!-- Live Weather Panel (7 cols) -->
+        <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-3xl p-5 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-sm">🌤️</div>
+              <div>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-[var(--foreground)]" data-i18n="weather_title">Destination Live Weather</h3>
+                <p class="text-[10px] text-[var(--muted-foreground)]" data-i18n="weather_subtitle">Real-time telemetry via Open-Meteo Meteorological Service</p>
+              </div>
+            </div>
+            <!-- City Switcher -->
+            <div class="flex items-center gap-1.5">
+              <label class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase" data-i18n="weather_select_city">City:</label>
+              <select id="weatherCitySelect" onchange="fetchLiveWeather(this.value)" class="py-1 px-2.5 bg-[var(--background)] border border-[var(--border)] rounded-xl text-xs font-bold text-[var(--foreground)] focus:ring-1 focus:ring-blue-500 outline-none cursor-pointer">
+                <option value="udaipur" selected>Udaipur</option>
+                <option value="jaipur">Jaipur</option>
+                <option value="bikaner">Bikaner</option>
+                <option value="jaisalmer">Jaisalmer</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+            <!-- Main Temp Card -->
+            <div id="weatherMainBox" class="sm:col-span-5 flex items-center gap-3.5 p-3.5 bg-[var(--background)] rounded-2xl border border-[var(--border)]">
+              <span id="weatherIcon" class="text-4xl animate-bounce">☀️</span>
+              <div>
+                <div class="flex items-baseline gap-1">
+                  <span id="weatherTemp" class="text-2xl md:text-3xl font-black">--°C</span>
+                  <span id="weatherCondition" class="text-[10px] font-bold text-blue-600 uppercase">Updating...</span>
+                </div>
+                <div class="text-[10px] text-[var(--muted-foreground)] flex gap-2 font-medium mt-0.5">
+                  <span>💨 <span id="weatherWind">-- km/h</span></span>
+                  <span>💧 <span id="weatherHumidity">--%</span></span>
+                </div>
+              </div>
+            </div>
+            <!-- 4-Day Mini Forecast Cards -->
+            <div id="weatherForecastGrid" class="sm:col-span-7 grid grid-cols-4 gap-1.5 text-center">
+              <div class="p-2 bg-[var(--background)] rounded-xl border border-[var(--border)] text-[10px]">
+                <span class="font-bold text-[9px] text-[var(--muted-foreground)]">Day 1</span>
+                <div class="text-lg my-0.5">🌤️</div>
+                <span class="font-bold">--°</span>
+              </div>
+              <div class="p-2 bg-[var(--background)] rounded-xl border border-[var(--border)] text-[10px]">
+                <span class="font-bold text-[9px] text-[var(--muted-foreground)]">Day 2</span>
+                <div class="text-lg my-0.5">☀️</div>
+                <span class="font-bold">--°</span>
+              </div>
+              <div class="p-2 bg-[var(--background)] rounded-xl border border-[var(--border)] text-[10px]">
+                <span class="font-bold text-[9px] text-[var(--muted-foreground)]">Day 3</span>
+                <div class="text-lg my-0.5">🌦️</div>
+                <span class="font-bold">--°</span>
+              </div>
+              <div class="p-2 bg-[var(--background)] rounded-xl border border-[var(--border)] text-[10px]">
+                <span class="font-bold text-[9px] text-[var(--muted-foreground)]">Day 4</span>
+                <div class="text-lg my-0.5">🌤️</div>
+                <span class="font-bold">--°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency SOS Quick Panel (5 cols) -->
+        <div class="lg:col-span-5 bg-red-500/10 border border-red-500/30 rounded-3xl p-5 shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
+              </span>
+              <h3 class="text-xs font-black uppercase text-red-600 tracking-wider" data-i18n="sos_title">Emergency SOS & Incident Response</h3>
+            </div>
+            <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 bg-red-600 text-white rounded-full" data-i18n="sos_badge">24x7 Active</span>
+          </div>
+
+          <p class="text-[11px] text-[var(--foreground)] font-medium leading-tight mb-3" data-i18n="sos_description">
+            Pressing the SOS broadcast instantly transmits your GPS telemetry to Rajasthan Tourist Police Command & Medical First Responders.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button onclick="triggerEmergencySOS()" id="sosActionBtn" class="w-full bg-red-600 hover:bg-red-700 active:scale-95 text-white font-black py-3 px-4 rounded-2xl text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-1.707 1.707A1 1 0 003 15h14a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
+              <span data-i18n="sos_button">Trigger Emergency SOS</span>
+            </button>
+            <button onclick="testSOSLocation()" class="w-full bg-[var(--card)] hover:bg-[var(--accent)] text-[var(--foreground)] border border-[var(--border)] font-bold py-3 px-3 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              <span data-i18n="sos_share_loc">Share Geo-Pin</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- EXTENDED INTERACTIVE REAL GPS MAP (FULL WIDTH) -->
+      <section class="w-full bg-[var(--card)] border border-[var(--border)] rounded-3xl p-5 shadow-sm flex flex-col justify-between min-h-[540px]">
+        
+        <div class="flex-1 flex flex-col">
+          <!-- Title Section -->
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h2 data-i18n="mapMainTitle" class="text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
+                Interactive Tourist Map
+              </h2>
+              <p id="mapSubtitle" class="text-xs text-[var(--muted-foreground)]">3 Top Rated Tourist Destinations & Essential Public Facilities</p>
+            </div>
+            <!-- Destination Count Badge -->
+            <span class="flex items-center gap-1.5 px-3 py-1 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-[10px] font-extrabold rounded-full border border-blue-100 dark:border-blue-900/30 uppercase tracking-wider">
+              <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+              <span data-i18n="tagTopDestinations">Top 3 Spots</span>
+            </span>
+          </div>
+
+          <!-- City Selector Tabs -->
+          <div class="flex gap-2 flex-wrap mb-4 bg-[var(--background)] p-1.5 rounded-2xl border border-[var(--border)]">
+            <button onclick="switchCity('udaipur')" id="tab-udaipur" class="flex-1 text-center py-1.5 px-3 rounded-xl text-xs font-bold transition-all bg-[var(--card)] text-blue-600 dark:text-blue-400 shadow-sm border border-[var(--border)] cursor-pointer">
+              <span data-i18n="cityUdaipur">Udaipur</span>
+            </button>
+            <button onclick="switchCity('jaipur')" id="tab-jaipur" class="flex-1 text-center py-1.5 px-3 rounded-xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+              <span data-i18n="cityJaipur">Jaipur</span>
+            </button>
+            <button onclick="switchCity('bikaner')" id="tab-bikaner" class="flex-1 text-center py-1.5 px-3 rounded-xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+              <span data-i18n="cityBikaner">Bikaner</span>
+            </button>
+            <button onclick="switchCity('jaisalmer')" id="tab-jaisalmer" class="flex-1 text-center py-1.5 px-3 rounded-xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+              <span data-i18n="cityJaisalmer">Jaisalmer</span>
+            </button>
+          </div>
+
+          <!-- Real Interactive Leaflet GPS Map Container -->
+          <div class="relative w-full flex-1 min-h-[440px] rounded-2xl border border-[var(--border)] overflow-hidden shadow-inner bg-slate-100" id="mapCanvas">
+            <!-- Leaflet Container -->
+            <div id="leafletMap" class="w-full h-full min-h-[440px] z-10"></div>
+          </div>
+        </div>
+
+        <!-- Footer Map Info / Legend Annotation -->
+        <div class="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-4 text-[10px] font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
+          <span class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-blue-600 rounded-full border border-white shadow-sm"></span>
+            <span data-i18n="mapDestinationPins">Blue Pointers (Top 3)</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-green-600 rounded-full border border-white shadow-sm animate-pulse"></span>
+            <span data-i18n="mapPublicFacilities" class="text-green-700 dark:text-green-400 font-extrabold">Public Facilities</span>
+          </span>
+          <span class="text-blue-600 dark:text-blue-400 font-bold">GPS Map</span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Notification Banner (Solid White Opaque Background) -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 bg-white text-slate-900 border border-slate-200 py-3.5 px-5 rounded-2xl shadow-2xl flex items-center gap-3.5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="p-1.5 bg-green-100 text-green-700 rounded-xl shrink-0">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <span id="toastMsg" class="text-xs font-bold text-slate-800">Action completed successfully!</span>
+  </div>
+
+  <!-- ================= STATE & JAVASCRIPT LOGIC ================= -->
+  <script>
+    // Internationalization (i18n) Dictionary
+    const i18n = {
+      en: {
+        brandTitle1: "YATRA",
+        brandTitle2: "SAATHI -",
+        brandTitle3: "EXPLORE",
+        ministryTitle1: "YATRA",
+        ministryTitle2: "SAATHI -",
+        ministryTitle3: "EXPLORE",
+        navDashboard: "Dashboard",
+        navExplore: "Explore",
+        navBookings: "My Bookings",
+        navLore: "Cultural Reels",
+        navFestivals: "Art & Festivals",
+        navAccount: "Account",
+        navSettings: "Settings",
+        searchPlaceholder: "Search cultural paths, events, stays...",
+        userName: "Aditi Sharma",
+        mapMainTitle: "Interactive Tourist Map",
+        tagTopDestinations: "Top 3 Spots",
+        cityUdaipur: "Udaipur",
+        cityJaipur: "Jaipur",
+        cityBikaner: "Bikaner",
+        cityJaisalmer: "Jaisalmer",
+        mapDestinationPins: "Blue Pointers (Top 3)",
+        mapPublicFacilities: "Public Facilities",
+        tagPlayingLore: "Playing Lore",
+        discoverTodayTitle: "Discover Today",
+        tagUpcomingFestival: "Upcoming Festival",
+        btnViewEvent: "View Event",
+        tagArtisanSpotlight: "Artisan Spotlight",
+        btnLearnMore: "Learn More",
+        tagBookYourStay: "Book Your Stay",
+        perNight: "/night",
+        btnBookNow: "Book Now",
+        toastLangChanged: "Language changed to English",
+        toastLikedAdded: "Added to your Liked Lore gallery!",
+        toastLikedRemoved: "Removed from Liked Lore gallery",
+        toastMuted: "Muted audio story guide",
+        toastUnmuted: "Unmuted audio story guide",
+        toastLoreShared: "Lore link copied to clipboard!",
+        toastFestivalDetails: "Opening festival registration details...",
+        toastArtisanDetails: "Artisan booking details loaded.",
+        toastAccount: "Loading account settings...",
+        toastSettings: "Opening settings panel...",
+        toastNotifications: "No unread notifications",
+        viewDetails: "Tourist Spot Details",
+        nearestPolice: "Nearest Police Station",
+        nearestHospital: "Nearest Hospital",
+        nearestToilet: "Nearest Public Toilet",
+        facilitiesHeader: "Essential Public Facilities",
+        directionsBtn: "Navigate / Directions",
+        weather_title: "Destination Live Weather",
+        weather_subtitle: "Real-time telemetry via Open-Meteo Meteorological Service",
+        weather_select_city: "City:",
+        sos_title: "Emergency SOS & Incident Response",
+        sos_badge: "24x7 Active",
+        sos_description: "Pressing the SOS broadcast instantly transmits your GPS telemetry to Rajasthan Tourist Police Command & Medical First Responders.",
+        sos_button: "Trigger Emergency SOS",
+        sos_share_loc: "Share Geo-Pin",
+        toast_sos_active: "🚨 SOS Broadcast Active! Coordinates dispatched to Police & Medical first responders.",
+        toast_sos_copied: "📍 Geo-Location telemetry copied to clipboard & verified with Ministry Node."
+      },
+      hi: {
+        brandTitle1: "यात्रा",
+        brandTitle2: "साथी -",
+        brandTitle3: "अन्वेषण",
+        ministryTitle1: "यात्रा",
+        ministryTitle2: "साथी -",
+        ministryTitle3: "अन्वेषण",
+        navDashboard: "डैशबोर्ड",
+        navExplore: "अन्वेषण",
+        navBookings: "मेरी बुकिंग",
+        navLore: "सांस्कृतिक रील्स",
+        navFestivals: "कला एवं उत्सव",
+        navAccount: "खाता",
+        navSettings: "सेटिंग्स",
+        searchPlaceholder: "सांस्कृतिक मार्ग, कार्यक्रम, होटल खोजें...",
+        userName: "अदिति शर्मा",
+        mapMainTitle: "इंटरैक्टिव पर्यटन मानचित्र",
+        tagTopDestinations: "शीर्ष 3 स्थल",
+        cityUdaipur: "उदयपुर",
+        cityJaipur: "जयपुर",
+        cityBikaner: "बीकानेर",
+        cityJaisalmer: "जैसलमेर",
+        mapDestinationPins: "ब्लू पॉइंटर (शीर्ष 3)",
+        mapPublicFacilities: "सार्वजनिक सुविधाएं",
+        tagPlayingLore: "लोककथा जारी है",
+        discoverTodayTitle: "आज का आकर्षण",
+        tagUpcomingFestival: "आगामी उत्सव",
+        btnViewEvent: "विवरण देखें",
+        tagArtisanSpotlight: "शिल्पकार विशेष",
+        btnLearnMore: "अधिक जानें",
+        tagBookYourStay: "होटल बुक करें",
+        perNight: "/रात",
+        btnBookNow: "अभी बुक करें",
+        toastLangChanged: "भाषा बदलकर हिन्दी कर दी गई है",
+        toastLikedAdded: "पसंदीदा लोककथा गैलरी में जोड़ा गया!",
+        toastLikedRemoved: "पसंदीदा सूची से हटाया गया",
+        toastMuted: "ऑडियो गाइड म्यूट किया गया",
+        toastUnmuted: "ऑडियो गाइड अनम्यूट किया गया",
+        toastLoreShared: "कथा का लिंक क्लिपबोर्ड पर कॉपी हो गया!",
+        toastFestivalDetails: "उत्सव पंजीकरण विवरण खोला जा रहा है...",
+        toastArtisanDetails: "शिल्पकार विवरण उपलब्ध कराया जा रहा है...",
+        toastAccount: "खाता विवरण लोड हो रहा है...",
+        toastSettings: "सेटिंग्स पैनल खोला जा रहा है...",
+        toastNotifications: "कोई नई सूचना नहीं है",
+        viewDetails: "पर्यटन स्थल विवरण",
+        nearestPolice: "निकटतम पुलिस स्टेशन",
+        nearestHospital: "निकटतम अस्पताल",
+        nearestToilet: "निकटतम सार्वजनिक शौचालय",
+        facilitiesHeader: "आवश्यक सार्वजनिक सुविधाएं",
+        directionsBtn: "मार्ग / दिशा निर्देश",
+        weather_title: "गंतव्य लाइव मौसम",
+        weather_subtitle: "ओपन-मेटियो सेवा द्वारा रीयल-टाइम डेटा",
+        weather_select_city: "शहर:",
+        sos_title: "आपातकालीन एसओएस और घटना प्रतिक्रिया",
+        sos_badge: "24x7 सक्रिय",
+        sos_description: "एसओएस दबाने से आपकी जीपीएस लोकेशन तुरंत राजस्थान पर्यटक पुलिस और मेडिकल फर्स्ट रिस्पॉन्डर्स को भेजी जाती है।",
+        sos_button: "आपातकालीन एसओएस भेजें",
+        sos_share_loc: "जियो-पिन साझा करें",
+        toast_sos_active: "🚨 आपातकालीन एसओएस सक्रिय! जीपीएस लोकेशन पुलिस व मेडिकल टीमों को भेजी गई।",
+        toast_sos_copied: "📍 जियो-लोकेशन क्लिपबोर्ड पर कॉपी की गई और मंत्रालय नोड से सत्यापित की गई।"
+      }
+    };
+
+    // Bilingual Data Store with 3 Tourist Places per City (Real GPS Coordinates, Weather, Crowd & Public Facilities)
+    const mockDatabase = {
+      udaipur: {
+        center: [24.5854, 73.7125],
+        zoom: 13,
+        places: [
+          {
+            id: "u1",
+            lat: 24.5764,
+            lng: 73.6835,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmAaIAGIJ4Z50d2it5Faks_wXMW5i-CM925uVoOwyK0OlTLeXrYSbIHlQ&s=10",
+            crowdLevel: "high",
+            en: { name: "City Palace", type: "Royal Heritage", desc: "A 400-year-old palace complex towering over Lake Pichola with ornate courtyards and Mewar artifacts.", timing: "9:00 AM - 5:30 PM", weatherIcon: "☀️", weather: "Sunny (28°C)", crowdText: "Densely Crowded (Above Usual)", crowdBadge: "High Rush" },
+            hi: { name: "सिटी पैलेस", type: "शाही धरोहर", desc: "पिछोला झील के किनारे स्थित 400 वर्ष पुराना विशाल महल परिसर जिसमें भव्य आंगन और मेवाड़ कालीन वस्तुएं हैं।", timing: "सुबह 9:00 - शाम 5:30", weatherIcon: "☀️", weather: "खिली धूप (28°C)", crowdText: "अत्यधिक भीड़ (सामान्य से अधिक)", crowdBadge: "अधिक भीड़" },
+            facilities: {
+              police: {
+                lat: 24.5788,
+                lng: 73.6865,
+                en: { name: "Kotwali City Police Station", type: "Police Station", dist: "450 m (5 min walk)", phone: "112 / 0294-2410100" },
+                hi: { name: "कोतवाली नगर पुलिस थाना", type: "पुलिस स्टेशन", dist: "450 मी (5 मिनट पैदल)", phone: "112 / 0294-2410100" }
+              },
+              hospital: {
+                lat: 24.5832,
+                lng: 73.6920,
+                en: { name: "MB Govt General Hospital & Trauma", type: "Hospital", dist: "1.1 km (4 min drive)", phone: "0294-2528811 (24x7 Emergency)" },
+                hi: { name: "एमबी राजकीय सामान्य अस्पताल एवं ट्रॉमा", type: "अस्पताल", dist: "1.1 किमी (4 मिनट ड्राइव)", phone: "0294-2528811 (24x7 आपातकालीन)" }
+              },
+              toilet: {
+                lat: 24.5760,
+                lng: 73.6828,
+                en: { name: "City Palace Gate Swachh Public Toilet", type: "Public Restroom", dist: "120 m (2 min walk)", timing: "Open 24/7 (Clean & Accessible)" },
+                hi: { name: "सिटी पैलेस गेट स्वच्छ सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "120 मी (2 मिनट पैदल)", timing: "24/7 खुला (स्वच्छ व दिव्यांग सुलभ)" }
+              }
+            }
+          },
+          {
+            id: "u2",
+            lat: 24.5678,
+            lng: 73.6792,
+            image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=400&q=80",
+            crowdLevel: "moderate",
+            en: { name: "Lake Pichola & Jag Mandir", type: "Scenic Waterway", desc: "Famous picturesque freshwater lake featuring the Lake Palace and Jag Mandir island palace.", timing: "9:00 AM - 6:00 PM", weatherIcon: "🌤️", weather: "Pleasant Breeze (27°C)", crowdText: "Moderately Crowded (As Usual)", crowdBadge: "Moderate" },
+            hi: { name: "पिछोला झील एवं जग मंदिर", type: "प्राकृतिक जलमार्ग", desc: "प्रसिद्ध सुरम्य मीठे पानी की झील जिसमें लेक पैलेस और जग मंदिर द्वीप महल स्थित हैं।", timing: "सुबह 9:00 - शाम 6:00", weatherIcon: "🌤️", weather: "सुहावनी हवा (27°C)", crowdText: "मध्यम भीड़ (सामान्य स्तर)", crowdBadge: "मध्यम भीड़" },
+            facilities: {
+              police: {
+                lat: 24.5725,
+                lng: 73.6740,
+                en: { name: "Ambamata Police Station", type: "Police Station", dist: "850 m (9 min walk)", phone: "112 / 0294-2430044" },
+                hi: { name: "अम्बामाता पुलिस थाना", type: "पुलिस स्टेशन", dist: "850 मी (9 मिनट पैदल)", phone: "112 / 0294-2430044" }
+              },
+              hospital: {
+                lat: 24.5750,
+                lng: 73.6890,
+                en: { name: "Alok Health Centre & Clinic", type: "Hospital", dist: "1.4 km (5 min drive)", phone: "0294-2415122 (Emergency Aid)" },
+                hi: { name: "आलोक स्वास्थ्य केंद्र व क्लीनिक", type: "अस्पताल", dist: "1.4 किमी (5 मिनट ड्राइव)", phone: "0294-2415122 (आपातकालीन सेवा)" }
+              },
+              toilet: {
+                lat: 24.5665,
+                lng: 73.6805,
+                en: { name: "Dudh Talai Public Restroom Facility", type: "Public Restroom", dist: "180 m (3 min walk)", timing: "Open 6:00 AM - 10:00 PM" },
+                hi: { name: "दूध तलाई सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "180 मी (3 मिनट पैदल)", timing: "सुबह 6:00 - रात 10:00" }
+              }
+            }
+          },
+          {
+            id: "u3",
+            lat: 24.6042,
+            lng: 73.6844,
+            image: "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=400&q=80",
+            crowdLevel: "low",
+            en: { name: "Saheliyon-ki-Bari", type: "Royal Courtyard Gardens", desc: "Historic ornamental gardens built for the royal maids with marble fountains and lotus pools.", timing: "9:00 AM - 7:00 PM", weatherIcon: "⛅", weather: "Partly Cloudy (29°C)", crowdText: "Lesser Crowded (Below Usual)", crowdBadge: "Low Crowd" },
+            hi: { name: "सहेलियों की बाड़ी", type: "शाही वाटिका", desc: "राजकुमारी और उनकी सहेलियों के लिए निर्मित ऐतिहासिक उद्यान जिसमें संगमरमर के फव्वारे और कमल ताल हैं।", timing: "सुबह 9:00 - शाम 7:00", weatherIcon: "⛅", weather: "हल्के बादल (29°C)", crowdText: "कम भीड़ (सामान्य से कम)", crowdBadge: "कम भीड़" },
+            facilities: {
+              police: {
+                lat: 24.5995,
+                lng: 73.6880,
+                en: { name: "Hathipole Police Chowki", type: "Police Station", dist: "600 m (7 min walk)", phone: "112 / 0294-2420333" },
+                hi: { name: "हाथीपोल पुलिस चौकी", type: "पुलिस स्टेशन", dist: "600 मी (7 मिनट पैदल)", phone: "112 / 0294-2420333" }
+              },
+              hospital: {
+                lat: 24.6110,
+                lng: 73.6920,
+                en: { name: "GBH American Super Speciality Hospital", type: "Hospital", dist: "1.2 km (4 min drive)", phone: "0294-3056000 (24x7 ICU)" },
+                hi: { name: "जीबीएच अमेरिकन सुपर स्पेशियलिटी अस्पताल", type: "अस्पताल", dist: "1.2 किमी (4 मिनट ड्राइव)", phone: "0294-3056000 (24x7 आईसीयू)" }
+              },
+              toilet: {
+                lat: 24.6048,
+                lng: 73.6848,
+                en: { name: "Garden Complex Swachh Public Toilet", type: "Public Restroom", dist: "90 m (1 min walk)", timing: "Open 8:00 AM - 7:30 PM" },
+                hi: { name: "उद्यान परिसर स्वच्छ सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "90 मी (1 मिनट पैदल)", timing: "सुबह 8:00 - शाम 7:30" }
+              }
+            }
+          }
+        ],
+        en: {
+          subtitle: "3 Top Rated Tourist Destinations & Public Facilities",
+          playerSubtitle: "UDAIPUR PALACE AT DUSK",
+          playerTitle: "Royal Evening Glow",
+          festival: { name: "MEWAR FESTIVAL", date: "Apr 4-6 &bull; Udaipur" },
+          artisan: { name: "RAJASTHANI PUPPETRY", artist: "Artist: Ramesh Kumar" },
+          hotel: { name: "HOTEL SWASTI HERITAGE", locationRating: "Udaipur &bull; <span class='text-orange-500'>★ 4.8</span>" }
+        },
+        hi: {
+          subtitle: "उदयपुर के शीर्ष 3 प्रमुख पर्यटन स्थल एवं सुविधाएं",
+          playerSubtitle: "उदयपुर महल - गोधूलि वेला",
+          playerTitle: "शाही शाम की चमक",
+          festival: { name: "मेवाड़ उत्सव", date: "4-6 अप्रैल &bull; उदयपुर" },
+          artisan: { name: "राजस्थानी कठपुतली", artist: "शिल्पकार: रमेश कुमार" },
+          hotel: { name: "होटल स्वस्ति हेरिटेज", locationRating: "उदयपुर &bull; <span class='text-orange-500'>★ 4.8</span>" }
+        },
+        player: {
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmAaIAGIJ4Z50d2it5Faks_wXMW5i-CM925uVoOwyK0OlTLeXrYSbIHlQ&s=10",
+          duration: "9:16",
+          seconds: 556
+        },
+        festival: {
+          image: "https://www.india-tours.com/blog/wp-content/uploads/2021/05/mewar-festival.jpg"
+        },
+        artisan: {
+          image: "https://cdn.exoticindia.com/images/products/original/paintings-2019/mix198.jpg"
+        },
+        hotel: {
+          price: "₹12,500",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfn1TjJ-17nOW8Uiv9KddmTC8grYFhXZEyLaaWR9lbO_cK4yfwnD01cwo6&s=10"
+        }
+      },
+      
+      jaipur: {
+        center: [26.9124, 75.7873],
+        zoom: 12,
+        places: [
+          {
+            id: "j1",
+            lat: 26.9855,
+            lng: 75.8513,
+            image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=400&q=80",
+            crowdLevel: "high",
+            en: { name: "Amer Fort", type: "Hilltop Fortress", desc: "Opulent Rajput palace fortress overlooking Maota Lake, famous for Sheesh Mahal (Mirror Palace).", timing: "8:00 AM - 5:30 PM", weatherIcon: "☀️", weather: "Sunny & Warm (31°C)", crowdText: "Densely Crowded (Above Usual)", crowdBadge: "High Rush" },
+            hi: { name: "आमेर किला", type: "पहाड़ी दुर्ग", desc: "मावठा झील के सामने स्थित भव्य राजपूत दुर्ग, जो अपने शीश महल और नक्काशी के लिए विख्यात है।", timing: "सुबह 8:00 - शाम 5:30", weatherIcon: "☀️", weather: "धूप व गर्म (31°C)", crowdText: "अत्यधिक भीड़ (सामान्य से अधिक)", crowdBadge: "अधिक भीड़" },
+            facilities: {
+              police: {
+                lat: 26.9880,
+                lng: 75.8540,
+                en: { name: "Amer Police Station", type: "Police Station", dist: "400 m (5 min walk)", phone: "112 / 0141-2530100" },
+                hi: { name: "आमेर पुलिस थाना", type: "पुलिस स्टेशन", dist: "400 मी (5 मिनट पैदल)", phone: "112 / 0141-2530100" }
+              },
+              hospital: {
+                lat: 26.9820,
+                lng: 75.8570,
+                en: { name: "Amer Satellite Govt Hospital", type: "Hospital", dist: "750 m (3 min drive)", phone: "0141-2530222" },
+                hi: { name: "आमेर सैटेलाइट राजकीय अस्पताल", type: "अस्पताल", dist: "750 मी (3 मिनट ड्राइव)", phone: "0141-2530222" }
+              },
+              toilet: {
+                lat: 26.9845,
+                lng: 75.8505,
+                en: { name: "Maota Garden Tourist Restroom", type: "Public Restroom", dist: "150 m (2 min walk)", timing: "Open 7:30 AM - 6:30 PM" },
+                hi: { name: "मावठा उद्यान पर्यटक सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "150 मी (2 मिनट पैदल)", timing: "सुबह 7:30 - शाम 6:30" }
+              }
+            }
+          },
+          {
+            id: "j2",
+            lat: 26.9239,
+            lng: 75.8267,
+            image: "https://w0.peakpx.com/wallpaper/527/65/HD-wallpaper-jaipur-hawamahal-night.jpg",
+            crowdLevel: "moderate",
+            en: { name: "Hawa Mahal", type: "Architectural Icon", desc: "Iconic honeycomb-patterned pink sandstone facade with 953 windows designed for royal breezes.", timing: "9:00 AM - 5:00 PM", weatherIcon: "🌤️", weather: "Breezy & Fair (30°C)", crowdText: "Moderately Crowded (As Usual)", crowdBadge: "Moderate" },
+            hi: { name: "हवा महल", type: "वास्तुकला चमत्कार", desc: "953 झरोखों वाला गुलाबी बलुआ पत्थर का विश्वप्रसिद्ध हवादार महल।", timing: "सुबह 9:00 - शाम 5:00", weatherIcon: "🌤️", weather: "हवादार व साफ़ (30°C)", crowdText: "मध्यम भीड़ (सामान्य स्तर)", crowdBadge: "मध्यम भीड़" },
+            facilities: {
+              police: {
+                lat: 26.9255,
+                lng: 75.8285,
+                en: { name: "Manak Chowk Police Station", type: "Police Station", dist: "280 m (4 min walk)", phone: "112 / 0141-2601234" },
+                hi: { name: "माणक चौक पुलिस थाना", type: "पुलिस स्टेशन", dist: "280 मी (4 मिनट पैदल)", phone: "112 / 0141-2601234" }
+              },
+              hospital: {
+                lat: 26.9180,
+                lng: 75.8190,
+                en: { name: "SMS Medical College & Hospital", type: "Hospital", dist: "1.8 km (6 min drive)", phone: "0141-2560291 (Trauma 24x7)" },
+                hi: { name: "सवाई मानसिंह अस्पताल (एसएमएस)", type: "अस्पताल", dist: "1.8 किमी (6 मिनट ड्राइव)", phone: "0141-2560291 (24x7 इमरजेंसी)" }
+              },
+              toilet: {
+                lat: 26.9232,
+                lng: 75.8272,
+                en: { name: "Badi Chaupar Metro Swachh Toilet", type: "Public Restroom", dist: "110 m (2 min walk)", timing: "Open 24/7" },
+                hi: { name: "बड़ी चौपड़ मेट्रो स्वच्छ सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "110 मी (2 मिनट पैदल)", timing: "24/7 खुला" }
+              }
+            }
+          },
+          {
+            id: "j3",
+            lat: 26.9248,
+            lng: 75.8246,
+            image: "https://static.wixstatic.com/media/a039ca_25bd1285de9e4b4787e91bd7ad58c99f~mv2.jpg/v1/fill/w_400,h_250,al_c,q_80/a039ca_25bd1285de9e4b4787e91bd7ad58c99f~mv2.jpg",
+            crowdLevel: "low",
+            en: { name: "Jantar Mantar", type: "Astronomical Observatory", desc: "UNESCO World Heritage site with 19 architectural astronomical instruments and the world's largest sundial.", timing: "9:00 AM - 5:00 PM", weatherIcon: "☀️", weather: "Bright Sunshine (32°C)", crowdText: "Lesser Crowded (Below Usual)", crowdBadge: "Low Crowd" },
+            hi: { name: "जंतर मंतर", type: "खगोलीय वेधशाला", desc: "19 विशाल खगोलीय उपकरणों और विश्व की सबसे बड़ी धूपघड़ी वाली यूनेस्को विश्व धरोहर वेधशाला।", timing: "सुबह 9:00 - शाम 5:00", weatherIcon: "☀️", weather: "तेज धूप (32°C)", crowdText: "कम भीड़ (सामान्य से कम)", crowdBadge: "कम भीड़" },
+            facilities: {
+              police: {
+                lat: 26.9265,
+                lng: 75.8225,
+                en: { name: "Kotwali Police Station Jaipur", type: "Police Station", dist: "320 m (4 min walk)", phone: "112 / 0141-2605555" },
+                hi: { name: "कोतवाली पुलिस थाना जयपुर", type: "पुलिस स्टेशन", dist: "320 मी (4 मिनट पैदल)", phone: "112 / 0141-2605555" }
+              },
+              hospital: {
+                lat: 26.9150,
+                lng: 75.8150,
+                en: { name: "Janana Govt General Hospital", type: "Hospital", dist: "2.1 km (7 min drive)", phone: "0141-2602222" },
+                hi: { name: "जनाना राजकीय सामान्य अस्पताल", type: "अस्पताल", dist: "2.1 किमी (7 मिनट ड्राइव)", phone: "0141-2602222" }
+              },
+              toilet: {
+                lat: 26.9252,
+                lng: 75.8242,
+                en: { name: "Jantar Mantar Plaza Public Washroom", type: "Public Restroom", dist: "70 m (1 min walk)", timing: "Open 8:30 AM - 6:00 PM" },
+                hi: { name: "जंतर मंतर प्लाजा सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "70 मी (1 मिनट पैदल)", timing: "सुबह 8:30 - शाम 6:00" }
+              }
+            }
+          }
+        ],
+        en: {
+          subtitle: "3 Top Rated Tourist Destinations & Public Facilities",
+          playerSubtitle: "HAWA MAHAL AT DAWN",
+          playerTitle: "Symphony of Winds",
+          festival: { name: "TEEJ FESTIVAL", date: "Aug 18-19 &bull; Jaipur" },
+          artisan: { name: "BLUE POTTERY GLAZE", artist: "Artist: Laxmi Devi" },
+          hotel: { name: "RAMBAGH PALACE", locationRating: "Jaipur &bull; <span class='text-orange-500'>★ 4.9</span>" }
+        },
+        hi: {
+          subtitle: "जयपुर के शीर्ष 3 प्रमुख पर्यटन स्थल एवं सुविधाएं",
+          playerSubtitle: "हवा महल - भोर का समय",
+          playerTitle: "हवाओं की सरगम",
+          festival: { name: "तीज महोत्सव", date: "18-19 अगस्त &bull; जयपुर" },
+          artisan: { name: "ब्लू पॉटरी कला", artist: "शिल्पकार: लक्ष्मी देवी" },
+          hotel: { name: "रामबाग पैलेस", locationRating: "जयपुर &bull; <span class='text-orange-500'>★ 4.9</span>" }
+        },
+        player: {
+          image: "https://w0.peakpx.com/wallpaper/527/65/HD-wallpaper-jaipur-hawamahal-night.jpg",
+          duration: "9:16",
+          seconds: 556
+        },
+        festival: {
+          image: "https://www.india-tours.com/images/festivals/teej-festival/teej-festival-1.jpg"
+        },
+        artisan: {
+          image: "https://static.wixstatic.com/media/a039ca_25bd1285de9e4b4787e91bd7ad58c99f~mv2.jpg/v1/fill/w_980,h_632,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a039ca_25bd1285de9e4b4787e91bd7ad58c99f~mv2.jpg"
+        },
+        hotel: {
+          price: "₹35,000",
+          image: "https://tse3.mm.bing.net/th/id/OIP.4JGWVwxuYGVX1Bgl3np0QQHaEw?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        }
+      },
+      
+      bikaner: {
+        center: [28.0229, 73.3119],
+        zoom: 12,
+        places: [
+          {
+            id: "b1",
+            lat: 28.0224,
+            lng: 73.3197,
+            image: "https://img.veenaworld.com/wp-content/uploads/2021/03/Junagarh-Fort-Bikaner-Major-Attractions-and-Other-Details.jpeg",
+            crowdLevel: "moderate",
+            en: { name: "Junagarh Fort", type: "Sandstone Fortress", desc: "An unconquered fort with gold-painted ceilings, Italian tiles, and exquisite red sandstone carvings.", timing: "10:00 AM - 4:30 PM", weatherIcon: "☀️", weather: "Warm & Clear (33°C)", crowdText: "Moderately Crowded (As Usual)", crowdBadge: "Moderate" },
+            hi: { name: "जूनागढ़ किला", type: "बलुआ पत्थर दुर्ग", desc: "सोने की नक्काशीदार छतों और बारीक जालीदार पत्थरों वाला अभेद्य ऐतिहासिक किला।", timing: "सुबह 10:00 - शाम 4:30", weatherIcon: "☀️", weather: "साफ़ व गर्म (33°C)", crowdText: "मध्यम भीड़ (सामान्य स्तर)", crowdBadge: "मध्यम भीड़" },
+            facilities: {
+              police: {
+                lat: 28.0245,
+                lng: 73.3220,
+                en: { name: "Kotwali Police Station Bikaner", type: "Police Station", dist: "350 m (4 min walk)", phone: "112 / 0151-2522100" },
+                hi: { name: "कोतवाली पुलिस थाना बीकानेर", type: "पुलिस स्टेशन", dist: "350 मी (4 मिनट पैदल)", phone: "112 / 0151-2522100" }
+              },
+              hospital: {
+                lat: 28.0150,
+                lng: 73.3280,
+                en: { name: "PBM Govt Hospital & Trauma Center", type: "Hospital", dist: "1.3 km (4 min drive)", phone: "0151-2226300 (24x7 Emergency)" },
+                hi: { name: "पीबीएम राजकीय अस्पताल एवं ट्रॉमा", type: "अस्पताल", dist: "1.3 किमी (4 मिनट ड्राइव)", phone: "0151-2226300 (24x7 आपातकालीन)" }
+              },
+              toilet: {
+                lat: 28.0218,
+                lng: 73.3188,
+                en: { name: "Junagarh Moat Public Restroom", type: "Public Restroom", dist: "100 m (1 min walk)", timing: "Open 9:00 AM - 6:00 PM" },
+                hi: { name: "जूनागढ़ परकोटा सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "100 मी (1 मिनट पैदल)", timing: "सुबह 9:00 - शाम 6:00" }
+              }
+            }
+          },
+          {
+            id: "b2",
+            lat: 27.9715,
+            lng: 73.3533,
+            image: "https://mediaindia.eu/wp-content/uploads/2022/01/IMG_2767-scaled.jpg",
+            crowdLevel: "low",
+            en: { name: "Camel Research Centre", type: "Desert Sanctuary", desc: "Asia's only camel breeding and research centre, famous for camel safaris and fresh camel milk ice-cream.", timing: "12:00 PM - 6:00 PM", weatherIcon: "🏜️", weather: "Desert Warm (34°C)", crowdText: "Least Crowded (Below Usual)", crowdBadge: "Least Rush" },
+            hi: { name: "ऊंट अनुसंधान केंद्र", type: "मरुस्थलीय केंद्र", desc: "एशिया का एकमात्र ऊंट प्रजनन केंद्र जहाँ ऊंट सफारी और ऊंटनी के दूध की मिठाइयाँ उपलब्ध हैं।", timing: "दोपहर 12:00 - शाम 6:00", weatherIcon: "🏜️", weather: "मरुस्थलीय धूप (34°C)", crowdText: "न्यूनतम भीड़ (सामान्य से कम)", crowdBadge: "शांत परिसर" },
+            facilities: {
+              police: {
+                lat: 27.9850,
+                lng: 73.3420,
+                en: { name: "JNV Colony Police Outpost", type: "Police Station", dist: "2.8 km (7 min drive)", phone: "112 / 0151-2230100" },
+                hi: { name: "जेएनवी कॉलोनी पुलिस चौकी", type: "पुलिस स्टेशन", dist: "2.8 किमी (7 मिनट ड्राइव)", phone: "112 / 0151-2230100" }
+              },
+              hospital: {
+                lat: 27.9880,
+                lng: 73.3380,
+                en: { name: "Lifeline Emergency Hospital", type: "Hospital", dist: "3.2 km (8 min drive)", phone: "0151-2244555" },
+                hi: { name: "लाइफलाइन आपातकालीन अस्पताल", type: "अस्पताल", dist: "3.2 किमी (8 मिनट ड्राइव)", phone: "0151-2244555" }
+              },
+              toilet: {
+                lat: 27.9712,
+                lng: 73.3528,
+                en: { name: "NRCC Tourist Complex Restroom", type: "Public Restroom", dist: "50 m (1 min walk)", timing: "Open 11:30 AM - 6:30 PM" },
+                hi: { name: "एनआरसीसी पर्यटक परिसर शौचालय", type: "सार्वजनिक शौचालय", dist: "50 मी (1 मिनट पैदल)", timing: "सुबह 11:30 - शाम 6:30" }
+              }
+            }
+          },
+          {
+            id: "b3",
+            lat: 27.7909,
+            lng: 73.3409,
+            image: "https://image.wedmegood.com/resized/720X/uploads/member/379874/1731574006_2022_07_10.jpg?crop=10,0,1330,748",
+            crowdLevel: "high",
+            en: { name: "Karni Mata Temple", type: "Historic Shrine (Deshnoke)", desc: "World-renowned temple housing over 25,000 revered sacred black rats (kabbas) roaming freely.", timing: "4:00 AM - 10:00 PM", weatherIcon: "🌤️", weather: "Clear & Breezy (31°C)", crowdText: "Densely Crowded (Above Usual)", crowdBadge: "High Rush" },
+            hi: { name: "करणी माता मंदिर", type: "पवित्र तीर्थ (देशनोक)", desc: "25,000 से अधिक पवित्र चूहों (काबा) का पौराणिक एवं विश्वविख्यात चमत्कारी मंदिर।", timing: "सुबह 4:00 - रात 10:00", weatherIcon: "🌤️", weather: "साफ़ मौसम (31°C)", crowdText: "अत्यधिक भीड़ (सामान्य से अधिक)", crowdBadge: "अधिक भीड़" },
+            facilities: {
+              police: {
+                lat: 27.7925,
+                lng: 73.3418,
+                en: { name: "Deshnoke Police Station", type: "Police Station", dist: "200 m (3 min walk)", phone: "112 / 01531-232100" },
+                hi: { name: "देशनोक पुलिस थाना", type: "पुलिस स्टेशन", dist: "200 मी (3 मिनट पैदल)", phone: "112 / 01531-232100" }
+              },
+              hospital: {
+                lat: 27.7940,
+                lng: 73.3435,
+                en: { name: "Govt Community Health Centre Deshnoke", type: "Hospital", dist: "450 m (5 min walk)", phone: "01531-232222" },
+                hi: { name: "सामुदायिक स्वास्थ्य केंद्र देशनोक", type: "अस्पताल", dist: "450 मी (5 मिनट पैदल)", phone: "01531-232222" }
+              },
+              toilet: {
+                lat: 27.7904,
+                lng: 73.3403,
+                en: { name: "Deshnoke Temple Plaza Public Washrooms", type: "Public Restroom", dist: "80 m (1 min walk)", timing: "Open 24/7 (Free Access)" },
+                hi: { name: "देशनोक मंदिर प्रांगण सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "80 मी (1 मिनट पैदल)", timing: "24/7 खुला (निःशुल्क)" }
+              }
+            }
+          }
+        ],
+        en: {
+          subtitle: "3 Top Rated Tourist Destinations & Public Facilities",
+          playerSubtitle: "JUNAGARH FORT STORY",
+          playerTitle: "The Unconquered Legacy",
+          festival: { name: "CAMEL FESTIVAL", date: "Jan 11-12 &bull; Bikaner" },
+          artisan: { name: "USTA EMBOSSING", artist: "Artist: Mohammad Hanif" },
+          hotel: { name: "NARENDRA BHAWAN", locationRating: "Bikaner &bull; <span class='text-orange-500'>★ 4.7</span>" }
+        },
+        hi: {
+          subtitle: "बीकानेर के शीर्ष 3 प्रमुख पर्यटन स्थल एवं सुविधाएं",
+          playerSubtitle: "जूनागढ़ किले की गाथा",
+          playerTitle: "अजेय विरासत",
+          festival: { name: "ऊंट उत्सव", date: "11-12 जनवरी &bull; बीकानेर" },
+          artisan: { name: "उस्ता कला (नक्काशी)", artist: "शिल्पकार: मोहम्मद हनीफ" },
+          hotel: { name: "नरेंद्र भवन", locationRating: "बीकानेर &bull; <span class='text-orange-500'>★ 4.7</span>" }
+        },
+        player: {
+          image: "https://img.veenaworld.com/wp-content/uploads/2021/03/Junagarh-Fort-Bikaner-Major-Attractions-and-Other-Details.jpeg",
+          duration: "14:22",
+          seconds: 862
+        },
+        festival: {
+          image: "https://mediaindia.eu/wp-content/uploads/2022/01/IMG_2767-scaled.jpg"
+        },
+        artisan: {
+          image: "https://mumbaimirror.indiatimes.com/photo/15838018.cms"
+        },
+        hotel: {
+          price: "₹14,000",
+          image: "https://image.wedmegood.com/resized/720X/uploads/member/379874/1731574006_2022_07_10.jpg?crop=10,0,1330,748"
+        }
+      },
+      
+      jaisalmer: {
+        center: [26.9157, 70.9083],
+        zoom: 11,
+        places: [
+          {
+            id: "js1",
+            lat: 26.9124,
+            lng: 70.9128,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYuqLXdHUYuAZFrNMVUaLn4lMVnGopins5jpg-KixhQ&s=10",
+            crowdLevel: "high",
+            en: { name: "Jaisalmer Fort", type: "Living Golden Fortress", desc: "A UNESCO World Heritage golden sandstone living fort with houses, temples, and palaces inside.", timing: "9:00 AM - 6:00 PM", weatherIcon: "☀️", weather: "Sunny (34°C)", crowdText: "Densely Crowded (Above Usual)", crowdBadge: "High Rush" },
+            hi: { name: "जैसलमेर सोनार किला", type: "जीवंत स्वर्ण दुर्ग", desc: "पीले बलुआ पत्थर से बना विश्व का प्रसिद्ध 'जीवंत दुर्ग' जिसमें घर, प्राचीन जैन मंदिर और महल हैं।", timing: "सुबह 9:00 - शाम 6:00", weatherIcon: "☀️", weather: "खिली धूप (34°C)", crowdText: "अत्यधिक भीड़ (सामान्य से अधिक)", crowdBadge: "अधिक भीड़" },
+            facilities: {
+              police: {
+                lat: 26.9145,
+                lng: 70.9150,
+                en: { name: "Kotwali Police Station Jaisalmer", type: "Police Station", dist: "300 m (4 min walk)", phone: "112 / 02992-252233" },
+                hi: { name: "कोतवाली पुलिस थाना जैसलमेर", type: "पुलिस स्टेशन", dist: "300 मी (4 मिनट पैदल)", phone: "112 / 02992-252233" }
+              },
+              hospital: {
+                lat: 26.9180,
+                lng: 70.9210,
+                en: { name: "Shri Jawahir Govt District Hospital", type: "Hospital", dist: "900 m (3 min drive)", phone: "02992-252344 (24x7 Emergency)" },
+                hi: { name: "श्री जवाहर राजकीय जिला अस्पताल", type: "अस्पताल", dist: "900 मी (3 मिनट ड्राइव)", phone: "02992-252344 (24x7 आपातकालीन)" }
+              },
+              toilet: {
+                lat: 26.9130,
+                lng: 70.9118,
+                en: { name: "Fort Gopa Chowk Public Restroom", type: "Public Restroom", dist: "120 m (2 min walk)", timing: "Open 24/7" },
+                hi: { name: "किला गोपा चौक सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "120 मी (2 मिनट पैदल)", timing: "24/7 खुला" }
+              }
+            }
+          },
+          {
+            id: "js2",
+            lat: 26.9168,
+            lng: 70.9135,
+            image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/156785301.jpg?k=be174ae962a334f3653b6eceaa9a15ca6f01a2e80ab5923758ca1efd3a5da50f&o=",
+            crowdLevel: "moderate",
+            en: { name: "Patwon Ki Haveli", type: "Carved Mansions", desc: "Cluster of five opulent merchant mansions famous for delicately carved sandstone jharokhas.", timing: "9:00 AM - 5:30 PM", weatherIcon: "🌤️", weather: "Clear Breeze (32°C)", crowdText: "Moderately Crowded (As Usual)", crowdBadge: "Moderate" },
+            hi: { name: "पटवों की हवेली", type: "नक्काशीदार हवेलियाँ", desc: "बारीक नक्काशीदार पीले पत्थरों और झरोखों से सजी पांच भव्य हवेलियों का समूह।", timing: "सुबह 9:00 - शाम 5:30", weatherIcon: "🌤️", weather: "सुखद हवा (32°C)", crowdText: "मध्यम भीड़ (सामान्य स्तर)", crowdBadge: "मध्यम भीड़" },
+            facilities: {
+              police: {
+                lat: 26.9195,
+                lng: 70.9160,
+                en: { name: "Sadar Police Station", type: "Police Station", dist: "400 m (5 min walk)", phone: "112 / 02992-251100" },
+                hi: { name: "सदर पुलिस थाना", type: "पुलिस स्टेशन", dist: "400 मी (5 मिनट पैदल)", phone: "112 / 02992-251100" }
+              },
+              hospital: {
+                lat: 26.9220,
+                lng: 70.9190,
+                en: { name: "Sanjeevani Clinic & Medical Hub", type: "Hospital", dist: "800 m (3 min drive)", phone: "02992-254400" },
+                hi: { name: "संजीवनी क्लीनिक एवं मेडिकल", type: "अस्पताल", dist: "800 मी (3 मिनट ड्राइव)", phone: "02992-254400" }
+              },
+              toilet: {
+                lat: 26.9162,
+                lng: 70.9130,
+                en: { name: "Patwa Complex Public Restroom", type: "Public Restroom", dist: "90 m (1 min walk)", timing: "Open 8:30 AM - 7:00 PM" },
+                hi: { name: "पटवा परिसर सार्वजनिक शौचालय", type: "सार्वजनिक शौचालय", dist: "90 मी (1 मिनट पैदल)", timing: "सुबह 8:30 - शाम 7:00" }
+              }
+            }
+          },
+          {
+            id: "js3",
+            lat: 26.8315,
+            lng: 70.5050,
+            image: "https://www.rajasthantourplanner.com/blog/wp-content/uploads/2017/07/desert-festival-@-jaisalmer-1024x683.jpg",
+            crowdLevel: "low",
+            en: { name: "Sam Sand Dunes", type: "Thar Desert Wilderness", desc: "Stunning sweeping sand dunes offering camel safaris, desert campfires, and breathtaking sunsets.", timing: "24 Hours (Best at Sunset)", weatherIcon: "🌅", weather: "Sunset Breeze (29°C)", crowdText: "Lesser Crowded (Below Usual)", crowdBadge: "Low Crowd" },
+            hi: { name: "सैम सैंड ड्यून्स", type: "थार मरुस्थल के टीले", desc: "ऊंट सफारी, राजस्थानी लोक नृत्य और अद्भुत स्वर्णिम सूर्यास्त के लिए विख्यात रेत के टीले।", timing: "24 घंटे (सूर्यास्त के समय उत्तम)", weatherIcon: "🌅", weather: "सांध्य मरुस्थलीय बयार (29°C)", crowdText: "कम भीड़ (सामान्य से कम)", crowdBadge: "कम भीड़" },
+            facilities: {
+              police: {
+                lat: 26.8340,
+                lng: 70.5080,
+                en: { name: "Sam Desert Police Outpost", type: "Police Station", dist: "350 m (4 min walk)", phone: "112 / 02992-260100" },
+                hi: { name: "सैम मरुस्थल पुलिस चौकी", type: "पुलिस स्टेशन", dist: "350 मी (4 मिनट पैदल)", phone: "112 / 02992-260100" }
+              },
+              hospital: {
+                lat: 26.8280,
+                lng: 70.4980,
+                en: { name: "Sam Primary Health Centre & Army Post", type: "Hospital", dist: "1.1 km (3 min drive)", phone: "02992-260222" },
+                hi: { name: "सैम प्राथमिक स्वास्थ्य केंद्र", type: "अस्पताल", dist: "1.1 किमी (3 मिनट ड्राइव)", phone: "02992-260222" }
+              },
+              toilet: {
+                lat: 26.8310,
+                lng: 70.5042,
+                en: { name: "Sam Dunes Tourist Restroom Block", type: "Public Restroom", dist: "100 m (1 min walk)", timing: "Open 24/7 (Water & Soap Available)" },
+                hi: { name: "सैम ड्यून्स पर्यटक शौचालय ब्लॉक", type: "सार्वजनिक शौचालय", dist: "100 मी (1 मिनट पैदल)", timing: "24/7 खुला (स्वच्छ जल व साबुन उपलब्ध)" }
+              }
+            }
+          }
+        ],
+        en: {
+          subtitle: "3 Top Rated Tourist Destinations & Public Facilities",
+          playerSubtitle: "DESERT SUNSET MELODIES",
+          playerTitle: "Golden Echoes of Thar",
+          festival: { name: "DESERT FESTIVAL", date: "Feb 14-16 &bull; Jaisalmer" },
+          artisan: { name: "LEATHER EMBROIDERY", artist: "Artist: Swaroop Ram" },
+          hotel: { name: "SURYAGARH FORT HOTEL", locationRating: "Jaisalmer &bull; <span class='text-orange-500'>★ 4.9</span>" }
+        },
+        hi: {
+          subtitle: "जैसलमेर के शीर्ष 3 प्रमुख पर्यटन स्थल एवं सुविधाएं",
+          playerSubtitle: "मरुस्थल सूर्यास्त की धुनें",
+          playerTitle: "थार की सुनहरी गूँज",
+          festival: { name: "मरु महोत्सव", date: "14-16 फरवरी &bull; जैसलमेर" },
+          artisan: { name: "चमड़ा कशीदाकारी", artist: "शिल्पकार: स्वरूप राम" },
+          hotel: { name: "सूर्यगढ़ फोर्ट होटल", locationRating: "जैसलमेर &bull; <span class='text-orange-500'>★ 4.9</span>" }
+        },
+        player: {
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYuqLXdHUYuAZFrNMVUaLn4lMVnGopins5jpg-KixhQ&s=10",
+          duration: "10:05",
+          seconds: 605
+        },
+        festival: {
+          image: "https://www.rajasthantourplanner.com/blog/wp-content/uploads/2017/07/desert-festival-@-jaisalmer-1024x683.jpg"
+        },
+        artisan: {
+          image: "https://s7ap1.scene7.com/is/image/incredibleindia/leather-bags-in-jaisalmer-blog-sho-hero?qlt=82&ts=1726660016292"
+        },
+        hotel: {
+          price: "₹24,500",
+          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/156785301.jpg?k=be174ae962a334f3653b6eceaa9a15ca6f01a2e80ab5923758ca1efd3a5da50f&o="
+        }
+      }
+    };
+
+    // App State
+    let currentLangKey = localStorage.getItem('appLang') || 'en';
+    let currentCityKey = 'udaipur';
+    let activePlaceId = 'u1';
+    let mapInstance = null;
+    let markersLayerGroup = null;
+    let facilitiesLayerGroup = null;
+    let facilityLinesGroup = null;
+    let destinationMarkersMap = {};
+
+    let isPlaying = false;
+    let playInterval = null;
+    let currentPlaySeconds = 0;
+    let totalPlaySeconds = 556;
+    let isMuted = false;
+    let isLiked = false;
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      initLeafletMap();
+      applyLanguage(currentLangKey, false);
+      switchCity('udaipur');
+      fetchLiveWeather('udaipur');
+
+      // Click outside to close language menu
+      document.addEventListener('click', (e) => {
+        const container = document.getElementById('langDropdownContainer');
+        if (container && !container.contains(e.target)) {
+          closeLangMenu();
+        }
+      });
+    });
+
+    // Initialize Leaflet Map
+    function initLeafletMap() {
+      const container = document.getElementById('leafletMap');
+      if (!container || mapInstance) return;
+
+      mapInstance = L.map('leafletMap', {
+        zoomControl: true,
+        attributionControl: false
+      }).setView([24.5854, 73.7125], 13);
+
+      // High quality CartoDB Voyager tiles (crisp & clean)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        subdomains: 'abcd'
+      }).addTo(mapInstance);
+
+      markersLayerGroup = L.layerGroup().addTo(mapInstance);
+      facilityLinesGroup = L.layerGroup().addTo(mapInstance);
+      facilitiesLayerGroup = L.layerGroup().addTo(mapInstance);
+
+      setTimeout(() => {
+        if (mapInstance) mapInstance.invalidateSize();
+      }, 200);
+
+      window.addEventListener('resize', () => {
+        if (mapInstance) mapInstance.invalidateSize();
+      });
+    }
+
+    // Language Dropdown Handler
+    function toggleLangDropdown(event) {
+      if (event) event.stopPropagation();
+      const menu = document.getElementById('langMenu');
+      const chevron = document.getElementById('langChevron');
+      const isHidden = menu.classList.contains('hidden');
+
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        closeLangMenu();
+      }
+    }
+
+    function closeLangMenu() {
+      const menu = document.getElementById('langMenu');
+      const chevron = document.getElementById('langChevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
+
+    function selectLang(lang) {
+      if (lang !== 'en' && lang !== 'hi') lang = 'en';
+      currentLangKey = lang;
+      localStorage.setItem('appLang', lang);
+      closeLangMenu();
+      applyLanguage(lang, true);
+    }
+
+    function applyLanguage(lang, showNotification = true) {
+      const dict = i18n[lang] || i18n.en;
+
+      // Update button text and active checkmark
+      document.getElementById('currentLang').innerText = lang === 'hi' ? 'हिन्दी (Hindi)' : 'English';
+      
+      const checkEn = document.getElementById('check-en');
+      const checkHi = document.getElementById('check-hi');
+      if (checkEn && checkHi) {
+        if (lang === 'hi') {
+          checkEn.classList.add('hidden');
+          checkHi.classList.remove('hidden');
+        } else {
+          checkEn.classList.remove('hidden');
+          checkHi.classList.add('hidden');
+        }
+      }
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.innerText = dict[key];
+        }
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+
+      // Refresh dynamic city data & map markers in selected language
+      switchCity(currentCityKey);
+
+      if (showNotification) {
+        showToast(dict.toastLangChanged);
+      }
+    }
+
+    // Switch between Rajasthan cities on the Real Map
+    function switchCity(cityKey) {
+      if (!mockDatabase[cityKey]) return;
+      currentCityKey = cityKey;
+      const lang = currentLangKey;
+      const cityData = mockDatabase[cityKey][lang] || mockDatabase[cityKey].en;
+      const rawCity = mockDatabase[cityKey];
+
+      // Update Subtitle
+      document.getElementById('mapSubtitle').innerText = cityData.subtitle;
+
+      // Update active tabs styles
+      const cities = ['udaipur', 'jaipur', 'bikaner', 'jaisalmer'];
+      cities.forEach(c => {
+        const btn = document.getElementById(`tab-${c}`);
+        if (c === cityKey) {
+          btn.className = "flex-1 text-center py-1.5 px-3 rounded-xl text-xs font-bold transition-all bg-[var(--card)] text-blue-600 dark:text-blue-400 shadow-sm border border-[var(--border)] cursor-pointer";
+        } else {
+          btn.className = "flex-1 text-center py-1.5 px-3 rounded-xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer";
+        }
+      });
+
+      // Default active place is the first place in this city
+      if (rawCity.places && rawCity.places.length > 0) {
+        activePlaceId = rawCity.places[0].id;
+      }
+
+      // Render the 3 Blue Landmark Pointers on the Real GPS Map
+      renderMapDestinations(cityKey);
+
+      // Update Audio Player card details (if elements exist)
+      const playerCoverImg = document.getElementById('playerCoverImg');
+      if (playerCoverImg && rawCity.player) playerCoverImg.src = rawCity.player.image;
+      const playerSubtitle = document.getElementById('playerSubtitle');
+      if (playerSubtitle) playerSubtitle.innerText = cityData.playerSubtitle;
+      const playerTitle = document.getElementById('playerTitle');
+      if (playerTitle) playerTitle.innerText = cityData.playerTitle;
+      const playerTotalTime = document.getElementById('playerTotalTime');
+      if (playerTotalTime && rawCity.player) playerTotalTime.innerText = rawCity.player.duration;
+      if (rawCity.player) totalPlaySeconds = rawCity.player.seconds;
+      
+      // Update Discover Today elements (if elements exist)
+      const festName = document.getElementById('festName');
+      if (festName && cityData.festival) festName.innerText = cityData.festival.name;
+      const festDate = document.getElementById('festDate');
+      if (festDate && cityData.festival) festDate.innerHTML = cityData.festival.date;
+      const festImg = document.getElementById('festImg');
+      if (festImg && rawCity.festival) festImg.src = rawCity.festival.image;
+
+      const artisanName = document.getElementById('artisanName');
+      if (artisanName && cityData.artisan) artisanName.innerText = cityData.artisan.name;
+      const artisanArtist = document.getElementById('artisanArtist');
+      if (artisanArtist && cityData.artisan) artisanArtist.innerText = cityData.artisan.artist;
+      const artisanImg = document.getElementById('artisanImg');
+      if (artisanImg && rawCity.artisan) artisanImg.src = rawCity.artisan.image;
+
+      const hotelName = document.getElementById('hotelName');
+      if (hotelName && cityData.hotel) hotelName.innerText = cityData.hotel.name;
+      const hotelRating = document.getElementById('hotelRating');
+      if (hotelRating && cityData.hotel) hotelRating.innerHTML = cityData.hotel.locationRating;
+      const hotelPrice = document.getElementById('hotelPrice');
+      if (hotelPrice && rawCity.hotel) hotelPrice.innerText = rawCity.hotel.price;
+      const hotelImg = document.getElementById('hotelImg');
+      if (hotelImg && rawCity.hotel) hotelImg.src = rawCity.hotel.image;
+
+      // Sync Destination Live Weather
+      const weatherSelect = document.getElementById('weatherCitySelect');
+      if (weatherSelect) weatherSelect.value = cityKey;
+      fetchLiveWeather(cityKey);
+    }
+
+    // Render the 3 Selected Tourist Places on Leaflet Map with Blue Pointers
+    function renderMapDestinations(cityKey) {
+      if (!mapInstance) return;
+
+      // Clear existing layers
+      markersLayerGroup.clearLayers();
+      facilitiesLayerGroup.clearLayers();
+      facilityLinesGroup.clearLayers();
+      destinationMarkersMap = {};
+
+      const cityObj = mockDatabase[cityKey];
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      const places = cityObj.places;
+      const latLngs = [];
+
+      places.forEach((place, index) => {
+        const placeInfo = place[lang] || place.en;
+        const spotNumber = index + 1;
+        const latLng = [place.lat, place.lng];
+        latLngs.push(latLng);
+
+        // Custom Blue Color Pointer DivIcon
+        const blueIcon = L.divIcon({
+          className: 'custom-blue-marker',
+          html: `
+            <div class="custom-blue-pin">
+              <div class="pin-pulse"></div>
+              <div class="pin-body">
+                <div class="pin-content">${spotNumber}</div>
+              </div>
+            </div>
+          `,
+          iconSize: [32, 42],
+          iconAnchor: [16, 38],
+          popupAnchor: [0, -36]
+        });
+
+        // Fast access to facilities info for popup summary
+        const facPolice = place.facilities.police[lang] || place.facilities.police.en;
+        const facHospital = place.facilities.hospital[lang] || place.facilities.hospital.en;
+        const facToilet = place.facilities.toilet[lang] || place.facilities.toilet.en;
+
+        // Color-coded Crowd Styling (Red = Densely Crowded, Yellow = Moderately Crowded, Green = Low/Lesser Crowded)
+        let crowdBgClass = "bg-emerald-50/90 text-emerald-950 border border-emerald-200/80";
+        let crowdDotClass = "bg-emerald-500";
+        let crowdBadgeClass = "bg-emerald-200/80 text-emerald-900";
+
+        if (place.crowdLevel === "high") {
+          crowdBgClass = "bg-red-50/90 text-red-950 border border-red-200/80";
+          crowdDotClass = "bg-red-500";
+          crowdBadgeClass = "bg-red-200/80 text-red-900";
+        } else if (place.crowdLevel === "moderate") {
+          crowdBgClass = "bg-amber-50/90 text-amber-950 border border-amber-200/80";
+          crowdDotClass = "bg-amber-500";
+          crowdBadgeClass = "bg-amber-200/80 text-amber-900";
+        }
+
+        // Rich informational popup with Landmark Details, Timings, Weather, Real-Time Crowd & Facilities
+        const popupHtml = `
+          <div class="w-64 bg-white rounded-2xl overflow-hidden font-sans text-slate-800 shadow-xl">
+            <div class="relative h-28 w-full">
+              <img src="${place.image}" alt="${placeInfo.name}" class="w-full h-full object-cover">
+              <span class="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow-md">
+                #${spotNumber} ${placeInfo.type}
+              </span>
+            </div>
+            <div class="p-3.5 space-y-2">
+              <h4 class="font-extrabold text-xs text-slate-900 leading-tight">${placeInfo.name}</h4>
+              <p class="text-[10px] text-slate-500 leading-relaxed font-normal">${placeInfo.desc}</p>
+              
+              <div class="pt-2 border-t border-slate-100 space-y-1.5 text-[9px]">
+                <!-- Opening & Closing Timing -->
+                <div class="flex items-center justify-between font-semibold text-slate-600">
+                  <span class="flex items-center gap-1 text-orange-600 font-bold">
+                    ⏱ ${placeInfo.timing}
+                  </span>
+                  <span class="text-blue-600 font-bold uppercase">Spot #${spotNumber}</span>
+                </div>
+                
+                <!-- Real-time / Current Weather of Tourist Destination -->
+                <div class="flex items-center justify-between bg-blue-50/90 text-blue-900 px-2.5 py-1.5 rounded-xl border border-blue-100/80">
+                  <span class="flex items-center gap-1.5 font-bold">
+                    <span class="text-sm leading-none">${placeInfo.weatherIcon}</span>
+                    <span class="text-[10px] font-extrabold text-blue-900">${placeInfo.weather}</span>
+                  </span>
+                  <span class="text-[8px] bg-blue-200/70 text-blue-800 px-1.5 py-0.5 rounded-md font-black uppercase tracking-wider">Live</span>
+                </div>
+
+                <!-- Real-time Crowd Information (Below Weather & Above Public Facilities) -->
+                <div class="flex items-center justify-between ${crowdBgClass} px-2.5 py-1.5 rounded-xl">
+                  <span class="flex items-center gap-1.5 font-bold">
+                    <span class="w-2 h-2 rounded-full ${crowdDotClass} animate-pulse shrink-0"></span>
+                    <span class="text-[10px] font-extrabold">${placeInfo.crowdText}</span>
+                  </span>
+                  <span class="text-[8px] ${crowdBadgeClass} px-1.5 py-0.5 rounded-md font-black uppercase tracking-wider">${placeInfo.crowdBadge}</span>
+                </div>
+
+                <!-- Nearest Public Facilities Quick Badges -->
+                <div class="bg-green-50/90 text-green-900 p-2 rounded-xl border border-green-200/80 space-y-1">
+                  <div class="text-[8px] font-extrabold uppercase tracking-wider text-green-800 flex items-center justify-between">
+                    <span>${dict.facilitiesHeader}</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-ping"></span>
+                  </div>
+                  <div class="flex items-center justify-between text-[8px] font-bold text-green-950 pt-0.5">
+                    <span title="${facPolice.name}">👮 ${facPolice.dist.split(' ')[0]}</span>
+                    <span title="${facHospital.name}">🏥 ${facHospital.dist.split(' ')[0]}</span>
+                    <span title="${facToilet.name}">🚻 ${facToilet.dist.split(' ')[0]}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const marker = L.marker(latLng, { icon: blueIcon })
+          .bindPopup(popupHtml, { maxWidth: 280, closeButton: true });
+
+        // When user clicks on any tourist place pointer, show its info block and nearest police, hospital & toilet
+        marker.on('click', () => {
+          activePlaceId = place.id;
+          showPlaceFacilities(place);
+        });
+
+        markersLayerGroup.addLayer(marker);
+        destinationMarkersMap[place.id] = { marker, place };
+      });
+
+      // Smoothly zoom & fit map bounds around the 3 destinations
+      if (latLngs.length > 0) {
+        const bounds = L.latLngBounds(latLngs);
+        mapInstance.flyToBounds(bounds, {
+          padding: [35, 35],
+          maxZoom: 14,
+          duration: 1.2
+        });
+      }
+    }
+
+    // Display the 3 Nearest Public Facilities (Police, Hospital, Toilet) with Green Dots and Green Path Lines
+    function showPlaceFacilities(place) {
+      if (!mapInstance || !place || !place.facilities) return;
+
+      // Clear previous facility markers and lines for fresh rendering
+      facilitiesLayerGroup.clearLayers();
+      facilityLinesGroup.clearLayers();
+
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      const placeInfo = place[lang] || place.en;
+      const placeCoord = [place.lat, place.lng];
+      const facTypes = [
+        { key: 'police', emoji: '👮', label: dict.nearestPolice, color: '#16a34a', bgBadge: 'bg-emerald-100 text-emerald-800' },
+        { key: 'hospital', emoji: '🏥', label: dict.nearestHospital, color: '#16a34a', bgBadge: 'bg-red-100 text-red-800' },
+        { key: 'toilet', emoji: '🚻', label: dict.nearestToilet, color: '#16a34a', bgBadge: 'bg-blue-100 text-blue-800' }
+      ];
+
+      facTypes.forEach(facMeta => {
+        const facData = place.facilities[facMeta.key];
+        if (!facData) return;
+        const facInfo = facData[lang] || facData.en;
+        const facCoord = [facData.lat, facData.lng];
+
+        // Green Dot / Pointer Icon (DivIcon)
+        const greenIcon = L.divIcon({
+          className: 'custom-green-marker',
+          html: `
+            <div class="custom-green-pin">
+              <div class="pin-pulse"></div>
+              <div class="pin-body">
+                <div class="pin-content">${facMeta.emoji}</div>
+              </div>
+            </div>
+          `,
+          iconSize: [30, 40],
+          iconAnchor: [15, 36],
+          popupAnchor: [0, -34]
+        });
+
+        // Contact or Operating Hours Details
+        const contactOrHoursRow = facInfo.phone
+          ? `
+            <div class="flex items-center justify-between font-semibold">
+              <span class="text-slate-500">📞 Contact:</span>
+              <a href="tel:${facInfo.phone.split(' ')[0]}" class="text-blue-600 font-extrabold hover:underline">${facInfo.phone}</a>
+            </div>
+          `
+          : `
+            <div class="flex items-center justify-between font-semibold">
+              <span class="text-slate-500">⏰ Hours:</span>
+              <span class="text-slate-800 font-bold">${facInfo.timing}</span>
+            </div>
+          `;
+
+        // Rich Public Facility Info Popup
+        const facPopupHtml = `
+          <div class="w-60 bg-white rounded-2xl overflow-hidden font-sans text-slate-800 p-3.5 space-y-2.5 shadow-2xl border border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-green-100 text-green-700 flex items-center justify-center text-base font-bold shrink-0 shadow-sm">
+                ${facMeta.emoji}
+              </span>
+              <div class="min-w-0 flex-1">
+                <span class="text-[8px] font-extrabold uppercase text-green-600 tracking-wider block">${facInfo.type}</span>
+                <h5 class="font-extrabold text-xs text-slate-900 leading-tight truncate">${facInfo.name}</h5>
+              </div>
+            </div>
+
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 space-y-1.5 text-[9px] text-slate-600">
+              <div class="flex items-center justify-between font-semibold">
+                <span class="text-slate-500">📍 Near ${placeInfo.name}:</span>
+                <span class="text-green-700 font-extrabold">${facInfo.dist}</span>
+              </div>
+              ${contactOrHoursRow}
+            </div>
+
+            <div class="flex gap-1.5 pt-1">
+              ${facInfo.phone ? `
+                <a href="tel:${facInfo.phone.split(' ')[0]}" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold py-1.5 rounded-xl text-[9px] uppercase tracking-wider transition-colors text-center cursor-pointer flex items-center justify-center gap-1">
+                  📞 Call
+                </a>
+              ` : ''}
+              <button onclick="showToast('${facInfo.name} - ' + '${facInfo.dist}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-1.5 rounded-xl text-[9px] uppercase tracking-wider shadow-sm transition-colors text-center cursor-pointer flex items-center justify-center gap-1">
+                🧭 ${dict.directionsBtn}
+              </button>
+            </div>
+          </div>
+        `;
+
+        const facMarker = L.marker(facCoord, { icon: greenIcon })
+          .bindPopup(facPopupHtml, { maxWidth: 280, closeButton: true });
+
+        facilitiesLayerGroup.addLayer(facMarker);
+
+        // Draw Green Path Line from Tourist Place to this Facility
+        const greenPath = L.polyline([placeCoord, facCoord], {
+          color: '#16a34a',
+          weight: 3,
+          opacity: 0.85,
+          dashArray: '5, 6',
+          lineCap: 'round',
+          lineJoin: 'round'
+        });
+
+        facilityLinesGroup.addLayer(greenPath);
+      });
+    }
+
+    // Audio Controls for Story Player Card
+    function togglePlay() {
+      if (isPlaying) {
+        pauseAudio();
+      } else {
+        playAudio();
+      }
+    }
+
+    function playAudio() {
+      isPlaying = true;
+      document.getElementById('playIcon').classList.add('hidden');
+      document.getElementById('pauseIcon').classList.remove('hidden');
+      document.getElementById('playerCoverImg').classList.add('scale-105', 'brightness-90');
+      
+      if (playInterval) clearInterval(playInterval);
+      playInterval = setInterval(() => {
+        if (currentPlaySeconds < totalPlaySeconds) {
+          currentPlaySeconds += 1;
+          updateProgressBar();
+        } else {
+          currentPlaySeconds = 0;
+          pauseAudio();
+        }
+      }, 1000);
+    }
+
+    function pauseAudio() {
+      isPlaying = false;
+      document.getElementById('playIcon').classList.remove('hidden');
+      document.getElementById('pauseIcon').classList.add('hidden');
+      document.getElementById('playerCoverImg').classList.remove('scale-105', 'brightness-90');
+      if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+      }
+    }
+
+    function updateProgressBar() {
+      const progressBar = document.getElementById('playerProgressBar');
+      const timeLabel = document.getElementById('playerCurrentTime');
+      
+      const percentage = (currentPlaySeconds / totalPlaySeconds) * 100;
+      progressBar.style.width = `${percentage}%`;
+      
+      const minutes = Math.floor(currentPlaySeconds / 60);
+      const seconds = currentPlaySeconds % 60;
+      timeLabel.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function scrubPlayer(event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const width = rect.width;
+      const percentage = clickX / width;
+      
+      currentPlaySeconds = Math.floor(percentage * totalPlaySeconds);
+      updateProgressBar();
+      
+      if (!isPlaying) {
+        playAudio();
+      }
+    }
+
+    function toggleLike() {
+      const like = document.getElementById('likeIcon');
+      const dict = i18n[currentLangKey] || i18n.en;
+      isLiked = !isLiked;
+      
+      if (isLiked) {
+        like.setAttribute('fill', '#f97316');
+        like.setAttribute('stroke', '#f97316');
+        showToast(dict.toastLikedAdded);
+      } else {
+        like.setAttribute('fill', 'none');
+        like.setAttribute('stroke', 'currentColor');
+        showToast(dict.toastLikedRemoved);
+      }
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      const volIcon = document.getElementById('volumeIcon');
+      const dict = i18n[currentLangKey] || i18n.en;
+      if (isMuted) {
+        volIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />`;
+        showToast(dict.toastMuted);
+      } else {
+        volIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />`;
+        showToast(dict.toastUnmuted);
+      }
+    }
+
+    function shareLore() {
+      const dict = i18n[currentLangKey] || i18n.en;
+      const text = `${document.getElementById('playerTitle').innerText} - YatraSaathi`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(dict.toastLoreShared);
+      }).catch(() => {
+        showToast(dict.toastLoreShared);
+      });
+    }
+
+    function showLocalizedToast(key) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(dict[key] || "Action completed");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const toastText = document.getElementById('toastMsg');
+      
+      toastText.innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    // --- LIVE WEATHER COMPONENT VIA OPEN-METEO API ---
+    const cityCoordinates = {
+      udaipur: { lat: 24.5854, lon: 73.7125, name: "Udaipur" },
+      jaipur: { lat: 26.9124, lon: 75.7873, name: "Jaipur" },
+      bikaner: { lat: 28.0229, lon: 73.3119, name: "Bikaner" },
+      jaisalmer: { lat: 26.9157, lon: 70.9083, name: "Jaisalmer" },
+      jodhpur: { lat: 26.2389, lon: 73.0243, name: "Jodhpur" }
+    };
+
+    function decodeWeatherCode(code) {
+      if (code === 0) return { icon: "☀️", text: "Clear Sky" };
+      if (code === 1 || code === 2) return { icon: "🌤️", text: "Partly Cloudy" };
+      if (code === 3) return { icon: "☁️", text: "Overcast" };
+      if (code >= 45 && code <= 48) return { icon: "🌫️", text: "Foggy" };
+      if (code >= 51 && code <= 67) return { icon: "🌦️", text: "Light Rain" };
+      if (code >= 71 && code <= 77) return { icon: "🌨️", text: "Snow Flurries" };
+      if (code >= 80 && code <= 82) return { icon: "🌧️", text: "Showers" };
+      if (code >= 95) return { icon: "⛈️", text: "Thunderstorm" };
+      return { icon: "☀️", text: "Sunny" };
+    }
+
+    async function fetchLiveWeather(cityKey) {
+      const city = cityCoordinates[cityKey] || cityCoordinates.udaipur;
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.current) {
+          const wInfo = decodeWeatherCode(data.current.weather_code);
+          const tempEl = document.getElementById('weatherTemp');
+          const condEl = document.getElementById('weatherCondition');
+          const iconEl = document.getElementById('weatherIcon');
+          const windEl = document.getElementById('weatherWind');
+          const humEl = document.getElementById('weatherHumidity');
+
+          if (tempEl) tempEl.innerText = `${Math.round(data.current.temperature_2m)}°C`;
+          if (condEl) condEl.innerText = wInfo.text;
+          if (iconEl) iconEl.innerText = wInfo.icon;
+          if (windEl) windEl.innerText = `${data.current.wind_speed_10m} km/h`;
+          if (humEl) humEl.innerText = `${data.current.relative_humidity_2m}%`;
+
+          // 4-day forecast
+          if (data.daily && data.daily.time) {
+            const fGrid = document.getElementById('weatherForecastGrid');
+            if (fGrid) {
+              fGrid.innerHTML = '';
+              for (let i = 1; i <= 4; i++) {
+                const dCode = decodeWeatherCode(data.daily.weather_code[i] || 0);
+                const maxT = Math.round(data.daily.temperature_2m_max[i]);
+                const minT = Math.round(data.daily.temperature_2m_min[i]);
+                const dayName = new Date(data.daily.time[i]).toLocaleDateString(currentLangKey === 'hi' ? 'hi-IN' : 'en-US', { weekday: 'short' });
+                
+                fGrid.innerHTML += `
+                  <div class="p-2 bg-[var(--background)] rounded-xl border border-[var(--border)] text-[10px]">
+                    <span class="font-black text-[9px] text-[var(--muted-foreground)]">${dayName}</span>
+                    <div class="text-base my-0.5">${dCode.icon}</div>
+                    <span class="font-extrabold text-[var(--foreground)]">${maxT}° <span class="text-[var(--muted-foreground)] font-normal text-[8px]">${minT}°</span></span>
+                  </div>
+                `;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        // Safe offline fallback
+        const tempEl = document.getElementById('weatherTemp');
+        const condEl = document.getElementById('weatherCondition');
+        const iconEl = document.getElementById('weatherIcon');
+        const windEl = document.getElementById('weatherWind');
+        const humEl = document.getElementById('weatherHumidity');
+        if (tempEl) tempEl.innerText = "32°C";
+        if (condEl) condEl.innerText = "Clear Skies";
+        if (iconEl) iconEl.innerText = "☀️";
+        if (windEl) windEl.innerText = "12 km/h";
+        if (humEl) humEl.innerText = "42%";
+      }
+    }
+
+    // --- SOS EMERGENCY TRIGGER ---
+    function triggerEmergencySOS() {
+      const btn = document.getElementById('sosActionBtn');
+      const dict = i18n[currentLangKey] || i18n.en;
+      if (btn) btn.innerHTML = `<span class="animate-spin text-sm">🔄</span> Connecting 112...`;
+      
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            showToast(dict.toast_sos_active);
+            setTimeout(() => {
+              if (btn) btn.innerHTML = `<svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-1.707 1.707A1 1 0 003 15h14a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg> <span data-i18n="sos_button">${dict.sos_button}</span>`;
+            }, 4000);
+          },
+          () => {
+            showToast(dict.toast_sos_active);
+            setTimeout(() => {
+              if (btn) btn.innerHTML = `<svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-1.707 1.707A1 1 0 003 15h14a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg> <span data-i18n="sos_button">${dict.sos_button}</span>`;
+            }, 3000);
+          }
+        );
+      } else {
+        showToast(dict.toast_sos_active);
+        setTimeout(() => {
+          if (btn) btn.innerHTML = `<svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-1.707 1.707A1 1 0 003 15h14a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg> <span data-i18n="sos_button">${dict.sos_button}</span>`;
+        }, 3000);
+      }
+    }
+
+    function testSOSLocation() {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(dict.toast_sos_copied);
+    }
+  </script>
+</body>
+</html>

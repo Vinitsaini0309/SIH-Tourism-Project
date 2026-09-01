@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YatraSaathi - Dashboard</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom Scrollbar for better UI */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border, rgba(0, 0, 0, 0.1));
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted-foreground, rgba(0, 0, 0, 0.2));
+    }
+    .lang-dropdown-menu {
+      animation: dropdownFade 0.18s ease-out forwards;
+    }
+    @keyframes dropdownFade {
+      from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen flex flex-col md:flex-row p-4 md:p-6 gap-6 font-sans">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="w-full md:w-64 bg-[var(--card)] border border-[var(--border)] rounded-3xl p-6 flex flex-col justify-between shrink-0 shadow-sm">
+    <div>
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 flex-shrink-0 bg-gradient-to-tr from-orange-500 via-white to-green-600 rounded-full flex items-center justify-center shadow-md border border-[var(--border)] overflow-hidden">
+          <!-- Ashoka Chakra SVG -->
+          <svg class="w-6 h-6 text-blue-800 animate-[spin_20s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="1 1" />
+            <path stroke="currentColor" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4L18.4 5.6M12 12m-2 0a2 2 0 104 0 2 2 0 00-4 0" />
+          </svg>
+        </div>
+        <div>
+          <div data-i18n="brandTitle1" class="text-xs font-extrabold tracking-wider text-orange-500 leading-none">YATRA</div>
+          <div data-i18n="brandTitle2" class="text-xs font-extrabold tracking-wider text-[var(--foreground)] leading-none">SAATHI -</div>
+          <div data-i18n="brandTitle3" class="text-[10px] font-medium text-green-600 leading-none tracking-tight">DASHBOARD</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="space-y-2">
+        <a href="dashboard_preview_v2.html" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 font-semibold text-sm border-l-4 border-orange-500 shadow-sm transition-all">
+          <span class="flex items-center gap-4">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+            </svg>
+            <span data-i18n="navDashboard">Dashboard</span>
+          </span>
+          <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+        </a>
+        <a href="cultural_dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span data-i18n="navExplore">Explore</span>
+        </a>
+        <a href="#" onclick="showLocalizedToast('toastBookingsLoaded')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span data-i18n="navBookings">My Bookings</span>
+        </a>
+        <a href="cultural_reels.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span data-i18n="navLore">Cultural Reels</span>
+        </a>
+        <a href="art_festivals.html" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span data-i18n="navFestivals">Art & Festivals</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- User Profile & Settings in Sidebar Footer -->
+    <div class="mt-8 border-t border-[var(--border)] pt-6 space-y-2">
+      <a href="#" onclick="showLocalizedToast('toastAccountLoaded')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span data-i18n="navAccount">Account</span>
+      </a>
+      <a href="#" onclick="showLocalizedToast('toastSettingsLoaded')" class="flex items-center gap-4 px-4 py-3 rounded-xl text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] transition-all font-medium text-sm group">
+        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span data-i18n="navSettings">Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN WORKSPACE ================= -->
+  <main class="flex-1 flex flex-col gap-6 min-w-0">
+    
+    <!-- TOP BAR -->
+    <header class="w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-[var(--card)] border border-[var(--border)] rounded-3xl p-4 shadow-sm relative overflow-visible z-30">
+      <!-- Decorative Backdrop Tricolor Blur -->
+      <div class="absolute inset-0 pointer-events-none opacity-5 dark:opacity-10 flex rounded-3xl overflow-hidden">
+        <div class="w-1/3 h-full bg-orange-500 blur-2xl"></div>
+        <div class="w-1/3 h-full bg-white blur-2xl"></div>
+        <div class="w-1/3 h-full bg-green-600 blur-2xl"></div>
+      </div>
+      
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md">
+        <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Search bookings, companions, schedules..." class="w-full pl-11 pr-4 py-2.5 bg-[var(--background)] border border-[var(--border)] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-[var(--foreground)] placeholder-[var(--placeholder)] transition-all">
+        <svg class="w-4 h-4 text-[var(--muted-foreground)] absolute left-4 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- User Panel Controls -->
+      <div class="flex items-center justify-between sm:justify-end gap-4 relative z-30">
+        
+        <!-- Language Dropdown Toggle Bar -->
+        <div class="relative" id="langDropdownContainer">
+          <button id="langBtn" onclick="toggleLangDropdown(event)" type="button" class="flex items-center gap-2 px-4 py-2 bg-[var(--background)] border border-[var(--border)] hover:border-blue-500 rounded-full text-xs font-bold hover:bg-[var(--accent)] transition-all shadow-sm cursor-pointer select-none">
+            <span class="text-base leading-none">🌐</span>
+            <span id="currentLang">English</span>
+            <svg id="langChevron" class="w-3.5 h-3.5 text-[var(--muted-foreground)] transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          <!-- Lang Dropdown Menu (English & Hindi only) -->
+          <div id="langMenu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-2xl shadow-2xl py-1.5 z-50 text-xs lang-dropdown-menu overflow-hidden">
+            <button onclick="selectLang('en')" id="langOpt-en" type="button" class="w-full text-left px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold flex items-center justify-between transition-colors cursor-pointer">
+              <span>English</span>
+              <span id="check-en" class="text-blue-600 font-bold">✓</span>
+            </button>
+            <button onclick="selectLang('hi')" id="langOpt-hi" type="button" class="w-full text-left px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold flex items-center justify-between transition-colors cursor-pointer">
+              <span>हिन्दी (Hindi)</span>
+              <span id="check-hi" class="text-blue-600 font-bold hidden">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="flex items-center gap-3 bg-[var(--background)] border border-[var(--border)] rounded-full pl-1.5 pr-4 py-1">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Aditi Sharma" class="w-7 h-7 rounded-full object-cover border border-[var(--border)]">
+          <span data-i18n="userName" class="text-xs font-semibold text-[var(--foreground)] hidden xs:block">Aditi Sharma</span>
+          <svg class="w-3.5 h-3.5 text-[var(--muted-foreground)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <!-- Notifications Bell -->
+        <button onclick="showLocalizedToast('toastNotifications')" class="w-9 h-9 flex items-center justify-center bg-[var(--background)] border border-[var(--border)] rounded-full hover:bg-[var(--accent)] transition-all relative cursor-pointer">
+          <svg class="w-4 h-4 text-[var(--foreground)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="absolute top-1 right-1 w-2 h-2 bg-orange-500 border border-[var(--card)] rounded-full"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT WORKSPACE WITH TABS -->
+    <div class="flex-1 flex flex-col gap-6">
+      
+      <!-- Dashboard Title Block -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 data-i18n="dashMainTitle" class="text-2xl font-black text-[var(--foreground)] tracking-tight">Travel & Services Dashboard</h1>
+          <p data-i18n="dashSubtitle" class="text-xs text-[var(--muted-foreground)] mt-0.5">Plan, book, calculate, and customize your journey in real-time</p>
+        </div>
+        <div class="flex items-center gap-2 px-3.5 py-1.5 bg-orange-50 dark:bg-orange-950/20 text-orange-600 dark:text-orange-400 text-xs font-bold rounded-2xl border border-orange-100 dark:border-orange-950/50 shadow-sm">
+          <span data-i18n="tagRealtimeSync">Real-time Sync</span>
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+        </div>
+      </div>
+
+      <!-- Feature Tabs Row -->
+      <div class="flex gap-2 overflow-x-auto pb-1 p-1 bg-[var(--card)] border border-[var(--border)] rounded-3xl shrink-0 no-scrollbar">
+        <button onclick="switchTab('hotels')" id="tab-hotels" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-bold transition-all bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border border-[var(--border)] shadow-sm cursor-pointer">
+          <span data-i18n="tabHotels">🏨 Hotels</span>
+        </button>
+        <button onclick="switchTab('trains')" id="tab-trains" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+          <span data-i18n="tabTrains">🚄 Trains</span>
+        </button>
+        <button onclick="switchTab('buses')" id="tab-buses" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+          <span data-i18n="tabBuses">🚌 Buses</span>
+        </button>
+        <button onclick="switchTab('budget')" id="tab-budget" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+          <span data-i18n="tabBudget">🧮 Budget Planner</span>
+        </button>
+        <button onclick="switchTab('companion')" id="tab-companion" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+          <span data-i18n="tabCompanion">🤝 Companion</span>
+        </button>
+        <button onclick="switchTab('aiguide')" id="tab-aiguide" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+          <span data-i18n="tabAiGuide">🤖 AI Tour Guide</span>
+        </button>
+        <button onclick="switchTab('divyangjan')" id="tab-divyangjan" class="flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer">
+          <span data-i18n="tabDivyangjan">♿ Divyangjan</span>
+        </button>
+      </div>
+
+      <!-- ================= MAIN VIEW CONTENT ================= -->
+      <div class="flex-1 bg-[var(--card)] border border-[var(--border)] rounded-[32px] p-6 shadow-sm min-h-[500px]">
+        
+        <!-- ================= TAB 1: HOTELS ================= -->
+        <div id="content-hotels" class="tab-pane space-y-6">
+          <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Search Panel -->
+            <div class="w-full lg:w-80 bg-[var(--background)] border border-[var(--border)] p-5 rounded-2xl space-y-4 shrink-0 shadow-inner">
+              <h3 data-i18n="hotelSearchTitle" class="text-sm font-bold text-[var(--foreground)] uppercase tracking-wider">Search Heritage Hotels</h3>
+              <div class="space-y-3">
+                <div>
+                  <label data-i18n="lblDestination" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Destination</label>
+                  <select id="hotelDest" onchange="filterHotels()" class="w-full mt-1 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)] focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option value="all" data-i18n="optAllCities">All Rajasthan Cities</option>
+                    <option value="udaipur" data-i18n="cityUdaipur">Udaipur</option>
+                    <option value="jaipur" data-i18n="cityJaipur">Jaipur</option>
+                    <option value="bikaner" data-i18n="cityBikaner">Bikaner</option>
+                    <option value="jaisalmer" data-i18n="cityJaisalmer">Jaisalmer</option>
+                  </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label data-i18n="lblCheckIn" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Check-In</label>
+                    <input type="date" value="2026-09-05" class="w-full mt-1 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+                  </div>
+                  <div>
+                    <label data-i18n="lblCheckOut" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Check-Out</label>
+                    <input type="date" value="2026-09-10" class="w-full mt-1 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+                  </div>
+                </div>
+                <div>
+                  <label data-i18n="lblGuests" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Guests & Rooms</label>
+                  <input type="text" id="hotelGuestsInput" value="2 Adults, 1 Room" data-i18n-val="valGuests" class="w-full mt-1 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+                </div>
+                <button onclick="filterHotels()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/25 transition-all cursor-pointer">
+                  <span data-i18n="btnSearchHotels">Search Available</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Hotels Grid -->
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4" id="hotelsGrid">
+              <!-- Cards populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 2: TRAINS ================= -->
+        <div id="content-trains" class="tab-pane hidden space-y-6">
+          <div class="bg-[var(--background)] border border-[var(--border)] p-5 rounded-2xl shadow-inner">
+            <h3 data-i18n="trainSearchTitle" class="text-sm font-bold text-[var(--foreground)] uppercase tracking-wider mb-4">Railway Ticket Reservation</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+              <div>
+                <label data-i18n="lblFromStation" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">From Station</label>
+                <select id="trainFrom" class="w-full mt-1 p-2.5 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+                  <option value="NDLS" data-i18n="stnNDLS">New Delhi (NDLS)</option>
+                  <option value="UDZ" data-i18n="stnUDZ">Udaipur City (UDZ)</option>
+                  <option value="JP" data-i18n="stnJP">Jaipur Junction (JP)</option>
+                  <option value="BKN" data-i18n="stnBKN">Bikaner Junction (BKN)</option>
+                </select>
+              </div>
+              <div>
+                <label data-i18n="lblToStation" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">To Station</label>
+                <select id="trainTo" class="w-full mt-1 p-2.5 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+                  <option value="UDZ" data-i18n="stnUDZ">Udaipur City (UDZ)</option>
+                  <option value="JP" data-i18n="stnJP">Jaipur Junction (JP)</option>
+                  <option value="BKN" data-i18n="stnBKN">Bikaner Junction (BKN)</option>
+                  <option value="JSM" data-i18n="stnJSM">Jaisalmer (JSM)</option>
+                </select>
+              </div>
+              <div>
+                <label data-i18n="lblJourneyDate" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Journey Date</label>
+                <input type="date" value="2026-09-06" class="w-full mt-1 p-2.5 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+              </div>
+              <button onclick="searchTrains()" class="py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-orange-500/25 transition-all cursor-pointer">
+                <span data-i18n="btnFindTrains">Find Trains</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4" id="trainListings">
+            <!-- Train search results populated here -->
+          </div>
+        </div>
+
+        <!-- ================= TAB 3: BUSES ================= -->
+        <div id="content-buses" class="tab-pane hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-10 gap-6">
+            <!-- Left Listings -->
+            <div class="lg:col-span-6 space-y-4">
+              <div class="bg-[var(--background)] border border-[var(--border)] p-4 rounded-2xl space-y-3">
+                <h3 data-i18n="busSearchTitle" class="text-xs font-bold uppercase tracking-wider">Bus Booking Routes</h3>
+                <div class="grid grid-cols-3 gap-2">
+                  <select id="busFrom" class="p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs">
+                    <option value="Jaipur" data-i18n="cityJaipur">Jaipur</option>
+                    <option value="Delhi" data-i18n="cityDelhi">New Delhi</option>
+                    <option value="Ahmedabad" data-i18n="cityAhmedabad">Ahmedabad</option>
+                  </select>
+                  <select id="busTo" class="p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs">
+                    <option value="Udaipur" data-i18n="cityUdaipur">Udaipur</option>
+                    <option value="Jaisalmer" data-i18n="cityJaisalmer">Jaisalmer</option>
+                    <option value="Bikaner" data-i18n="cityBikaner">Bikaner</option>
+                  </select>
+                  <button onclick="searchBuses()" class="bg-blue-600 text-white text-xs font-bold rounded-xl uppercase hover:bg-blue-700 cursor-pointer">
+                    <span data-i18n="btnSearch">Search</span>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="space-y-3" id="busList">
+                <!-- Bus items populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Right Seat Selection Board -->
+            <div class="lg:col-span-4 bg-[var(--background)] border border-[var(--border)] p-5 rounded-2xl shadow-inner flex flex-col justify-between" id="seatSelectionBoard">
+              <div>
+                <h3 class="text-sm font-black uppercase text-[var(--foreground)] flex justify-between items-center mb-1">
+                  <span data-i18n="seatSelectorTitle">Interactive Seat Selector</span>
+                  <span id="selectedBusName" class="text-[10px] text-blue-600 font-extrabold uppercase">RSRTC Premium Gold</span>
+                </h3>
+                <p data-i18n="seatSelectorSub" class="text-[10px] text-[var(--muted-foreground)] mb-4">Click seats to add to reservation.</p>
+
+                <!-- Interactive Bus Seat Grid Layout -->
+                <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 max-w-[220px] mx-auto space-y-4 relative">
+                  <!-- Front Steering Wheel Representor -->
+                  <div class="flex justify-between items-center border-b border-[var(--border)] pb-2 mb-2">
+                    <span data-i18n="aisleDriver" class="text-[9px] font-bold text-[var(--muted-foreground)] uppercase">Aisle Driver -></span>
+                    <svg class="w-5 h-5 text-slate-400 rotate-90" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-15c-3.86 0-7 3.14-7 7s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7z"/></svg>
+                  </div>
+                  <!-- Seat layout (4 columns x 6 rows) -->
+                  <div class="grid grid-cols-4 gap-2 text-center" id="busSeatGrid">
+                    <!-- Dynamic seats via JS -->
+                  </div>
+                </div>
+
+                <!-- Legend of Seats -->
+                <div class="flex justify-around text-[9px] font-bold uppercase tracking-wider text-[var(--muted-foreground)] mt-4 border-t border-[var(--border)] pt-3">
+                  <span class="flex items-center gap-1"><span class="w-3 h-3 bg-white border border-[var(--border)] rounded-sm"></span> <span data-i18n="legendAvail">Avail</span></span>
+                  <span class="flex items-center gap-1"><span class="w-3 h-3 bg-slate-300 dark:bg-slate-700 rounded-sm"></span> <span data-i18n="legendBooked">Booked</span></span>
+                  <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-500 rounded-sm"></span> <span data-i18n="legendSelect">Select</span></span>
+                  <span class="flex items-center gap-1"><span class="w-3 h-3 bg-orange-400 rounded-sm"></span> <span data-i18n="legendAccessible">Accessible</span></span>
+                </div>
+              </div>
+
+              <!-- Ticket Booking Checkout Detail -->
+              <div class="mt-6 border-t border-[var(--border)] pt-4">
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span data-i18n="lblSelectedSeats">Selected Seats:</span>
+                  <span id="selectedSeatsLabel" class="text-blue-500">None</span>
+                </div>
+                <div class="flex justify-between text-sm font-black mb-4">
+                  <span data-i18n="lblTotalAmount">Total Amount:</span>
+                  <span id="busTotalLabel">₹0</span>
+                </div>
+                <button onclick="bookBusTickets()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/20 active:scale-95 transition-all cursor-pointer">
+                  <span data-i18n="btnProceedBook">Proceed to Book</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 4: BUDGET PLANNER ================= -->
+        <div id="content-budget" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Controls Panel -->
+            <div class="w-full lg:w-96 bg-[var(--background)] border border-[var(--border)] p-6 rounded-2xl space-y-5 shadow-inner">
+              <h3 data-i18n="budgetConfigTitle" class="text-sm font-bold text-[var(--foreground)] uppercase tracking-wider">Configure Travel Budget</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase flex justify-between">
+                    <span data-i18n="lblTargetBudget">Total Target Budget (₹)</span>
+                    <span class="text-blue-500 font-extrabold" id="budgetVal">₹35,000</span>
+                  </label>
+                  <input type="number" id="budgetInput" value="35000" oninput="calculateBudget()" class="w-full mt-1.5 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)] focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+                
+                <div>
+                  <label class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase flex justify-between">
+                    <span data-i18n="lblTripDuration">Trip Duration (Days)</span>
+                    <span class="text-blue-500 font-extrabold" id="daysVal">5 Days</span>
+                  </label>
+                  <input type="range" id="daysInput" min="1" max="14" value="5" oninput="calculateBudget()" class="w-full mt-2 accent-blue-500">
+                </div>
+
+                <div>
+                  <label data-i18n="lblComfortProfile" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Comfort Profile</label>
+                  <select id="comfortProfile" onchange="calculateBudget()" class="w-full mt-1.5 p-2.5 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)]">
+                    <option value="budget" data-i18n="optBudget">Backpacker / Budget (₹1,500/day min)</option>
+                    <option value="comfort" selected data-i18n="optComfort">Standard Comfort (₹4,000/day min)</option>
+                    <option value="luxury" data-i18n="optLuxury">Luxury Heritage (₹12,000/day min)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Allocation breakdown Chart -->
+            <div class="flex-1 space-y-6">
+              <div>
+                <h3 data-i18n="budgetAllocTitle" class="text-sm font-black uppercase text-[var(--foreground)]">Recommended Resource Allocation</h3>
+                <p data-i18n="budgetAllocSub" class="text-xs text-[var(--muted-foreground)] mt-0.5">Calculated using verified cultural path costs</p>
+              </div>
+
+              <!-- Metrics bar columns -->
+              <div class="space-y-4" id="budgetBreakdown">
+                <!-- Breakdown populated by JavaScript -->
+              </div>
+
+              <!-- Warning Banner -->
+              <div id="budgetWarning" class="p-4 bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 rounded-xl text-xs flex items-center gap-3 hidden">
+                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span id="budgetTextWarning">Selected budget may be insufficient for standard lodging and heritage monument passes.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 5: COMPANION ================= -->
+        <div id="content-companion" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[var(--border)] pb-4">
+            <div>
+              <h3 data-i18n="companionTitle" class="text-sm font-bold text-[var(--foreground)] uppercase tracking-wider">Verified Tour Companions & Guides</h3>
+              <p data-i18n="companionSubtitle" class="text-xs text-[var(--muted-foreground)] mt-0.5">Authorized Ministry guides with credentials and language certification</p>
+            </div>
+            <select id="companionLang" onchange="filterCompanions()" class="p-2 bg-[var(--background)] border border-[var(--border)] rounded-xl text-xs font-semibold">
+              <option value="all" data-i18n="optAllLanguages">All Languages</option>
+              <option value="English">English</option>
+              <option value="French">French</option>
+              <option value="Hindi">Hindi</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="companionsGrid">
+            <!-- Companions dynamic listing -->
+          </div>
+        </div>
+
+        <!-- ================= TAB 6: AI TOUR GUIDE ================= -->
+        <div id="content-aiguide" class="tab-pane hidden space-y-6">
+          <div class="max-w-3xl mx-auto flex flex-col h-[500px] border border-[var(--border)] bg-[var(--background)] rounded-2xl overflow-hidden shadow-inner">
+            <!-- Header -->
+            <div class="bg-[var(--card)] border-b border-[var(--border)] py-3 px-5 flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-500 to-green-600 flex items-center justify-center text-white text-xs font-bold shadow-inner">AI</div>
+                <div>
+                  <h4 data-i18n="aiGuideHeader" class="text-xs font-black text-[var(--foreground)]">Virtual Tour Guide (Beta)</h4>
+                  <p class="text-[9px] text-[var(--muted-foreground)] font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> <span data-i18n="aiGuideOnline">Online</span>
+                  </p>
+                </div>
+              </div>
+              <button onclick="clearChat()" class="text-[9px] text-[var(--muted-foreground)] font-extrabold hover:text-red-500 uppercase cursor-pointer">
+                <span data-i18n="aiClearHistory">Clear History</span>
+              </button>
+            </div>
+
+            <!-- Messages area -->
+            <div id="chatHistory" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs">
+              <!-- Initial Welcome message -->
+              <div class="flex items-start gap-2.5 max-w-[85%]">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-orange-500 to-green-600 text-white flex items-center justify-center shrink-0 text-[10px] font-bold">AI</div>
+                <div id="welcomeMessageBubble" class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 leading-relaxed shadow-sm">
+                  Namaste! I am your AI Virtual Guide for Rajasthan's heritage corridors. Click any prompt below or type your questions about itineraries, local culture, and history!
+                </div>
+              </div>
+            </div>
+
+            <!-- Typing indicator -->
+            <div id="chatTyping" class="px-5 py-1 text-[10px] text-[var(--muted-foreground)] font-bold hidden italic">
+              <span data-i18n="aiTyping">AI Guide is tailoring itinerary...</span>
+            </div>
+
+            <!-- Quick prompts list -->
+            <div class="p-3 bg-[var(--card)] border-t border-[var(--border)] flex gap-2 overflow-x-auto no-scrollbar shrink-0" id="promptChipsContainer">
+              <!-- Rendered via JS based on active language -->
+            </div>
+
+            <!-- Input area -->
+            <div class="p-3 bg-[var(--card)] border-t border-[var(--border)] flex gap-2 shrink-0">
+              <input type="text" id="chatInput" data-i18n-placeholder="chatPlaceholder" placeholder="Ask about routes, lore, timings..." onkeydown="if(event.key==='Enter') sendChatMessage()" class="flex-1 bg-[var(--background)] border border-[var(--border)] rounded-xl px-4 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <button onclick="sendChatMessage()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-xl text-xs uppercase transition-colors cursor-pointer">
+                <span data-i18n="btnSend">Send</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 7: DIVYANGJAN ================= -->
+        <div id="content-divyangjan" class="tab-pane hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-10 gap-6">
+            <!-- Left Side Guide & Form -->
+            <div class="lg:col-span-6 space-y-6">
+              <div class="bg-blue-500/10 border border-blue-500/20 p-5 rounded-2xl space-y-2">
+                <h3 data-i18n="divBannerTitle" class="text-sm font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                  Divyangjan Accessible Services Concessions
+                </h3>
+                <p data-i18n="divBannerDesc" class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+                  The Ministry of Tourism is committed to ensuring heritage sites are barrier-free. Register below to book certified assistive companions, wheelchairs, accessible transport, and secure ticket concessions (up to 50% discount on transport bookings).
+                </p>
+              </div>
+
+              <!-- Accessible booking request form -->
+              <div class="bg-[var(--background)] border border-[var(--border)] p-5 rounded-2xl space-y-4 shadow-inner">
+                <h3 data-i18n="divFormTitle" class="text-xs font-black uppercase tracking-wider">Accessible Assistance Booking Form</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label data-i18n="lblApplicantName" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Applicant Name</label>
+                    <input type="text" id="divName" value="Aditi Sharma" class="w-full mt-1.5 p-2.5 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs">
+                  </div>
+                  <div>
+                    <label data-i18n="lblUdid" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase">Disability Certificate ID / UDID</label>
+                    <input type="text" id="divUdid" data-i18n-placeholder="udidPlaceholder" placeholder="Format: MH12345XXXXX" class="w-full mt-1.5 p-2.5 bg-[var(--card)] border border-[var(--border)] rounded-xl text-xs uppercase">
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label data-i18n="lblAssistReq" class="text-[10px] font-bold text-[var(--muted-foreground)] uppercase block">Select Assistance Requirements</label>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-semibold">
+                    <label class="flex items-center gap-2 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl cursor-pointer hover:bg-[var(--accent)] transition-colors">
+                      <input type="checkbox" id="srvWheelchair" class="rounded accent-blue-600"> <span data-i18n="srvWheelchair">Wheelchair Assist at Monuments (Free)</span>
+                    </label>
+                    <label class="flex items-center gap-2 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl cursor-pointer hover:bg-[var(--accent)] transition-colors">
+                      <input type="checkbox" id="srvInterpreter" class="rounded accent-blue-600"> <span data-i18n="srvInterpreter">Sign Language Interpreter (+₹800/day)</span>
+                    </label>
+                    <label class="flex items-center gap-2 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl cursor-pointer hover:bg-[var(--accent)] transition-colors">
+                      <input type="checkbox" id="srvTransport" class="rounded accent-blue-600"> <span data-i18n="srvTransport">Ramp-Accessible Vehicle Pickup (+₹600)</span>
+                    </label>
+                    <label class="flex items-center gap-2 p-2 bg-[var(--card)] border border-[var(--border)] rounded-xl cursor-pointer hover:bg-[var(--accent)] transition-colors">
+                      <input type="checkbox" id="srvKit" class="rounded accent-blue-600"> <span data-i18n="srvKit">Tactile / Audio Guide Kit (Free)</span>
+                    </label>
+                  </div>
+                </div>
+
+                <button onclick="submitDivyangjanRequest()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/20 transition-all cursor-pointer">
+                  <span data-i18n="btnSubmitConcession">Submit Concession Request</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Side Monument Accessibility Guide -->
+            <div class="lg:col-span-4 bg-[var(--background)] border border-[var(--border)] p-5 rounded-2xl shadow-inner space-y-4" id="monumentRegistryContainer">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Notification Banner (Solid White Opaque Background) -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 bg-white text-slate-900 border border-slate-200 py-3.5 px-5 rounded-2xl shadow-2xl flex items-center gap-3.5 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="p-1.5 bg-green-100 text-green-700 rounded-xl shrink-0">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <span id="toastMsg" class="text-xs font-bold text-slate-800">Success message!</span>
+  </div>
+
+  <!-- ================= JAVASCRIPT APP STATE & LOGIC ================= -->
+  <script>
+    // Internationalization (i18n) Dictionary
+    const i18n = {
+      en: {
+        brandTitle1: "YATRA",
+        brandTitle2: "SAATHI -",
+        brandTitle3: "DASHBOARD",
+        ministryTitle1: "YATRA",
+        ministryTitle2: "SAATHI -",
+        ministryTitle3: "DASHBOARD",
+        navDashboard: "Dashboard",
+        navExplore: "Explore",
+        navBookings: "My Bookings",
+        navLore: "Cultural Reels",
+        navFestivals: "Art & Festivals",
+        navAccount: "Account",
+        navSettings: "Settings",
+        searchPlaceholder: "Search bookings, companions, schedules...",
+        userName: "Aditi Sharma",
+        dashMainTitle: "Travel & Services Dashboard",
+        dashSubtitle: "Plan, book, calculate, and customize your journey in real-time",
+        tagRealtimeSync: "Real-time Sync",
+        tabHotels: "🏨 Hotels",
+        tabTrains: "🚄 Trains",
+        tabBuses: "🚌 Buses",
+        tabBudget: "🧮 Budget Planner",
+        tabCompanion: "🤝 Companion",
+        tabAiGuide: "🤖 AI Tour Guide",
+        tabDivyangjan: "♿ Divyangjan",
+        hotelSearchTitle: "Search Heritage Hotels",
+        lblDestination: "Destination",
+        optAllCities: "All Rajasthan Cities",
+        cityUdaipur: "Udaipur",
+        cityJaipur: "Jaipur",
+        cityBikaner: "Bikaner",
+        cityJaisalmer: "Jaisalmer",
+        cityDelhi: "New Delhi",
+        cityAhmedabad: "Ahmedabad",
+        lblCheckIn: "Check-In",
+        lblCheckOut: "Check-Out",
+        lblGuests: "Guests & Rooms",
+        valGuests: "2 Adults, 1 Room",
+        btnSearchHotels: "Search Available",
+        perNight: "/night",
+        btnBookRoom: "Book Room",
+        trainSearchTitle: "Railway Ticket Reservation",
+        lblFromStation: "From Station",
+        lblToStation: "To Station",
+        stnNDLS: "New Delhi (NDLS)",
+        stnUDZ: "Udaipur City (UDZ)",
+        stnJP: "Jaipur Junction (JP)",
+        stnBKN: "Bikaner Junction (BKN)",
+        stnJSM: "Jaisalmer (JSM)",
+        lblJourneyDate: "Journey Date",
+        btnFindTrains: "Find Trains",
+        busSearchTitle: "Bus Booking Routes",
+        btnSearch: "Search",
+        seatSelectorTitle: "Interactive Seat Selector",
+        seatSelectorSub: "Click seats to add to reservation.",
+        aisleDriver: "Aisle Driver ->",
+        legendAvail: "Avail",
+        legendBooked: "Booked",
+        legendSelect: "Select",
+        legendAccessible: "Accessible",
+        lblSelectedSeats: "Selected Seats:",
+        lblTotalAmount: "Total Amount:",
+        btnProceedBook: "Proceed to Book",
+        budgetConfigTitle: "Configure Travel Budget",
+        lblTargetBudget: "Total Target Budget (₹)",
+        lblTripDuration: "Trip Duration (Days)",
+        lblComfortProfile: "Comfort Profile",
+        optBudget: "Backpacker / Budget (₹1,500/day min)",
+        optComfort: "Standard Comfort (₹4,000/day min)",
+        optLuxury: "Luxury Heritage (₹12,000/day min)",
+        budgetAllocTitle: "Recommended Resource Allocation",
+        budgetAllocSub: "Calculated using verified cultural path costs",
+        companionTitle: "Verified Tour Companions & Guides",
+        companionSubtitle: "Authorized Ministry guides with credentials and language certification",
+        optAllLanguages: "All Languages",
+        btnBookCompanion: "Book Now",
+        aiGuideHeader: "Virtual Tour Guide (Beta)",
+        aiGuideOnline: "Online",
+        aiClearHistory: "Clear History",
+        aiWelcome: "Namaste! I am your AI Virtual Guide for Rajasthan's heritage corridors. Click any prompt below or type your questions about itineraries, local culture, and history!",
+        aiTyping: "AI Guide is tailoring itinerary...",
+        chatPlaceholder: "Ask about routes, lore, timings...",
+        btnSend: "Send",
+        divBannerTitle: "Divyangjan Accessible Services Concessions",
+        divBannerDesc: "The Ministry of Tourism is committed to ensuring heritage sites are barrier-free. Register below to book certified assistive companions, wheelchairs, accessible transport, and secure ticket concessions (up to 50% discount on transport bookings).",
+        divFormTitle: "Accessible Assistance Booking Form",
+        lblApplicantName: "Applicant Name",
+        lblUdid: "Disability Certificate ID / UDID",
+        udidPlaceholder: "Format: MH12345XXXXX",
+        lblAssistReq: "Select Assistance Requirements",
+        srvWheelchair: "Wheelchair Assist at Monuments (Free)",
+        srvInterpreter: "Sign Language Interpreter (+₹800/day)",
+        srvTransport: "Ramp-Accessible Vehicle Pickup (+₹600)",
+        srvKit: "Tactile / Audio Guide Kit (Free)",
+        btnSubmitConcession: "Submit Concession Request",
+        registryTitle: "Monument Access Registry",
+        fullyAccess: "Fully Access",
+        assistReq: "Assist Required",
+        toastLangChanged: "Language changed to English",
+        toastBookingsLoaded: "Loading bookings data...",
+        toastAccountLoaded: "Loading account settings...",
+        toastSettingsLoaded: "Opening settings panel...",
+        toastNotifications: "No unread notifications",
+        toastSelectSeatFirst: "Please select at least one seat first!",
+        toastBusConfirmed: "Booking confirmed for seats:",
+        toastTrainBooked: "Booking request sent for",
+        toastDivReqSent: "Divyangjan concession request submitted for",
+        toastCompanionBooked: "Hiring companion query sent to"
+      },
+      hi: {
+        brandTitle1: "यात्रा",
+        brandTitle2: "साथी -",
+        brandTitle3: "डैशबोर्ड",
+        ministryTitle1: "यात्रा",
+        ministryTitle2: "साथी -",
+        ministryTitle3: "डैशबोर्ड",
+        navDashboard: "डैशबोर्ड",
+        navExplore: "अन्वेषण",
+        navBookings: "मेरी बुकिंग",
+        navLore: "सांस्कृतिक रील्स",
+        navFestivals: "कला एवं उत्सव",
+        navAccount: "खाता",
+        navSettings: "सेटिंग्स",
+        searchPlaceholder: "बुकिंग, गाइड, समय-सारणी खोजें...",
+        userName: "अदिति शर्मा",
+        dashMainTitle: "यात्रा एवं सेवा डैशबोर्ड",
+        dashSubtitle: "वास्तविक समय में अपनी यात्रा की योजना बनाएं, बुक करें, गणना करें और अनुकूलित करें",
+        tagRealtimeSync: "रीयल-टाइम सिंक",
+        tabHotels: "🏨 होटल",
+        tabTrains: "🚄 ट्रेनें",
+        tabBuses: "🚌 बसें",
+        tabBudget: "🧮 बजट योजनाकार",
+        tabCompanion: "🤝 टूर साथी व गाइड",
+        tabAiGuide: "🤖 एआई टूर गाइड",
+        tabDivyangjan: "♿ दिव्यांगजन सेवाएं",
+        hotelSearchTitle: "हेरिटेज होटल खोजें",
+        lblDestination: "गंतव्य शहर",
+        optAllCities: "राजस्थान के सभी शहर",
+        cityUdaipur: "उदयपुर",
+        cityJaipur: "जयपुर",
+        cityBikaner: "बीकानेर",
+        cityJaisalmer: "जैसलमेर",
+        cityDelhi: "नई दिल्ली",
+        cityAhmedabad: "अहमदाबाद",
+        lblCheckIn: "आगमन तिथि",
+        lblCheckOut: "प्रस्थान तिथि",
+        lblGuests: "अतिथि एवं कमरे",
+        valGuests: "2 वयस्क, 1 कमरा",
+        btnSearchHotels: "उपलब्ध होटल खोजें",
+        perNight: "/रात",
+        btnBookRoom: "कमरा बुक करें",
+        trainSearchTitle: "रेलवे टिकट आरक्षण",
+        lblFromStation: "प्रस्थान स्टेशन",
+        lblToStation: "गंतव्य स्टेशन",
+        stnNDLS: "नई दिल्ली (NDLS)",
+        stnUDZ: "उदयपुर सिटी (UDZ)",
+        stnJP: "जयपुर जंक्शन (JP)",
+        stnBKN: "बीकानेर जंक्शन (BKN)",
+        stnJSM: "जैसलमेर (JSM)",
+        lblJourneyDate: "यात्रा की तारीख",
+        btnFindTrains: "ट्रेन खोजें",
+        busSearchTitle: "बस बुकिंग मार्ग",
+        btnSearch: "खोजें",
+        seatSelectorTitle: "इंटरैक्टिव सीट चयन",
+        seatSelectorSub: "आरक्षण में जोड़ने के लिए सीटों पर क्लिक करें।",
+        aisleDriver: "चालक केबिन ->",
+        legendAvail: "उपलब्ध",
+        legendBooked: "बुक",
+        legendSelect: "चयनित",
+        legendAccessible: "सुलभ/प्राथमिकता",
+        lblSelectedSeats: "चयनित सीटें:",
+        lblTotalAmount: "कुल राशि:",
+        btnProceedBook: "बुकिंग के लिए आगे बढ़ें",
+        budgetConfigTitle: "यात्रा बजट निर्धारित करें",
+        lblTargetBudget: "कुल लक्षित बजट (₹)",
+        lblTripDuration: "यात्रा अवधि (दिन)",
+        lblComfortProfile: "सुविधा स्तर",
+        optBudget: "बजट / बैकपैकर (न्यूनतम ₹1,500/दिन)",
+        optComfort: "मानक सुविधा (न्यूनतम ₹4,000/दिन)",
+        optLuxury: "शाही विलासिता (न्यूनतम ₹12,000/दिन)",
+        budgetAllocTitle: "अनुशंसित बजट आवंटन",
+        budgetAllocSub: "प्रमाणित पर्यटन दरों के आधार पर गणना",
+        companionTitle: "प्रमाणित टूर साथी एवं गाइड",
+        companionSubtitle: "पर्यटन मंत्रालय द्वारा प्रमाणित एवं भाषा-दक्ष गाइड",
+        optAllLanguages: "सभी भाषाएं",
+        btnBookCompanion: "अभी बुक करें",
+        aiGuideHeader: "आभासी टूर गाइड (बीटा)",
+        aiGuideOnline: "सक्रिय",
+        aiClearHistory: "इतिहास मिटाएं",
+        aiWelcome: "नमस्ते! मैं राजस्थान के ऐतिहासिक स्थलों के लिए आपका एआई वर्चुअल गाइड हूँ। नीचे दिए गए किसी भी प्रॉम्प्ट पर क्लिक करें या यात्रा कार्यक्रम, स्थानीय संस्कृति और इतिहास के बारे में पूछें!",
+        aiTyping: "एआई गाइड यात्रा विवरण तैयार कर रहा है...",
+        chatPlaceholder: "मार्ग, इतिहास, समय आदि के बारे में पूछें...",
+        btnSend: "भेजें",
+        divBannerTitle: "दिव्यांगजन सुगम्य सेवाएं एवं रियायतें",
+        divBannerDesc: "पर्यटन मंत्रालय सभी ऐतिहासिक स्थलों को बाधा-मुक्त बनाने के लिए प्रतिबद्ध है। प्रमाणित सहायक गाइड, व्हीलचेयर, सुलभ वाहन बुक करने और यात्रा टिकटों पर 50% तक की छूट पाने के लिए नीचे पंजीकरण करें।",
+        divFormTitle: "सुगम्य सहायता अनुरोध फॉर्म",
+        lblApplicantName: "आवेदक का नाम",
+        lblUdid: "दिव्यांगता प्रमाण पत्र / UDID संख्या",
+        udidPlaceholder: "प्रारूप: MH12345XXXXX",
+        lblAssistReq: "आवश्यक सहायता सेवाओं का चयन करें",
+        srvWheelchair: "स्मारकों पर व्हीलचेयर सहायता (निःशुल्क)",
+        srvInterpreter: "सांकेतिक भाषा दुभाषिया (+₹800/दिन)",
+        srvTransport: "रैंप-युक्त सुलभ वाहन (+₹600)",
+        srvKit: "स्पर्श / ऑडियो गाइड किट (निःशुल्क)",
+        btnSubmitConcession: "रियायत अनुरोध जमा करें",
+        registryTitle: "स्मारक सुगम्यता सूची",
+        fullyAccess: "पूर्णतः सुलभ",
+        assistReq: "सहायता आवश्यक",
+        toastLangChanged: "भाषा बदलकर हिन्दी कर दी गई है",
+        toastBookingsLoaded: "बुकिंग विवरण लोड हो रहा है...",
+        toastAccountLoaded: "खाता सेटिंग्स खोली जा रही हैं...",
+        toastSettingsLoaded: "सेटिंग्स पैनल लोड हो रहा है...",
+        toastNotifications: "कोई नई सूचना नहीं है",
+        toastSelectSeatFirst: "कृपया पहले कम से कम एक सीट चुनें!",
+        toastBusConfirmed: "सीटों की बुकिंग कन्फर्म हुई:",
+        toastTrainBooked: "के लिए टिकट बुकिंग अनुरोध भेजा गया",
+        toastDivReqSent: "दिव्यांगजन रियायत अनुरोध दर्ज किया गया:",
+        toastCompanionBooked: "गाइड बुकिंग अनुरोध भेजा गया:"
+      }
+    };
+
+    // Bilingual Data Sets
+    const hotelData = [
+      { id: "h1", name: { en: "HOTEL SWASTI HERITAGE", hi: "होटल स्वस्ति हेरिटेज" }, city: "udaipur", rating: "4.8", price: 12500, tag: "★ 4.8", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfn1TjJ-17nOW8Uiv9KddmTC8grYFhXZEyLaaWR9lbO_cK4yfwnD01cwo6&s=10" },
+      { id: "h2", name: { en: "RAMBAGH PALACE", hi: "रामबाग पैलेस" }, city: "jaipur", rating: "4.9", price: 35000, tag: "★ 4.9", image: "https://tse3.mm.bing.net/th/id/OIP.4JGWVwxuYGVX1Bgl3np0QQHaEw?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+      { id: "h3", name: { en: "NARENDRA BHAWAN", hi: "नरेंद्र भवन" }, city: "bikaner", rating: "4.7", price: 14000, tag: "★ 4.7", image: "https://image.wedmegood.com/resized/720X/uploads/member/379874/1731574006_2022_07_10.jpg?crop=10,0,1330,748" },
+      { id: "h4", name: { en: "SURYAGARH FORT HOTEL", hi: "सूर्यगढ़ फोर्ट होटल" }, city: "jaisalmer", rating: "4.9", price: 24500, tag: "★ 4.9", image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/156785301.jpg?k=be174ae962a334f3653b6eceaa9a15ca6f01a2e80ab5923758ca1efd3a5da50f&o=" }
+    ];
+
+    const trainData = [
+      { number: "12964", name: { en: "Mewar Express", hi: "मेवाड़ एक्सप्रेस" }, from: "NDLS", to: "UDZ", time: "18:30 -> 07:20", duration: { en: "12h 50m", hi: "12 घंटे 50 मिनट" }, classes: [ { name: "3A", price: "₹820", state: "Green", text: { en: "AVBL-48", hi: "उपलब्ध-48" } }, { name: "2A", price: "₹1160", state: "Orange", text: { en: "RAC-3", hi: "आरएसी-3" } }, { name: "1A", price: "₹1950", state: "Red", text: { en: "WL-12", hi: "प्रतीक्षा-12" } } ] },
+      { number: "12973", name: { en: "Jaipur Express", hi: "जयपुर एक्सप्रेस" }, from: "NDLS", to: "JP", time: "21:00 -> 04:30", duration: { en: "7h 30m", hi: "7 घंटे 30 मिनट" }, classes: [ { name: "CC", price: "₹650", state: "Green", text: { en: "AVBL-104", hi: "उपलब्ध-104" } }, { name: "EC", price: "₹1200", state: "Green", text: { en: "AVBL-18", hi: "उपलब्ध-18" } } ] },
+      { number: "22986", name: { en: "Rajasthan Humsafar", hi: "राजस्थान हमसफर" }, from: "NDLS", to: "UDZ", time: "16:15 -> 05:40", duration: { en: "13h 25m", hi: "13 घंटे 25 मिनट" }, classes: [ { name: "3A", price: "₹950", state: "Green", text: { en: "AVBL-12", hi: "उपलब्ध-12" } } ] },
+      { number: "12468", name: { en: "Leelan SF Express", hi: "लीलाण सुपरफास्ट" }, from: "JP", to: "BKN", time: "16:20 -> 22:30", duration: { en: "6h 10m", hi: "6 घंटे 10 मिनट" }, classes: [ { name: "SL", price: "₹260", state: "Green", text: { en: "AVBL-220", hi: "उपलब्ध-220" } }, { name: "3A", price: "₹710", state: "Green", text: { en: "AVBL-45", hi: "उपलब्ध-45" } } ] }
+    ];
+
+    const busData = [
+      { name: { en: "RSRTC Volvo Superluxury", hi: "आरएसआरटीसी वोल्वो सुपरलग्जरी" }, from: "Jaipur", to: "Udaipur", type: { en: "AC Sleeper (2+2)", hi: "एसी स्लीपर (2+2)" }, time: "22:00 -> 05:30", price: 850, rating: "4.6" },
+      { name: { en: "Zingbus Premium AC", hi: "ज़िंगबस प्रीमियम एसी" }, from: "Delhi", to: "Jaipur", type: { en: "AC Sleeper (2+1)", hi: "एसी स्लीपर (2+1)" }, time: "23:30 -> 05:00", price: 720, rating: "4.7" },
+      { name: { en: "Desert Queen Travels", hi: "डेजर्ट क्वीन ट्रैवल्स" }, from: "Jaipur", to: "Jaisalmer", type: { en: "Non-AC Seater/Sleeper", hi: "नॉन-एसी सीटर/स्लीपर" }, time: "21:00 -> 07:00", price: 650, rating: "4.3" }
+    ];
+
+    const guidesData = [
+      { name: { en: "Rajesh Kumar", hi: "राजेश कुमार" }, rating: "4.9", price: "₹1,500/day", lang: ["Hindi", "English"], location: { en: "Udaipur", hi: "उदयपुर" }, desc: { en: "Expert in Mewar history, City Palace corridors, and Lake lore.", hi: "मेवाड़ इतिहास, सिटी पैलेस के गलियारों और झील की लोककथाओं के विशेषज्ञ।" }, img: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=150&q=80" },
+      { name: { en: "Amina Begum", hi: "अमीना बेगम" }, rating: "4.8", price: "₹1,800/day", lang: ["English", "French"], location: { en: "Jaipur", hi: "जयपुर" }, desc: { en: "Jaipur architecture enthusiast, local bazaars curator, and royal guide.", hi: "जयपुर वास्तुकला विशेषज्ञ, पारंपरिक बाज़ारों की मार्गदर्शिका और शाही गाइड।" }, img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" },
+      { name: { en: "Sanjay Mehta", hi: "संजय मेहता" }, rating: "5.0", price: "₹2,000/day", lang: ["Hindi", "Gujarati", "English"], location: { en: "Bikaner", hi: "बीकानेर" }, desc: { en: "Temple folklore curator, desert route planner, and food walk guide.", hi: "मंदिर लोककथाओं के जानकार, मरुस्थल मार्ग योजनाकार और फ़ूड वॉक गाइड।" }, img: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=150&q=80" }
+    ];
+
+    const monumentsData = [
+      { name: { en: "Amber Fort (Jaipur)", hi: "आमेर किला (जयपुर)" }, status: "fully", desc: { en: "Accessible parking, golf carts available for slope climb, ramp entry to court.", hi: "सुलभ पार्किंग, चढ़ाई के लिए गोल्फ कार्ट सुविधा, मुख्य चौक तक रैंप प्रवेश।" } },
+      { name: { en: "City Palace (Udaipur)", hi: "सिटी पैलेस (उदयपुर)" }, status: "fully", desc: { en: "Lift access fitted for main palace galleries, wheelchair pathways marked.", hi: "मुख्य महल दीर्घाओं के लिए लिफ्ट सुविधा, स्पष्ट व्हीलचेयर मार्ग।" } },
+      { name: { en: "Jaisalmer Sand Dunes", hi: "जैसलमेर सैंड ड्यून्स" }, status: "assist", desc: { en: "All-terrain wheelchair tracks laid near base camp, require helper reservation.", hi: "बेस कैंप के पास ऑल-टेरेन व्हीलचेयर ट्रैक, सहायक गाइड की आवश्यकता।" } }
+    ];
+
+    const promptChipsData = [
+      { id: "udaipur", label: { en: "🗺️ Udaipur 3-Day Plan", hi: "🗺️ उदयपुर 3-दिवसीय योजना" }, query: "udaipur itinerary" },
+      { id: "karnimata", label: { en: "🐀 Karni Mata Lore", hi: "🐀 करणी माता मंदिर कथा" }, query: "karni mata bikaner" },
+      { id: "jaipur", label: { en: "♿ Accessible Jaipur", hi: "♿ सुगम्य जयपुर स्थल" }, query: "accessible jaipur" },
+      { id: "food", label: { en: "🍽️ Jaisalmer Food", hi: "🍽️ जैसलमेर के व्यंजन" }, query: "jaisalmer food" }
+    ];
+
+    // State Variables
+    let currentLangKey = localStorage.getItem('appLang') || 'en';
+    let selectedSeats = [];
+    const busSeatPrice = 850;
+
+    // App Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(currentLangKey, false);
+      switchTab('hotels');
+      filterHotels();
+      searchTrains();
+      searchBuses();
+      calculateBudget();
+      filterCompanions();
+      renderBusSeats();
+      renderMonuments();
+      renderPromptChips();
+
+      // Click outside to close language menu
+      document.addEventListener('click', (e) => {
+        const container = document.getElementById('langDropdownContainer');
+        if (container && !container.contains(e.target)) {
+          closeLangMenu();
+        }
+      });
+    });
+
+    // Language Dropdown Handler
+    function toggleLangDropdown(event) {
+      if (event) event.stopPropagation();
+      const menu = document.getElementById('langMenu');
+      const chevron = document.getElementById('langChevron');
+      const isHidden = menu.classList.contains('hidden');
+
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        closeLangMenu();
+      }
+    }
+
+    function closeLangMenu() {
+      const menu = document.getElementById('langMenu');
+      const chevron = document.getElementById('langChevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.classList.remove('rotate-180');
+    }
+
+    function selectLang(lang) {
+      if (lang !== 'en' && lang !== 'hi') lang = 'en';
+      currentLangKey = lang;
+      localStorage.setItem('appLang', lang);
+      closeLangMenu();
+      applyLanguage(lang, true);
+    }
+
+    function applyLanguage(lang, showNotification = true) {
+      const dict = i18n[lang] || i18n.en;
+
+      // Update button text and active checkmark
+      document.getElementById('currentLang').innerText = lang === 'hi' ? 'हिन्दी (Hindi)' : 'English';
+      
+      const checkEn = document.getElementById('check-en');
+      const checkHi = document.getElementById('check-hi');
+      if (checkEn && checkHi) {
+        if (lang === 'hi') {
+          checkEn.classList.add('hidden');
+          checkHi.classList.remove('hidden');
+        } else {
+          checkEn.classList.remove('hidden');
+          checkHi.classList.add('hidden');
+        }
+      }
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.innerText = dict[key];
+        }
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+
+      // Update input values
+      document.querySelectorAll('[data-i18n-val]').forEach(el => {
+        const key = el.getAttribute('data-i18n-val');
+        if (dict[key]) {
+          el.value = dict[key];
+        }
+      });
+
+      // Update welcome message bubble
+      const welcome = document.getElementById('welcomeMessageBubble');
+      if (welcome) welcome.innerText = dict.aiWelcome;
+
+      // Re-render components with localized strings
+      filterHotels();
+      searchTrains();
+      searchBuses();
+      calculateBudget();
+      filterCompanions();
+      renderMonuments();
+      renderPromptChips();
+      updateSeatSelectionUI();
+
+      if (showNotification) {
+        showToast(dict.toastLangChanged);
+      }
+    }
+
+    // Toggle Workspace Tabs
+    function switchTab(tabKey) {
+      const panes = document.querySelectorAll('.tab-pane');
+      panes.forEach(pane => pane.classList.add('hidden'));
+
+      const target = document.getElementById(`content-${tabKey}`);
+      if (target) target.classList.remove('hidden');
+
+      const tabs = ['hotels', 'trains', 'buses', 'budget', 'companion', 'aiguide', 'divyangjan'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+          if (t === tabKey) {
+            btn.className = "flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-bold transition-all bg-blue-50/75 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border border-[var(--border)] shadow-sm cursor-pointer";
+          } else {
+            btn.className = "flex-1 min-w-[120px] text-center py-2.5 px-4 rounded-2xl text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all cursor-pointer";
+          }
+        }
+      });
+    }
+
+    // --- TAB 1: HOTELS LOGIC ---
+    function filterHotels() {
+      const dest = document.getElementById('hotelDest').value;
+      const grid = document.getElementById('hotelsGrid');
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      grid.innerHTML = '';
+
+      const filtered = dest === 'all' ? hotelData : hotelData.filter(h => h.city === dest);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-2 text-center text-xs text-[var(--muted-foreground)] py-12">${lang === 'hi' ? 'चयनित शहर के लिए कोई होटल उपलब्ध नहीं है।' : 'No stays found for the selected city.'}</div>`;
+        return;
+      }
+
+      filtered.forEach(h => {
+        const hotelName = h.name[lang] || h.name.en;
+        const cityName = dict['city' + h.city.charAt(0).toUpperCase() + h.city.slice(1)] || h.city;
+        const tagText = lang === 'hi' ? `${cityName} प्रीमियम होटल` : `${h.city.toUpperCase()} Premium Stay`;
+
+        grid.innerHTML += `
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow group">
+            <div class="flex gap-4">
+              <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-[var(--border)]">
+                <img src="${h.image}" alt="${hotelName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="text-[9px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider">${tagText}</span>
+                <h4 class="font-extrabold text-xs text-[var(--foreground)] truncate mt-0.5">${hotelName}</h4>
+                <p class="text-[10px] text-[var(--muted-foreground)] font-semibold mt-1 flex items-center gap-1">
+                  ${lang === 'hi' ? 'रेटिंग:' : 'Rating:'} <span class="text-orange-500 font-extrabold">${h.tag}</span>
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between border-t border-[var(--border)] pt-3 mt-4">
+              <div>
+                <span class="text-xs font-black text-[var(--foreground)]">₹${h.price.toLocaleString()}</span>
+                <span class="text-[9px] text-[var(--muted-foreground)] font-semibold">${dict.perNight}</span>
+              </div>
+              <button onclick="bookHotel('${hotelName}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl text-[10px] uppercase tracking-wider shadow-md shadow-blue-500/25 active:scale-95 transition-all cursor-pointer">
+                ${dict.btnBookRoom}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function bookHotel(name) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(`${name}: ${dict.toastBookingsLoaded}`);
+    }
+
+    // --- TAB 2: TRAINS LOGIC ---
+    function searchTrains() {
+      const from = document.getElementById('trainFrom').value;
+      const to = document.getElementById('trainTo').value;
+      const listings = document.getElementById('trainListings');
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      listings.innerHTML = '';
+
+      const filtered = trainData.filter(t => t.from === from && t.to === to);
+
+      if (filtered.length === 0) {
+        listings.innerHTML = `
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8 text-center text-xs text-[var(--muted-foreground)]">
+            ${lang === 'hi' ? `चयनित तारीख पर ${from} और ${to} के बीच कोई सीधी ट्रेन नहीं मिली।` : `No direct trains found between ${from} and ${to} for selected date. Try changing station nodes.`}
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(t => {
+        const trainName = t.name[lang] || t.name.en;
+        const durationText = t.duration[lang] || t.duration.en;
+        let classesHtml = '';
+
+        t.classes.forEach(c => {
+          let stateClass = '';
+          if (c.state === 'Green') stateClass = 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-900/30';
+          if (c.state === 'Orange') stateClass = 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-400 dark:border-orange-900/30';
+          if (c.state === 'Red') stateClass = 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30';
+
+          const classStatus = c.text[lang] || c.text.en;
+
+          classesHtml += `
+            <button onclick="bookTrainClass('${trainName}', '${c.name}', '${c.price}')" class="flex-1 p-2 bg-[var(--background)] border ${stateClass} rounded-xl text-left hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+              <div class="flex justify-between text-[10px] font-black uppercase">
+                <span>${c.name}</span>
+                <span>${c.price}</span>
+              </div>
+              <div class="text-[9px] font-semibold mt-1">${classStatus}</div>
+            </button>
+          `;
+        });
+
+        const routeLabel = lang === 'hi' ? `मार्ग: ${t.from} ➔ ${t.to} | यात्रा समय: ${durationText}` : `Route: ${t.from} ➔ ${t.to} | Duration: ${durationText}`;
+
+        listings.innerHTML += `
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-black">${trainName}</span>
+                  <span class="text-[9px] bg-slate-100 dark:bg-slate-800 text-[var(--muted-foreground)] px-2 py-0.5 rounded-full font-bold uppercase">${t.number}</span>
+                </div>
+                <p class="text-[10px] text-[var(--muted-foreground)] mt-0.5 font-semibold">${routeLabel}</p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">${t.time}</span>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 border-t border-[var(--border)] pt-4">
+              ${classesHtml}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function bookTrainClass(trainName, cls, price) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(`${trainName} (${cls} - ${price}): ${dict.toastTrainBooked}`);
+    }
+
+    // --- TAB 3: BUS LOGIC ---
+    function searchBuses() {
+      const from = document.getElementById('busFrom').value;
+      const to = document.getElementById('busTo').value;
+      const list = document.getElementById('busList');
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      list.innerHTML = '';
+
+      const filtered = busData.filter(b => b.from === from && b.to === to);
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 text-center text-xs text-[var(--muted-foreground)]">
+            ${lang === 'hi' ? 'इस मार्ग पर कोई सीधी बस उपलब्ध नहीं है।' : 'No direct bus liners listed for this route.'}
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((b, index) => {
+        const busName = b.name[lang] || b.name.en;
+        const busType = b.type[lang] || b.type.en;
+
+        list.innerHTML += `
+          <div onclick="selectBus(${index}, '${busName}')" class="bg-[var(--card)] border border-[var(--border)] p-4 rounded-xl shadow-sm flex items-center justify-between cursor-pointer hover:border-blue-500 hover:shadow-md transition-all group">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-[var(--foreground)] truncate">${busName}</span>
+                <span class="text-[9px] bg-orange-500/10 text-orange-500 font-extrabold px-2 py-0.5 rounded-full">★ ${b.rating}</span>
+              </div>
+              <p class="text-[10px] text-[var(--muted-foreground)] mt-1 font-semibold">${busType} &bull; ${b.time}</p>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-xs font-black text-blue-600 dark:text-blue-400">₹${b.price}</span>
+              <span class="text-[9px] text-[var(--muted-foreground)] block font-semibold">${dict.legendSelect}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      if (filtered.length > 0) {
+        const firstBus = filtered[0];
+        selectBus(0, firstBus.name[lang] || firstBus.name.en);
+      }
+    }
+
+    function selectBus(index, busName) {
+      document.getElementById('selectedBusName').innerText = busName.toUpperCase();
+      selectedSeats = [];
+      updateSeatSelectionUI();
+    }
+
+    function renderBusSeats() {
+      const grid = document.getElementById('busSeatGrid');
+      grid.innerHTML = '';
+
+      for (let r = 1; r <= 6; r++) {
+        const rows = ['A', 'B', 'C', 'D'];
+        rows.forEach((col) => {
+          const seatId = `${col}${r}`;
+          const isOccupied = (r === 2 && col === 'B') || (r === 4 && col === 'C') || (r === 1 && col === 'A');
+          const isAccessible = r === 1;
+
+          let btnClass = 'bg-white text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700';
+          if (isOccupied) {
+            btnClass = 'bg-slate-200 text-slate-400 dark:bg-slate-700 dark:text-slate-500 cursor-not-allowed';
+          } else if (isAccessible) {
+            btnClass = 'bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100/50 cursor-pointer';
+          } else {
+            btnClass += ' hover:bg-slate-100 cursor-pointer';
+          }
+
+          grid.innerHTML += `
+            <button onclick="clickSeat('${seatId}', ${isOccupied})" id="seat-${seatId}" class="w-8 h-8 rounded-lg border text-[9px] font-bold transition-all ${btnClass} flex items-center justify-center">
+              ${seatId}
+            </button>
+          `;
+        });
+      }
+    }
+
+    function clickSeat(seatId, isOccupied) {
+      if (isOccupied) return;
+
+      const idx = selectedSeats.indexOf(seatId);
+      const btn = document.getElementById(`seat-${seatId}`);
+
+      if (idx > -1) {
+        selectedSeats.splice(idx, 1);
+        btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+        if (seatId.endsWith('1')) {
+          btn.className = "w-8 h-8 rounded-lg border text-[9px] font-bold transition-all bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100/50 flex items-center justify-center cursor-pointer";
+        } else {
+          btn.className = "w-8 h-8 rounded-lg border text-[9px] font-bold transition-all bg-white text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 hover:bg-slate-100 flex items-center justify-center cursor-pointer";
+        }
+      } else {
+        selectedSeats.push(seatId);
+        btn.className = "w-8 h-8 rounded-lg border text-[9px] font-bold transition-all bg-blue-600 text-white border-blue-600 flex items-center justify-center cursor-pointer";
+      }
+
+      updateSeatSelectionUI();
+    }
+
+    function updateSeatSelectionUI() {
+      const seatsLabel = document.getElementById('selectedSeatsLabel');
+      const totalLabel = document.getElementById('busTotalLabel');
+      const lang = currentLangKey;
+
+      if (selectedSeats.length === 0) {
+        seatsLabel.innerText = lang === 'hi' ? 'कोई नहीं' : 'None';
+        totalLabel.innerText = '₹0';
+      } else {
+        seatsLabel.innerText = selectedSeats.join(', ');
+        totalLabel.innerText = `₹${(selectedSeats.length * busSeatPrice).toLocaleString()}`;
+      }
+    }
+
+    function bookBusTickets() {
+      const dict = i18n[currentLangKey] || i18n.en;
+      if (selectedSeats.length === 0) {
+        showToast(dict.toastSelectSeatFirst);
+        return;
+      }
+      showToast(`${dict.toastBusConfirmed} ${selectedSeats.join(', ')}`);
+      selectedSeats = [];
+      renderBusSeats();
+      updateSeatSelectionUI();
+    }
+
+    // --- TAB 4: BUDGET PLANNER LOGIC ---
+    function calculateBudget() {
+      const total = parseInt(document.getElementById('budgetInput').value) || 0;
+      const days = parseInt(document.getElementById('daysInput').value) || 1;
+      const profile = document.getElementById('comfortProfile').value;
+      const lang = currentLangKey;
+
+      document.getElementById('budgetVal').innerText = `₹${total.toLocaleString()}`;
+      document.getElementById('daysVal').innerText = lang === 'hi' ? `${days} दिन` : `${days} Days`;
+
+      const dailyRate = total / days;
+      let minRequired = 4000;
+      if (profile === 'budget') minRequired = 1500;
+      if (profile === 'luxury') minRequired = 12000;
+
+      const warning = document.getElementById('budgetWarning');
+      const warningText = document.getElementById('budgetTextWarning');
+      if (dailyRate < minRequired) {
+        warning.classList.remove('hidden');
+        warningText.innerText = lang === 'hi'
+          ? `चयनित बजट के अनुसार ₹${Math.round(dailyRate).toLocaleString()}/दिन बनता है, जो इस सुविधा स्तर के लिए अनुशंसित ₹${minRequired.toLocaleString()}/दिन से कम है।`
+          : `Selected budget yields ₹${Math.round(dailyRate).toLocaleString()}/day, which is below the recommended ₹${minRequired.toLocaleString()}/day for this comfort level.`;
+      } else {
+        warning.classList.add('hidden');
+      }
+
+      const allocations = [
+        { name: { en: "🏨 Stays & Heritage Hotels", hi: "🏨 आवास एवं हेरिटेज होटल" }, pct: 35, color: 'bg-blue-600' },
+        { name: { en: "🚄 Transit & Travel Bookings", hi: "🚄 यात्रा एवं परिवहन" }, pct: 25, color: 'bg-orange-500' },
+        { name: { en: "🍽️ Dining & Culinary", hi: "🍽️ भोजन एवं खानपान" }, pct: 20, color: 'bg-green-600' },
+        { name: { en: "🎟️ Monument Passes & Audio Lore", hi: "🎟️ स्मारक टिकट एवं ऑडियो गाइड" }, pct: 12, color: 'bg-yellow-500' },
+        { name: { en: "🛍️ Local Handloom & Misc", hi: "🛍️ स्थानीय हस्तशिल्प एवं अन्य" }, pct: 8, color: 'bg-indigo-600' }
+      ];
+
+      const breakdown = document.getElementById('budgetBreakdown');
+      breakdown.innerHTML = '';
+
+      allocations.forEach(item => {
+        const itemVal = (total * item.pct) / 100;
+        const itemName = item.name[lang] || item.name.en;
+        breakdown.innerHTML += `
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>${itemName} (${item.pct}%)</span>
+              <span class="font-extrabold text-[var(--foreground)]">₹${Math.round(itemVal).toLocaleString()}</span>
+            </div>
+            <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div class="h-full ${item.color} rounded-full transition-all duration-500" style="width: ${item.pct}%"></div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // --- TAB 5: COMPANION LOGIC ---
+    function filterCompanions() {
+      const langFilter = document.getElementById('companionLang').value;
+      const grid = document.getElementById('companionsGrid');
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      grid.innerHTML = '';
+
+      const filtered = langFilter === 'all' ? guidesData : guidesData.filter(g => g.lang.includes(langFilter));
+
+      filtered.forEach(g => {
+        const guideName = g.name[lang] || g.name.en;
+        const guideLoc = g.location[lang] || g.location.en;
+        const guideDesc = g.desc[lang] || g.desc.en;
+
+        grid.innerHTML += `
+          <div class="bg-[var(--card)] border border-[var(--border)] p-5 rounded-2xl flex flex-col justify-between hover:shadow-md transition-shadow">
+            <div class="space-y-4">
+              <div class="flex items-center gap-4">
+                <img src="${g.img}" alt="${guideName}" class="w-12 h-12 rounded-full object-cover border border-[var(--border)]">
+                <div>
+                  <h4 class="text-xs font-black text-[var(--foreground)]">${guideName}</h4>
+                  <div class="flex gap-1.5 mt-1 flex-wrap">
+                    ${g.lang.map(l => `<span class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-[8px] font-extrabold uppercase text-[var(--muted-foreground)]">${l}</span>`).join('')}
+                  </div>
+                </div>
+              </div>
+              <p class="text-[10px] text-[var(--muted-foreground)] leading-relaxed">${guideDesc}</p>
+            </div>
+            <div class="flex items-center justify-between border-t border-[var(--border)] pt-4 mt-6">
+              <div>
+                <span class="text-xs font-black text-[var(--foreground)]">${g.price}</span>
+                <span class="text-[8px] text-[var(--muted-foreground)] font-semibold block">${lang === 'hi' ? 'स्थान' : 'Loc'}: ${guideLoc}</span>
+              </div>
+              <button onclick="bookCompanion('${guideName}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded-xl text-[10px] uppercase shadow-md shadow-blue-500/25 transition-all cursor-pointer">
+                ${dict.btnBookCompanion}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function bookCompanion(name) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(`${dict.toastCompanionBooked} ${name}`);
+    }
+
+    // --- TAB 6: AI VIRTUAL GUIDE LOGIC ---
+    function renderPromptChips() {
+      const container = document.getElementById('promptChipsContainer');
+      const lang = currentLangKey;
+      container.innerHTML = '';
+
+      promptChipsData.forEach(p => {
+        const label = p.label[lang] || p.label.en;
+        container.innerHTML += `
+          <button onclick="askPrompt('${p.query}', '${label}')" class="px-3 py-1 bg-[var(--background)] border border-[var(--border)] rounded-full text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-50/50 whitespace-nowrap transition-colors cursor-pointer">
+            ${label}
+          </button>
+        `;
+      });
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendChatMessage('User', text);
+      input.value = '';
+
+      const typing = document.getElementById('chatTyping');
+      typing.classList.remove('hidden');
+
+      setTimeout(() => {
+        typing.classList.add('hidden');
+        const reply = getAIResponse(text);
+        appendChatMessage('AI', reply);
+      }, 1100);
+    }
+
+    function askPrompt(query, userPromptLabel) {
+      appendChatMessage('User', userPromptLabel);
+      const typing = document.getElementById('chatTyping');
+      typing.classList.remove('hidden');
+
+      setTimeout(() => {
+        typing.classList.add('hidden');
+        const reply = getAIResponse(query);
+        appendChatMessage('AI', reply);
+      }, 900);
+    }
+
+    function appendChatMessage(sender, text) {
+      const history = document.getElementById('chatHistory');
+      const isAI = sender === 'AI';
+
+      const avatar = isAI 
+        ? `<div class="w-6 h-6 rounded-full bg-gradient-to-tr from-orange-500 to-green-600 text-white flex items-center justify-center shrink-0 text-[10px] font-bold">AI</div>`
+        : `<div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 text-[10px] font-bold">${currentLangKey === 'hi' ? 'मैं' : 'ME'}</div>`;
+
+      const msgBubble = isAI
+        ? `<div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-3 leading-relaxed shadow-sm">${text}</div>`
+        : `<div class="bg-blue-600 text-white rounded-2xl p-3 leading-relaxed ml-auto">${text}</div>`;
+
+      const bubbleWrapper = isAI
+        ? `<div class="flex items-start gap-2.5 max-w-[85%]">${avatar}${msgBubble}</div>`
+        : `<div class="flex items-start gap-2.5 max-w-[85%] ml-auto justify-end">${msgBubble}${avatar}</div>`;
+
+      history.innerHTML += bubbleWrapper;
+      history.scrollTop = history.scrollHeight;
+    }
+
+    function clearChat() {
+      const dict = i18n[currentLangKey] || i18n.en;
+      document.getElementById('chatHistory').innerHTML = '';
+      appendChatMessage('AI', dict.aiWelcome);
+    }
+
+    function getAIResponse(query) {
+      const q = query.toLowerCase();
+      const lang = currentLangKey;
+
+      if (q.includes('udaipur') || q.includes('उदयपुर')) {
+        if (lang === 'hi') {
+          return `<strong>उदयपुर 3-दिवसीय सांस्कृतिक यात्रा योजना:</strong><br>
+          • <strong>पहला दिन:</strong> सुबह भव्य <em>सिटी पैलेस</em> का भ्रमण, दोपहर बाद पिछोला झील में नौका विहार और लेक पैलेस पर सूर्यास्त।<br>
+          • <strong>दूसरा दिन:</strong> <em>सहेलियों-की-बाड़ी</em> में सैर, शिल्पग्राम कला ग्राम में दस्तकारी की खरीदारी और शाम को अंबाई घाट।<br>
+          • <strong>तीसरा दिन:</strong> अरावली पहाड़ियों के दृश्य हेतु सज्जनगढ़ मानसून पैलेस और बागोर की हवेली में शाम का कठपुतली नृत्य।`;
+        }
+        return `<strong>Udaipur Cultural Itinerary (3 Days):</strong><br>
+        • <strong>Day 1:</strong> Visit the grand <em>City Palace</em> early morning, take a late afternoon boat ride on Pichola Lake, and watch a sunset at Lake Palace.<br>
+        • <strong>Day 2:</strong> Walk through <em>Saheliyon-ki-Bari</em>, browse craft vendors at Shilpgram arts village, and dine near Ambrai Ghat.<br>
+        • <strong>Day 3:</strong> Ride up to Sajjangarh Monsoon Palace for panoramic mountain views, and enjoy puppet dances at Bagore-ki-Haveli.`;
+      }
+
+      if (q.includes('karni mata') || q.includes('करणी माता') || q.includes('bikaner') || q.includes('बीकानेर')) {
+        if (lang === 'hi') {
+          return `<strong>करणी माता मंदिर (देशनोक, बीकानेर) की कथा:</strong><br>
+          • यह 600 वर्ष पुराना मंदिर 25,000 से अधिक पवित्र चूहों (काबा) के लिए विश्वप्रसिद्ध है।<br>
+          • पौराणिक मान्यतानुसार, करणी माता के वंशज मृत्यु के उपरांत चूहों के रूप में पुनर्जन्म लेते हैं और मंदिर में निवास करते हैं।<br>
+          • यहाँ दुर्लभ सफेद चूहे के दर्शन को अत्यंत शुभ और मंगलकारी माना जाता है।`;
+        }
+        return `<strong>Lore of Karni Mata Temple (Deshnoke, Bikaner):</strong><br>
+        • This 600-year-old temple is legendary for housing over 25,000 black rats, locally worshipped as <em>kabbas</em>.<br>
+        • According to folklore, the mystic Karni Mata's kin reincarnate as sacred rats inside the temple before rebirth.<br>
+        • Spotting a rare white rat is considered extremely auspicious and a sign of divine blessings.`;
+      }
+
+      if (q.includes('accessible') || q.includes('सुगम्य') || q.includes('jaipur') || q.includes('जयपुर')) {
+        if (lang === 'hi') {
+          return `<strong>जयपुर के सुगम्य ऐतिहासिक स्थल:</strong><br>
+          • <strong>आमेर किला:</strong> पार्किंग से मुख्य चौक तक गोल्फ कार्ट सुविधा और रैंप मार्ग उपलब्ध हैं।<br>
+          • <strong>सिटी पैलेस जयपुर:</strong> संग्रहालय दीर्घाओं के लिए लिफ्ट लगी हैं और ऑडियो/ब्रेल गाइड उपलब्ध हैं।<br>
+          • <strong>जंतर मंतर:</strong> समतल व व्हीलचेयर अनुकूल मार्ग। दिव्यांगजन टैब से पूर्व-पंजीकरण किया जा सकता है।`;
+        }
+        return `<strong>Accessibility Guide for Jaipur:</strong><br>
+        • <strong>Amber Fort:</strong> Flat pathways, ramp access, and certified golf-cart transit services climb to the main courtyard from parking slots.<br>
+        • <strong>City Palace Jaipur:</strong> Lifts are fitted for museum wings, with tactile layouts available at the counter.<br>
+        • <strong>Jantar Mantar:</strong> Paved, wheelchair-friendly paths trace the astronomical stone instruments.`;
+      }
+
+      if (q.includes('food') || q.includes('व्यंजन') || q.includes('jaisalmer') || q.includes('जैसलमेर')) {
+        if (lang === 'hi') {
+          return `<strong>जैसलमेर के पारंपरिक स्वादिष्ट व्यंजन:</strong><br>
+          • <strong>केर सांगरी:</strong> मरुस्थलीय सांगरी फलियों और केर बेर की तीखी-चटपटी पारंपरिक सब्ज़ी।<br>
+          • <strong>दाल बाटी चूरमा:</strong> घी में डूबी बाटी, पंचमेल दाल और मीठा चूरमा।<br>
+          • <strong>गट्टे की सब्ज़ी:</strong> बेसन के नर्म गट्टों से बनी स्वादिष्ट दही ग्रेवी वाली सब्ज़ी। बाजरे की रोटी के साथ लाजवाब!`;
+        }
+        return `<strong>Jaisalmer Culinary Specialties:</strong><br>
+        • <strong>Ker Sangri:</strong> Traditional desert berry and bean stir-fry seasoned with local spices.<br>
+        • <strong>Dal Baati Churma:</strong> Quintessential Rajasthani platter with wood-fired wheat balls, rich lentil soup, and sweet churma.<br>
+        • <strong>Gatte ki Sabzi:</strong> Spiced gram flour dumplings cooked in a rich, tangy yogurt gravy. Excellent with bajra roti.`;
+      }
+
+      if (lang === 'hi') {
+        return `मैं राजस्थान के सांस्कृतिक मार्गों की योजना बनाने में आपकी सहायता कर सकता हूँ। कृपया <strong>"उदयपुर यात्रा योजना"</strong> या <strong>"करणी माता कथा"</strong> लिखकर पूछें!`;
+      }
+      return `I can help you plan your journey through Rajasthan's heritage corridors. Type details like <strong>"Jaipur accessible sites"</strong> or <strong>"Udaipur itinerary"</strong> to get structured guides.`;
+    }
+
+    // --- TAB 7: DIVYANGJAN LOGIC ---
+    function renderMonuments() {
+      const container = document.getElementById('monumentRegistryContainer');
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+      
+      let html = `<h3 class="text-sm font-black uppercase text-[var(--foreground)]">${dict.registryTitle}</h3><div class="space-y-3">`;
+
+      monumentsData.forEach(m => {
+        const monName = m.name[lang] || m.name.en;
+        const monDesc = m.desc[lang] || m.desc.en;
+        const isFully = m.status === 'fully';
+        const badgeClass = isFully ? 'bg-green-500/10 text-green-600' : 'bg-orange-500/10 text-orange-600';
+        const badgeLabel = isFully ? dict.fullyAccess : dict.assistReq;
+
+        html += `
+          <div class="p-3 bg-[var(--card)] border border-[var(--border)] rounded-xl space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold">${monName}</span>
+              <span class="px-2 py-0.5 ${badgeClass} text-[8px] font-extrabold rounded-full">${badgeLabel}</span>
+            </div>
+            <p class="text-[9px] text-[var(--muted-foreground)]">${monDesc}</p>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    function submitDivyangjanRequest() {
+      const name = document.getElementById('divName').value.trim();
+      const udid = document.getElementById('divUdid').value.trim();
+      const lang = currentLangKey;
+      const dict = i18n[lang] || i18n.en;
+
+      if (!name || !udid) {
+        showToast(lang === 'hi' ? "कृपया आवेदक का नाम और UDID संख्या दर्ज करें।" : "Please specify applicant name and UDID number.");
+        return;
+      }
+
+      const selected = [];
+      if (document.getElementById('srvWheelchair').checked) selected.push("Wheelchair");
+      if (document.getElementById('srvInterpreter').checked) selected.push("Interpreter");
+      if (document.getElementById('srvTransport').checked) selected.push("Transport");
+      if (document.getElementById('srvKit').checked) selected.push("Tactile Kit");
+
+      if (selected.length === 0) {
+        showToast(lang === 'hi' ? "कृपया कम से कम एक सहायता विकल्प चुनें।" : "Please choose at least one assistance requirement checkbox.");
+        return;
+      }
+
+      showToast(`${dict.toastDivReqSent} ${name} (UDID: ${udid})`);
+    }
+
+    // Helper Toasts
+    function showLocalizedToast(key) {
+      const dict = i18n[currentLangKey] || i18n.en;
+      showToast(dict[key] || "Action completed");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const toastText = document.getElementById('toastMsg');
+      
+      toastText.innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
